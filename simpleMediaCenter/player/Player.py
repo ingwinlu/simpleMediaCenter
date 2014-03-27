@@ -1,6 +1,13 @@
 class Player():
-    def play():
+
+    def __init__(self, cmdline):
+        raise NotImplementedError
+
+    def send(self, str):
+        raise NotImplementedError
+
+    def play(self):
         raise NotImplementedError
         
-    def stop():
+    def stop(self):
         raise NotImplementedError
