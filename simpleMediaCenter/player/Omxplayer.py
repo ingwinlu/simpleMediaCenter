@@ -54,6 +54,5 @@ if __name__ == "__main__":
     time.sleep(10)
     logging.debug("done sleeping")
     omxplayer.stop()
-    omxplayer.stop()
     
     
