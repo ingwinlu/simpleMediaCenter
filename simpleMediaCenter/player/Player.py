@@ -6,7 +6,7 @@ class Player():
     def send(self, str):
         raise NotImplementedError
 
-    def play(self):
+    def play(self, file):
         raise NotImplementedError
         
     def stop(self):
