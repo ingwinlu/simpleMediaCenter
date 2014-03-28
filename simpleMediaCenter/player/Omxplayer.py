@@ -1,4 +1,4 @@
-from Player import Player
+from player.Player import Player
 import logging
 import subprocess
 import shlex
@@ -10,9 +10,11 @@ class Omxplayer(Player):
     __process=None
 
     def __init__(self, cmdline):
+        logging.debug("Omxplayer init")
         self.cmdline=cmdline
 
     def send(self, str):
+        logging.debug("Omxplayer send")
         raise NotImplementedError
 
     def play(self, file):

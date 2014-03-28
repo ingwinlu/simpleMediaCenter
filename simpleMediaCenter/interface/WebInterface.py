@@ -1,5 +1,5 @@
-from Interface import Interface
-from tg import expose, TGController, AppConfig
+from interface.Interface import Interface
+from tg import expose, TGController, AppConfig, redirect
 from wsgiref.simple_server import make_server
 import os
 import jinja2
@@ -7,8 +7,11 @@ import logging
 
 
 class RootController(TGController):  
-    def __init__(self):
-        pass
+    player=None
+
+    def __init__(self, player=None):
+        logging.debug("WebInterface init")
+        self.player=player
     
     @expose('index.html')
     def index(self):
@@ -16,19 +19,40 @@ class RootController(TGController):
                         "description" : "A simple inquiry of function.",
                         "files" : ["file1", "file2","file3"]}
         return templateVars
+        
+        
+    
+    #controls
+    @expose()
+    def play(self):
+        logging.debug("play called")
+        if(player is not None):
+            player.play()
+        redirect("/")
+    
+    @expose()
+    def stop(self):
+        logging.debug("stop called")
+        if(player is not None):
+            player.stop()
+        redirect("/")
+    
 
 class WebInterface(Interface):
     config=None
     httpd=None
     application=None
     keep_running=True
-
-    def __init__(self):
+    player=None
+    
+    def __init__(self, player=None):
+        self.player=player
+    
         logging.debug("create WebInterface Instance")
 
         ##temporary
         logging.debug("setup TurboGears2")
-        self.config = AppConfig(minimal=True, root_controller=RootController())
+        self.config = AppConfig(minimal=True, root_controller=RootController(player=self.player))
         #jinja stuff
         self.config.renderers.append('jinja')
         self.config.default_renderer = 'jinja'
@@ -40,6 +64,8 @@ class WebInterface(Interface):
         self.application = self.config.make_wsgi_app()
         self.httpd = make_server('', 8080, self.application)
         self.httpd.timeout = 5
+    
+    def run(self):
         logging.debug("start Webserver")
         while(self.keep_running):
             logging.debug("wait for request")
@@ -50,10 +76,10 @@ class WebInterface(Interface):
         self.keep_running=False
         
 
-                
         
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     logging.debug("testing WebInterface")
-    webinterface = WebInterface();
+    webinterface = WebInterface()
+    webinterface.run()
     
