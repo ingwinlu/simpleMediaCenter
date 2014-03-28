@@ -26,15 +26,15 @@ class RootController(TGController):
     @expose()
     def play(self):
         logging.debug("play called")
-        if(player is not None):
-            player.play()
+        if(self.player is not None):
+            self.player.play("/home/winlu/gitrepos/simpleMediaCenter/simpleMediaCenter/player/test.mp4")
         redirect("/")
     
     @expose()
     def stop(self):
         logging.debug("stop called")
-        if(player is not None):
-            player.stop()
+        if(self.player is not None):
+            self.player.stop()
         redirect("/")
     
 
