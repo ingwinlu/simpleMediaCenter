@@ -45,7 +45,7 @@ class WebInterface(Interface):
     keep_running=True
     player=None
     
-    def __init__(self, player=None):
+    def __init__(self, templatePath, staticPath, player=None,):
         self.player=player
     
         logging.debug("create WebInterface Instance")
@@ -57,10 +57,10 @@ class WebInterface(Interface):
         self.config.renderers.append('jinja')
         self.config.default_renderer = 'jinja'
         self.config.use_dotted_templatenames = False
-        #self.config.paths['templates'] = os.path.abspath('./templates/') # how to move templates in to a subdirectory?
+        self.config.paths['templates'] = templatePath # how to move templates in to a subdirectory?
         #statics
         self.config.serve_static = True
-        self.config.paths['static_files'] = 'static'
+        self.config.paths['static_files'] = staticPath
         self.application = self.config.make_wsgi_app()
         self.httpd = make_server('', 8080, self.application)
         self.httpd.timeout = 5
