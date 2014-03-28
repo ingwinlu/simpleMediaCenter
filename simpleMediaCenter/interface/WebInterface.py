@@ -1,5 +1,5 @@
 from interface.Interface import Interface
-from tg import expose, TGController, AppConfig, redirect
+from tg import expose, TGController, AppConfig, redirect, config
 from wsgiref.simple_server import make_server
 import os
 import jinja2
@@ -45,22 +45,23 @@ class WebInterface(Interface):
     keep_running=True
     player=None
     
-    def __init__(self, templatePath, staticPath, player=None,):
-        self.player=player
-    
+    def __init__(self, templatePath='./templates/', staticPath='./static/', player=None,):
         logging.debug("create WebInterface Instance")
-
-        ##temporary
+        self.player=player
+  
         logging.debug("setup TurboGears2")
         self.config = AppConfig(minimal=True, root_controller=RootController(player=self.player))
+        
         #jinja stuff
         self.config.renderers.append('jinja')
         self.config.default_renderer = 'jinja'
         self.config.use_dotted_templatenames = False
-        self.config.paths['templates'] = templatePath # how to move templates in to a subdirectory?
+        self.config.paths['templates'] = [templatePath]
+        
         #statics
         self.config.serve_static = True
         self.config.paths['static_files'] = staticPath
+        
         self.application = self.config.make_wsgi_app()
         self.httpd = make_server('', 8080, self.application)
         self.httpd.timeout = 5
@@ -70,7 +71,6 @@ class WebInterface(Interface):
         while(self.keep_running):
             logging.debug("wait for request")
             self.httpd.handle_request()
-        ##temporary end
         
     def shutdown(self):
         self.keep_running=False
