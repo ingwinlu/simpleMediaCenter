@@ -1,3 +1,9 @@
 <div id="filebrowser">
     <p>inside filebrowser.html</p>
+    <p>current dir</p>
+    <ul>
+        {% for file in files %}
+          <li>{{ file }}</li>
+        {% endfor %}
+    </ul>
 </div>

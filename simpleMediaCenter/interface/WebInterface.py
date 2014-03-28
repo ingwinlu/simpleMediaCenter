@@ -6,21 +6,22 @@ import jinja2
 import logging
 
 
-class RootController(TGController):
-    
+class RootController(TGController):  
     def __init__(self):
         pass
     
     @expose('index.html')
     def index(self):
         templateVars = { "title" : "Test Example",
-                        "description" : "A simple inquiry of function." }
+                        "description" : "A simple inquiry of function.",
+                        "files" : ["file1", "file2","file3"]}
         return templateVars
 
 class WebInterface(Interface):
     config=None
     httpd=None
     application=None
+    keep_running=True
 
     def __init__(self):
         logging.debug("create WebInterface Instance")
@@ -32,18 +33,21 @@ class WebInterface(Interface):
         self.config.renderers.append('jinja')
         self.config.default_renderer = 'jinja'
         self.config.use_dotted_templatenames = False
-        #self.config.paths['templates'] = os.path.abspath('./templates/')
+        #self.config.paths['templates'] = os.path.abspath('./templates/') # how to move templates in to a subdirectory?
         #statics
         self.config.serve_static = True
         self.config.paths['static_files'] = 'static'
         self.application = self.config.make_wsgi_app()
         self.httpd = make_server('', 8080, self.application)
+        self.httpd.timeout = 5
         logging.debug("start Webserver")
-        self.httpd.serve_forever()
+        while(self.keep_running):
+            logging.debug("wait for request")
+            self.httpd.handle_request()
         ##temporary end
         
     def shutdown(self):
-        pass
+        self.keep_running=False
         
 
                 
