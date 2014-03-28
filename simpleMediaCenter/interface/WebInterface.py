@@ -36,14 +36,13 @@ class RootController(TGController):
             redirect("/")
         try:
             id = int(id)
+            if(id in self.crawler.getFileList()):
+                logging.debug("trying to play %s" ,self.crawler.getFileList()[id])
+                self.player.play(self.crawler.getFileListPath(id))
+            else:
+                logging.error("id not in FileList")
         except:
             logging.error("could not convert id")
-            redirect("/")
-        
-        if(id in self.crawler.getFileList()):
-            logging.debug("trying to play %s" ,self.crawler.getFileList()[id])
-            self.player.play(self.crawler.getFileListPath(id))
-
         redirect("/")
     
     @expose()
@@ -58,13 +57,13 @@ class RootController(TGController):
         logging.debug("change called %s", id)
         try: 
             id = int(id)
+            if(id in self.crawler.getDirList()):
+                logging.debug("trying to change into %s" ,self.crawler.getDirListPath(id))
+                self.crawler.setWorkingDir(self.crawler.getDirListPath(id))
+            else:
+                logging.error("id not in DirList")
         except:
             logging.error("could not convert id")
-            redirect("/")
-        if(id in self.crawler.getDirList()):
-            logging.debug("trying to change into %s" ,self.crawler.getDirListPath(id))
-            self.crawler.setWorkingDir(self.crawler.getDirListPath(id))
-
         redirect("/")
 
     
