@@ -11,4 +11,3 @@ interface = WebInterface(player=omxplayer)
 interface.run()
 
 
-
