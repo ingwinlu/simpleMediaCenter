@@ -3,14 +3,14 @@
     <p>current dir: {{ workingDir }}</p>
     <hr>
     <ul>
-        {% for dir in dirs %}
-          <li>{{ dir }}</li>
+        {% for key,value in dirs.items() %}
+          <li><a href="./change?id={{ key }}">{{value}}</a></li>
         {% endfor %}
     </ul>
     <hr>
     <ul>
-        {% for file in files %}
-          <li>{{ file }}</li>
+        {% for key,value in files.items() %}
+          <li><a href="./play?id={{ key }}">{{value}}</a></li>
         {% endfor %}
     </ul>
 </div>

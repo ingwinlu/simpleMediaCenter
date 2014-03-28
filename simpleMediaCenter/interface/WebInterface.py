@@ -20,21 +20,30 @@ class RootController(TGController):
         logging.debug("workingDir: %s", self.crawler.getWorkingDir())
         logging.debug("dirs: %s", self.crawler.getDirList())
         logging.debug("files: %s", self.crawler.getFileList())
-        templateVars = { "title" : "Test Example",
-                        "description" : "A simple inquiry of function.",
-                        "workingDir" : self.crawler.getWorkingDir(),
-                        "dirs" : self.crawler.getDirList(),
-                        "files" : self.crawler.getFileList()}
+        templateVars = { "workingDir" : self.crawler.getWorkingDir(),
+                         "dirs"       : self.crawler.getDirList(),
+                         "files"      : self.crawler.getFileList()}
         return templateVars
         
         
     
     #controls
     @expose()
-    def play(self):
-        logging.debug("play called")
-        if(self.player is not None):
-            self.player.play("/home/winlu/gitrepos/simpleMediaCenter/simpleMediaCenter/player/test.mp4")
+    def play(self, id=None):
+        logging.debug("play called %s", id)
+        if((self.player is None) or (id is None)):
+            logging.info("play failed")
+            redirect("/")
+        try:
+            id = int(id)
+        except:
+            logging.error("could not convert id")
+            redirect("/")
+        
+        if(id in self.crawler.getFileList()):
+            logging.debug("trying to play %s" ,self.crawler.getFileList()[id])
+            self.player.play(self.crawler.getFileListPath(id))
+
         redirect("/")
     
     @expose()
@@ -43,6 +52,21 @@ class RootController(TGController):
         if(self.player is not None):
             self.player.stop()
         redirect("/")
+        
+    @expose()
+    def change(self,id=None):
+        logging.debug("change called %s", id)
+        try: 
+            id = int(id)
+        except:
+            logging.error("could not convert id")
+            redirect("/")
+        if(id in self.crawler.getDirList()):
+            logging.debug("trying to change into %s" ,self.crawler.getDirListPath(id))
+            self.crawler.setWorkingDir(self.crawler.getDirListPath(id))
+
+        redirect("/")
+
     
 
 class WebInterface(Interface):
