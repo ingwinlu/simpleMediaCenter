@@ -1,4 +1,9 @@
-{% extends "./base.html" %}
+{% extends "base.html" %}
 {% block content %}
-    <p>inside index.html</p>
+    {% include "player.html" %}
+
+    {% include "playlist.html" %}
+
+    {% include "filebrowser.html" %}
+
 {% endblock content %}

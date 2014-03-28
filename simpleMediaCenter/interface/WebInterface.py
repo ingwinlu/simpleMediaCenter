@@ -1,6 +1,7 @@
 from Interface import Interface
 from tg import expose, TGController, AppConfig
 from wsgiref.simple_server import make_server
+import os
 import jinja2
 import logging
 
@@ -27,9 +28,14 @@ class WebInterface(Interface):
         ##temporary
         logging.debug("setup TurboGears2")
         self.config = AppConfig(minimal=True, root_controller=RootController())
+        #jinja stuff
         self.config.renderers.append('jinja')
         self.config.default_renderer = 'jinja'
         self.config.use_dotted_templatenames = False
+        #self.config.paths['templates'] = os.path.abspath('./templates/')
+        #statics
+        self.config.serve_static = True
+        self.config.paths['static_files'] = 'static'
         self.application = self.config.make_wsgi_app()
         self.httpd = make_server('', 8080, self.application)
         logging.debug("start Webserver")

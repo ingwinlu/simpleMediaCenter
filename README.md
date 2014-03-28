@@ -7,4 +7,10 @@ Planned Core Features:
 + Web Interface (jinja + turbogears)
 + omxplayer compability
 
+##Requirements
++ omxplayer
++ TurboGears2
++ jinja2
++ more?
+
  
