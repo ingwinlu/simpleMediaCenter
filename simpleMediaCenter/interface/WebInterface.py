@@ -1,23 +1,30 @@
 from interface.Interface import Interface
 from tg import expose, TGController, AppConfig, redirect, config
 from wsgiref.simple_server import make_server
+from fileCrawler.FileCrawler import FileCrawler
 import os
 import jinja2
 import logging
 
-
 class RootController(TGController):  
     player=None
+    crawler=None
 
     def __init__(self, player=None):
         logging.debug("WebInterface init")
         self.player=player
+        self.crawler=FileCrawler()
     
     @expose('index.html')
     def index(self):
+        logging.debug("workingDir: %s", self.crawler.getWorkingDir())
+        logging.debug("dirs: %s", self.crawler.getDirList())
+        logging.debug("files: %s", self.crawler.getFileList())
         templateVars = { "title" : "Test Example",
                         "description" : "A simple inquiry of function.",
-                        "files" : ["file1", "file2","file3"]}
+                        "workingDir" : self.crawler.getWorkingDir(),
+                        "dirs" : self.crawler.getDirList(),
+                        "files" : self.crawler.getFileList()}
         return templateVars
         
         

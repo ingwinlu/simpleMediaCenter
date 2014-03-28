@@ -1,6 +1,13 @@
 <div id="filebrowser">
     <p>inside filebrowser.html</p>
-    <p>current dir</p>
+    <p>current dir: {{ workingDir }}</p>
+    <hr>
+    <ul>
+        {% for dir in dirs %}
+          <li>{{ dir }}</li>
+        {% endfor %}
+    </ul>
+    <hr>
     <ul>
         {% for file in files %}
           <li>{{ file }}</li>
