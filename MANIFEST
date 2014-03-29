@@ -7,6 +7,12 @@ simpleMediaCenter/fileCrawler/__init__.py
 simpleMediaCenter/interface/Interface.py
 simpleMediaCenter/interface/WebInterface.py
 simpleMediaCenter/interface/__init__.py
+simpleMediaCenter/interface/static/reset.css
+simpleMediaCenter/interface/templates/base.html
+simpleMediaCenter/interface/templates/filebrowser.html
+simpleMediaCenter/interface/templates/index.html
+simpleMediaCenter/interface/templates/player.html
+simpleMediaCenter/interface/templates/playlist.html
 simpleMediaCenter/player/Omxplayer.py
 simpleMediaCenter/player/Player.py
 simpleMediaCenter/player/__init__.py
