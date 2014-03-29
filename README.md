@@ -7,6 +7,12 @@ Planned Core Features:
 + Web Interface (jinja + turbogears)
 + omxplayer compability
 
+##TODO
++ use javascript to disable buttons
++ move player to the navbar
++ implement playlist functionality
++ implement multithreading
+
 ##Requirements
 + omxplayer
 + TurboGears2
