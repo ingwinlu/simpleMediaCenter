@@ -1,9 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
   <title>simpleMediaCenter</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="simpleMediaCenter main page" />
+
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="reset.css" />
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="bootstrap.spacelab.min.css" />
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="style.css" />
@@ -25,11 +28,16 @@
                 {% endblock %}
             </section>
         </div>
-        <div class="col-sm-3 well well-sm" id="sidebar">
-            {% include "sidebar.html" %}
-        </div>
+        {% include "sidebar.html" %}
     </div>
 </div>
 
+
+<!--javascript-->
+<script src="http://code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="bootstrap.min.js"></script>
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="respond.min.js"></script>
 </body>
 </html>

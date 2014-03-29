@@ -7,6 +7,7 @@ import time
 class Omxplayer(Player):
     __cmdline=""
     __playerline="omxplayer"
+    __playerstatus="Stopped"
     __process=None
 
     def __init__(self, cmdline):
@@ -25,11 +26,13 @@ class Omxplayer(Player):
         
         line = self.__playerline + " " + self.__cmdline + " " + file
         self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , close_fds=True)
+        self.__playerstatus="Playing " + file
         
     def pause(self):
         logging.debug("pause called")
         if(process is not None):
             self.send('p')
+            self.__playerstatus="Paused " + file
         
     def stop(self):
         logging.debug("stopping")
@@ -46,6 +49,13 @@ class Omxplayer(Player):
             subprocess.Popen(shlex.split("killall omxplayer.bin")).wait() ##quickhack
         self.__process = None    
         logging.debug("player stopped")
+        self.__playerstatus="Stopped"
+        
+    def getDict(self):
+        tempDict={}
+        tempDict['displayPlayer'] = True
+        tempDict['playerStatus'] = self.__playerstatus
+        return tempDict
         
 
 if __name__ == "__main__":

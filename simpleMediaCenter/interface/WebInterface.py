@@ -1,7 +1,6 @@
 from interface.Interface import Interface
 from tg import expose, TGController, AppConfig, redirect, config
 from wsgiref.simple_server import make_server
-from fileCrawler.FileCrawler import FileCrawler
 import os
 import jinja2
 import logging
@@ -9,20 +8,31 @@ import logging
 class RootController(TGController):  
     player=None
     crawler=None
+    playlist=None
 
-    def __init__(self, player=None):
+    def __init__(self, player=None,playlist=None, browser=None ):
         logging.debug("WebInterface init")
         self.player=player
-        self.crawler=FileCrawler()
+        self.browser=browser
+        self.playlist=playlist
+        
     
     @expose('index.html')
     def index(self):
-        logging.debug("workingDir: %s", self.crawler.getWorkingDir())
-        logging.debug("dirs: %s", self.crawler.getDirList())
-        logging.debug("files: %s", self.crawler.getFileList())
-        templateVars = { "workingDir" : self.crawler.getWorkingDir(),
-                         "dirs"       : self.crawler.getDirList(),
-                         "files"      : self.crawler.getFileList()}
+        templateVars = {
+            'displayPlayer' : False,
+            'displayBrowser': False,
+            'displayPlaylist':False
+            }
+        if(self.player is not None):
+            templateVars.update(self.player.getDict())
+        if(self.playlist is not None):
+            templateVars.update(self.playlist.getDict())
+        if(self.browser is not None):
+            templateVars.update(self.browser.getDict())
+            
+        logging.debug(templateVars)
+                         
         return templateVars
         
         
@@ -36,9 +46,9 @@ class RootController(TGController):
             redirect("/")
         try:
             id = int(id)
-            if(id in self.crawler.getFileList()):
-                logging.debug("trying to play %s" ,self.crawler.getFileList()[id])
-                self.player.play(self.crawler.getFileListPath(id))
+            if(id in self.browser.getFileList()):
+                logging.debug("trying to play %s" ,self.browser.getFileList()[id])
+                self.player.play(self.browser.getFileListPath(id))
             else:
                 logging.error("id not in FileList")
         except:
@@ -57,9 +67,9 @@ class RootController(TGController):
         logging.debug("change called %s", id)
         try: 
             id = int(id)
-            if(id in self.crawler.getDirList()):
-                logging.debug("trying to change into %s" ,self.crawler.getDirListPath(id))
-                self.crawler.setWorkingDir(self.crawler.getDirListPath(id))
+            if(id in self.browser.getDirList()):
+                logging.debug("trying to change into %s" ,self.browser.getDirListPath(id))
+                self.browser.setWorkingDir(self.browser.getDirListPath(id))
             else:
                 logging.error("id not in DirList")
         except:
@@ -75,12 +85,12 @@ class WebInterface(Interface):
     keep_running=True
     player=None
     
-    def __init__(self, templatePath='./templates/', staticPath='./static/', player=None,):
+    def __init__(self, templatePath='./templates/', staticPath='./static/', player=None, playlist=None, browser=None):
         logging.debug("create WebInterface Instance")
         self.player=player
   
         logging.debug("setup TurboGears2")
-        self.config = AppConfig(minimal=True, root_controller=RootController(player=self.player))
+        self.config = AppConfig(minimal=True, root_controller=RootController(player=self.player, playlist=playlist, browser=browser))
         
         #jinja stuff
         self.config.renderers.append('jinja')
