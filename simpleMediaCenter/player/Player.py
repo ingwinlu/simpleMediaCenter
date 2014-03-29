@@ -1,4 +1,6 @@
-class Player():
+from interface.Interface import Displayable
+
+class Player(Displayable):
 
     def __init__(self, cmdline):
         raise NotImplementedError

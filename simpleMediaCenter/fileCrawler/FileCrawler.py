@@ -1,7 +1,8 @@
 import os
 import logging
+from interface.Interface import Displayable
 
-class FileCrawler():
+class FileCrawler(Displayable):
     workingDir=''
     dirlist = {}
     filelist = {}
@@ -57,6 +58,19 @@ class FileCrawler():
         else:
             return False
         return True
+        
+    def getDict(self):
+        """
+        templateVars = { "workingDir" : self.browser.getWorkingDir(),
+                         "dirs"       : self.browser.getDirList(),
+                         "files"      : self.browser.getFileList()}
+        """
+        tempDict={}
+        tempDict['displayBrowser'] = True
+        tempDict['workingDir'] = self.workingDir
+        tempDict['dirs'] = self.dirlist
+        tempDict['files']= self.filelist
+        return tempDict
         
         
 if __name__ == "__main__":

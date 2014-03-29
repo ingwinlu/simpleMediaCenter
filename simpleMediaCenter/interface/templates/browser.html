@@ -1,0 +1,18 @@
+<div id="filebrowser" class="panel panel-warning">
+    <div class="panel-heading">
+        <h3 class="panel-title">File Browser - current dir: {{ workingDir }}</h3>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            {% for key,value in dirs.items() %}
+              <a href="./change?id={{ key }}"  class="list-group-item">{{value}}</a>
+            {% endfor %}
+        </ul>
+        <hr>
+        <ul class="list-group">
+            {% for key,value in files.items() %}
+                <a href="./play?id={{ key }}" class="list-group-item">{{value}}</a>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
