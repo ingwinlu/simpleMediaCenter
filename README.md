@@ -15,5 +15,6 @@ Planned Core Features:
 
 ##Screenshot
 ![index Screenshot V0.3](./docs/screen_index_0_3.PNG)
+![index Screenshot V0.3](./docs/screen_mobile_index_0_3.png)
 
  
