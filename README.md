@@ -11,10 +11,12 @@ Planned Core Features:
 + omxplayer
 + TurboGears2
 + jinja2
++ [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch)
 + more?
 
 ##Screenshot
 ![index Screenshot V0.3](./docs/screen_index_0_3.PNG)
 ![index Screenshot V0.3](./docs/screen_mobile_index_0_3.png)
+
 
  
