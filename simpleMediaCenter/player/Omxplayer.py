@@ -14,8 +14,9 @@ class Omxplayer(Player):
         self.cmdline=cmdline
 
     def send(self, str):
-        logging.debug("Omxplayer send")
-        raise NotImplementedError
+        logging.debug("Omxplayer send %s", str)
+        self.__process.stdin.write(bytes(str, 'UTF-8'))
+        self.__process.stdin.flush()
 
     def play(self, file):
         logging.debug("playing file: %s",file)
@@ -25,13 +26,17 @@ class Omxplayer(Player):
         line = self.__playerline + " " + self.__cmdline + " " + file
         self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , close_fds=True)
         
+    def pause(self):
+        logging.debug("pause called")
+        if(process is not None):
+            self.send('p')
+        
     def stop(self):
         logging.debug("stopping")
         if(self.__process is None):
             logging.debug("nothing to stop")
             return
-        self.__process.stdin.write(bytes('q', 'UTF-8'))
-        self.__process.stdin.flush()
+        self.send('q')
         try:
             logging.debug("waiting for process to close")
             self.__process.wait(timeout=5)
@@ -40,6 +45,7 @@ class Omxplayer(Player):
             #self.__process.kill()
             subprocess.Popen(shlex.split("killall omxplayer.bin")).wait() ##quickhack
         self.__process = None    
+        logging.debug("player stopped")
         
 
 if __name__ == "__main__":

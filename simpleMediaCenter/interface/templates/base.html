@@ -5,14 +5,31 @@
   <title>simpleMediaCenter</title>
   <meta name="description" content="simpleMediaCenter main page" />
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="reset.css" />
+  <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="bootstrap.spacelab.min.css" />
+  <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-
-<div id=content>
-    {% block content %}
-    {% endblock %}
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="./" class="navbar-brand">simpleMediaCenter</a>
+        </div>
+    </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+            <section id=content>
+                {% block content %}
+                {% endblock %}
+            </section>
+        </div>
+        <div class="col-sm-3 well well-sm" id="sidebar">
+            {% include "sidebar.html" %}
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

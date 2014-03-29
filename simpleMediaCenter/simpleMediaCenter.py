@@ -8,7 +8,7 @@ pathToTemplates=os.path.abspath('./interface/templates/')
 pathToStatic=os.path.abspath('./interface/static/')
 
 logging.basicConfig(level=logging.DEBUG)
-omxplayer = Omxplayer("")
+omxplayer = Omxplayer("-o hdmi")
 interface = WebInterface(pathToTemplates,pathToStatic, player=omxplayer)
 interface.run()
 

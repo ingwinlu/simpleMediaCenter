@@ -1,16 +1,18 @@
-<div id="filebrowser">
-    <p>inside filebrowser.html</p>
-    <p>current dir: {{ workingDir }}</p>
-    <hr>
-    <ul>
-        {% for key,value in dirs.items() %}
-          <li><a href="./change?id={{ key }}">{{value}}</a></li>
-        {% endfor %}
-    </ul>
-    <hr>
-    <ul>
-        {% for key,value in files.items() %}
-          <li><a href="./play?id={{ key }}">{{value}}</a></li>
-        {% endfor %}
-    </ul>
+<div id="playlist" class="panel panel-warning">
+    <div class="panel-heading">
+        <h3 class="panel-title">File Browser - current dir: {{ workingDir }}</h3>
+    </div>
+    <div class="panel-body">
+        <ul>
+            {% for key,value in dirs.items() %}
+              <li><a href="./change?id={{ key }}">{{value}}</a></li>
+            {% endfor %}
+        </ul>
+        <hr>
+        <ul>
+            {% for key,value in files.items() %}
+              <li><a href="./play?id={{ key }}">{{value}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>

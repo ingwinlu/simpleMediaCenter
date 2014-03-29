@@ -9,5 +9,8 @@ class Player():
     def play(self, file):
         raise NotImplementedError
         
+    def pause(self):
+        raise NotImplementedError
+        
     def stop(self):
         raise NotImplementedError
