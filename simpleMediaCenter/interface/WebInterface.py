@@ -63,6 +63,13 @@ class RootController(TGController):
         redirect("/")
         
     @expose()
+    def pause(self):
+        logging.debug("pause called")
+        if(self.player is not None):
+            self.player.pause()
+        redirect("/")
+        
+    @expose()
     def change(self,id=None):
         logging.debug("change called %s", id)
         try: 
@@ -75,6 +82,8 @@ class RootController(TGController):
         except:
             logging.error("could not convert id")
         redirect("/")
+        
+        
 
     
 
