@@ -32,8 +32,8 @@ class Omxplayer(Player):
                 logging.debug("process ended")
                 # read sterr or stdout maybe before setting to None
                 self.__resetplayer()
-        
-
+                
+    
     def send(self, str):
         logging.debug("Omxplayer send %s", str)
         self.poll()
