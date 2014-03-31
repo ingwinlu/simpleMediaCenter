@@ -1,6 +1,12 @@
 <div id="player" class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Player - {{ playerStatus }}</h3>
+        {% if playerStatus == 0 %}
+            <h3 class="panel-title">Player - stopped</h3>
+        {% elif playerStatus == 1 %}
+            <h3 class="panel-title">Player - playing {{ currentFile }}</h3>
+        {% elif playerStatus == 2 %}
+            <h3 class="panel-title">Player - paused {{ currentFile }}</h3>
+        {% endif %}
     </div>
     <div class="panel-body">
         <div class="btn-group btn-group-justified">

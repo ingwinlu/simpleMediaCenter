@@ -7,9 +7,10 @@ import time
 class Omxplayer(Player):
     __cmdline=""
     __playerline="omxplayer"
-    __playerstatus="Stopped"
+    __playerstatus=0 # 0 stopped, 1 playing, 2 paused
+    __currentfile=""
     __process=None
-    __paused=False
+    
 
     def __init__(self, cmdline):
         logging.debug("Omxplayer init")
@@ -23,7 +24,8 @@ class Omxplayer(Player):
             if(self.__process.returncode is not None):
                 logging.debug("process ended")
                 # read sterr or stdout maybe before setting to None
-                self.__playerstatus="Stopped"
+                self.__playerstatus=0
+                self.__currentfile=""
                 self.__paused=False
                 self.__process=None
         
@@ -43,7 +45,8 @@ class Omxplayer(Player):
             
         line = self.__playerline + " " + self.__cmdline + " " + file
         self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , close_fds=True)
-        self.__playerstatus="Playing " + file
+        self.__playerstatus=1
+        self.__currentfile = file
         self.__paused=False
         
     def pause(self):
@@ -51,12 +54,10 @@ class Omxplayer(Player):
         logging.debug("pause called")
         if(self.__process is not None):
             self.send('p')
-            if(self.__paused==False):
-                self.__playerstatus="Paused"
-                self.__paused=True
+            if(self.__playerstatus==1):
+                self.__playerstatus=2
             else:
-                self.__playerstatus="Unpaused"
-                self.__paused=False
+                self.__playerstatus=1
         
     def stop(self):
         self.poll()
@@ -71,14 +72,14 @@ class Omxplayer(Player):
                 #self.__process.kill()
                 subprocess.Popen(shlex.split("killall omxplayer.bin")).wait() ##quickhack
             self.__process = None    
-            self.__paused=False
-            self.__playerstatus="Stopped"
+            self.__playerstatus=0
             logging.debug("player stopped")
         
     def getDict(self):
         tempDict={}
         tempDict['displayPlayer'] = True
         tempDict['playerStatus'] = self.__playerstatus
+        tempDict['currentFile'] = self.__currentfile
         return tempDict
         
 
