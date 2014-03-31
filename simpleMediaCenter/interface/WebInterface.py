@@ -20,9 +20,9 @@ class RootController(TGController):
     @expose('index.html')
     def index(self):
         templateVars = {
-            'displayPlayer' : False,
-            'displayBrowser': False,
-            'displayPlaylist':False
+            'displayPlayer'  : False,
+            'displayBrowser' : False,
+            'displayPlaylist': False
             }
         if(self.player is not None):
             templateVars.update(self.player.getDict())
