@@ -20,6 +20,7 @@ class RootController(TGController):
     @expose('index.html')
     def index(self):
         templateVars = {
+            'displaySidebar'  : False,
             'displayPlayer'  : False,
             'displayBrowser' : False,
             'displayPlaylist': False

@@ -1,8 +1,13 @@
 body{
-    padding-top: 70px;
+    padding-top: 100px;
 }
 
 ul{
     list-style:none;
 }
 
+@media (min-width: 768px){
+    body{
+        padding-top: 70px;
+    }
+}

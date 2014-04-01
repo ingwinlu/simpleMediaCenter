@@ -9,26 +9,43 @@
 
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="reset.css" />
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="bootstrap.spacelab.min.css" />
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top active" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <a href="./" class="navbar-brand">simpleMediaCenter</a>
         </div>
+
+        <div class="navbar-right">
+            <button type="button" class="btn btn-default navbar-btn">
+                <a href="./pause" class="navbar-link"><span class="glyphicon glyphicon-pause"></span></a>
+            </button>
+            <button type="button" class="btn btn-default navbar-btn">
+                <a href="./stop" class="navbar-link"><span class="glyphicon glyphicon-stop"></span></a>
+            </button>
+        </div>
+
     </div>
 </div>
 
 <div class="container">
     <div class="row">
+      {% if displaySidebar %}
         <div class="col-sm-9">
+      {% else %}
+        <div class="col-sm-12">
+      {% endif %}
             <section id=content>
                 {% block content %}
                 {% endblock %}
             </section>
         </div>
+      {% if displaySidebar %}
         {% include "sidebar.html" %}
+      {% endif %}
     </div>
 </div>
 
