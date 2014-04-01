@@ -22,8 +22,7 @@ Planned Core Features:
 + more?
 
 ##Screenshot
-![index Screenshot V0.3](./docs/screen_index_0_3.PNG)
-![index Screenshot V0.3](./docs/screen_mobile_index_0_3.png)
+![index Screenshot V0.3](./docs/simpleMediaServer_v0_3.PNG)
 
 
  
