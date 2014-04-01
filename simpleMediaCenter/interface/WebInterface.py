@@ -121,9 +121,14 @@ class WebInterface(Interface):
         logging.debug("start Webserver")
         while(self.keep_running):
             logging.debug("wait for request")
-            self.httpd.handle_request()
+            try:
+                self.httpd.handle_request()
+            except KeyboardInterrupt:
+                self.shutdown()
+                
         
     def shutdown(self):
+        logging.info("init shutdown")
         self.keep_running=False
         
 
