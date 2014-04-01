@@ -8,10 +8,12 @@
             <h3 class="panel-title">Player - paused {{ currentFile }}</h3>
         {% endif %}
     </div>
+  {% if displayPlayerInMain %}  
     <div class="panel-body">
         <div class="btn-group btn-group-justified">
             <a href="./pause" class="btn btn-default">Pause</a>
             <a href="./stop" class="btn btn-default">Stop</a>
         </div>
     </div>
+  {% endif %}
 </div>

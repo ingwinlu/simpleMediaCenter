@@ -18,16 +18,9 @@
         <div class="navbar-header">
             <a href="./" class="navbar-brand">simpleMediaCenter</a>
         </div>
-
-        <div class="navbar-right">
-            <button type="button" class="btn btn-default navbar-btn">
-                <a href="./pause" class="navbar-link"><span class="glyphicon glyphicon-pause"></span></a>
-            </button>
-            <button type="button" class="btn btn-default navbar-btn">
-                <a href="./stop" class="navbar-link"><span class="glyphicon glyphicon-stop"></span></a>
-            </button>
-        </div>
-
+      {% if displayPlayerInNav %}
+        {% include "playernav.html" %}
+      {% endif %}
     </div>
 </div>
 

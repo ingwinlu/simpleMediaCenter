@@ -21,7 +21,8 @@ class RootController(TGController):
     def index(self):
         templateVars = {
             'displaySidebar'  : False,
-            'displayPlayer'  : False,
+            'displayPlayerInMain'  : False,
+            'displayPlayerInNav'  : False,
             'displayBrowser' : False,
             'displayPlaylist': False
             }

@@ -80,7 +80,7 @@ class Omxplayer(Player):
         
     def getDict(self):
         tempDict={}
-        tempDict['displayPlayer'] = True
+        tempDict['displayPlayerInNav'] = True
         tempDict['playerStatus'] = self.__playerstatus
         tempDict['currentFile'] = self.__currentfile
         return tempDict

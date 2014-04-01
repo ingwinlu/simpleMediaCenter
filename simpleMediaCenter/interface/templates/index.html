@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    {% if displayPlayer %}
+    {% if displayPlayerInMain or displayPlayerInNav %}
         {% include "player.html" %}
     {% endif %}
     {% if displayPlaylist %}
