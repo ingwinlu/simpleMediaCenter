@@ -8,7 +8,8 @@ Planned Core Features:
 + omxplayer compability
 
 ##TODO
-+ use javascript to disable buttons
++ implement an interface where js or other clients can pull json data from
++ use javascript to disable buttons and display status/warning texts instead of jinja site generation for everything
 + move player to the navbar
 + implement playlist functionality
 + implement multithreading
