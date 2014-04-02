@@ -93,7 +93,7 @@ class RootController(TGController):
         redirect("/")
         
     @expose()
-    def status(self):
+    def status(self,_=None):
         self.updateStatus()
         return json.dumps(self.statusDict)
         
