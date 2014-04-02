@@ -30,7 +30,8 @@ class Omxplayer(Player):
             self.__process.poll()
             if(self.__process.returncode is not None):
                 logging.debug("process ended")
-                # read sterr or stdout maybe before setting to None
+                for line in self.__process.stdout:
+                    logging.debug("stdout" + line.decode('utf-8'))
                 self.__resetplayer()
                 
     
@@ -47,7 +48,7 @@ class Omxplayer(Player):
         if(self.__process is not None):
             self.stop()
             
-        line = self.__playerline + " " + self.__cmdline + " " + file
+        line = self.__playerline + " " + self.__cmdline + " '" + file + "'"
         self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , close_fds=True)
         self.__playerstatus=1
         self.__currentfile = file
@@ -79,6 +80,7 @@ class Omxplayer(Player):
             logging.debug("player stopped")
         
     def getDict(self):
+        self.poll()
         tempDict={}
         tempDict['displayPlayerInNav'] = True
         tempDict['playerStatus'] = self.__playerstatus

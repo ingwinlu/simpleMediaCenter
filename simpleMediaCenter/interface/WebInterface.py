@@ -4,38 +4,45 @@ from wsgiref.simple_server import make_server
 import os
 import jinja2
 import logging
+import json
 
 class RootController(TGController):  
     player=None
     crawler=None
     playlist=None
+    statusDict=None
 
     def __init__(self, player=None,playlist=None, browser=None ):
         logging.debug("WebInterface init")
         self.player=player
         self.browser=browser
         self.playlist=playlist
-        
-    
-    @expose('index.html')
-    def index(self):
-        templateVars = {
+        self.statusDict = {
             'displaySidebar'  : False,
             'displayPlayerInMain'  : False,
             'displayPlayerInNav'  : False,
             'displayBrowser' : False,
             'displayPlaylist': False
             }
-        if(self.player is not None):
-            templateVars.update(self.player.getDict())
-        if(self.playlist is not None):
-            templateVars.update(self.playlist.getDict())
-        if(self.browser is not None):
-            templateVars.update(self.browser.getDict())
             
-        logging.debug(templateVars)
+            
+    def updateStatus(self):
+        logging.debug("updateStatus")
+        if(self.player is not None):
+            self.statusDict.update(self.player.getDict())
+        if(self.playlist is not None):
+            self.statusDict.update(self.playlist.getDict())
+        if(self.browser is not None):
+            self.statusDict.update(self.browser.getDict())
+        
+    
+    @expose('index.html')
+    def index(self):
+        self.updateStatus()
+            
+        #logging.debug(statusDict)
                          
-        return templateVars
+        return self.statusDict
         
         
     
@@ -85,6 +92,11 @@ class RootController(TGController):
             logging.error("could not convert id")
         redirect("/")
         
+    @expose()
+    def status(self):
+        self.updateStatus()
+        return json.dumps(self.statusDict)
+        
         
 
     
@@ -95,13 +107,15 @@ class WebInterface(Interface):
     application=None
     keep_running=True
     player=None
+    controller=None
     
     def __init__(self, templatePath='./templates/', staticPath='./static/', player=None, playlist=None, browser=None):
         logging.debug("create WebInterface Instance")
         self.player=player
   
         logging.debug("setup TurboGears2")
-        self.config = AppConfig(minimal=True, root_controller=RootController(player=self.player, playlist=playlist, browser=browser))
+        self.controller = RootController(player=self.player, playlist=playlist, browser=browser)
+        self.config = AppConfig(minimal=True, root_controller=self.controller)
         
         #jinja stuff
         self.config.renderers.append('jinja')
@@ -123,6 +137,7 @@ class WebInterface(Interface):
             logging.debug("wait for request")
             try:
                 self.httpd.handle_request()
+                self.controller.updateStatus() # need for improvement
             except KeyboardInterrupt:
                 self.shutdown()
                 
