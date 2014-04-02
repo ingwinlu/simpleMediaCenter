@@ -1,7 +1,9 @@
+var runUpdate = 0
+
 $( document ).ready(function() {
     $.ajaxSetup({ cache: false });
     update()
-    setInterval("update()", 3000);
+    runUpdate = setInterval("update()", 3000);
     
 
 });
@@ -26,5 +28,7 @@ function update(){
         .fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ", " + error;
             console.log( "Request Failed: " + err );
+            alert("Could not load json, is the Server running?")
+            clearInterval(runUpdate)
         });
 }
