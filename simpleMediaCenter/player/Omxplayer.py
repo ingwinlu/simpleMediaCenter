@@ -71,7 +71,7 @@ class Omxplayer(Player):
             try:
                 logging.debug("waiting for process to close")
                 self.__process.wait(timeout=5)
-            except TimeoutExpired:
+            except subprocess.TimeoutExpired:
                 logging.debug("timeout occured, killing")
                 #self.__process.kill()
                 subprocess.Popen(shlex.split("killall omxplayer.bin")).wait() ##quickhack
