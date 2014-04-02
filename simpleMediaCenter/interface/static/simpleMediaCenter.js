@@ -3,9 +3,7 @@ var runUpdate = 0
 $( document ).ready(function() {
     $.ajaxSetup({ cache: false });
     update()
-    runUpdate = setInterval("update()", 3000);
-    
-
+    runUpdate = setInterval("update()", 1000);
 });
 
 
@@ -13,14 +11,14 @@ function update(){
     $.getJSON("./status")
         .done(function( json ) {
             if (json.playerStatus == "0"){ //stopped
-                $("#btn-pause").prop('disabled', true);
-                $("#btn-stop").prop('disabled', true);
+                $("#btn-pause").attr('disabled', true);
+                $("#btn-stop").attr('disabled', true);
             }else if (json.playerStatus == "1"){ //playing
-                $("#btn-pause").prop('disabled', false);
-                $("#btn-stop").prop('disabled', false);
+                $("#btn-pause").attr('disabled', false);
+                $("#btn-stop").attr('disabled', false);
             }else if (json.playerStatus == "2"){ //paused
-                $("#btn-pause").prop('disabled', false);
-                $("#btn-stop").prop('disabled', false);
+                $("#btn-pause").attr('disabled', false);
+                $("#btn-stop").attr('disabled', false);
             }
             console.log( "JSON Data: " + json.playerStatus );
             
