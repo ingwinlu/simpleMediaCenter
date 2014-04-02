@@ -31,7 +31,6 @@ class FileCrawler(Displayable):
         
     def getPath(list,key):
         return os.path.join(self.workingDir,list[key])
-
         
     def setWorkingDir(self, newWorkingDir):
         if(os.path.isdir(newWorkingDir)):
@@ -43,6 +42,9 @@ class FileCrawler(Displayable):
             self.workingDir = os.path.abspath(newWorkingDir)
             list = os.listdir(self.workingDir)
 
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+            
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
             
