@@ -11,14 +11,7 @@
   {% if displayPlayerInMain %}  
     <div class="panel-body">
         <div class="btn-group btn-group-justified">
-            <a href="./pause" id="btn-pause" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-pause"></span>
-                Pause
-            </a>
-            <a href="./stop" id="btn-stop" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-stop"></span>
-                Stop
-            </a>
+            {% include playerbutton.html %}
         </div>
     </div>
   {% endif %}
