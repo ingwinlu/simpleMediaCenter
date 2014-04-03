@@ -9,13 +9,14 @@ Planned Core Features:
 
 ##TODO
 + ~~implement an interface where js or other clients can pull json data from~~
-+ implement configparser and split up index page generation from playerstatus
 + ~~use javascript to disable buttons~~
-+ javascript to display status/warning texts
 + ~~move player to the navbar~~
++ implement configparser and split up index page generation from playerstatus
++ javascript to display status/warning texts
 + implement playlist functionality
 + improve documentation 
 + improve comments in code
++ drag and drop between browser/playlist
 
 ##Requirements
 + [omxplayer](http://omxplayer.sconde.net/)
@@ -24,7 +25,7 @@ Planned Core Features:
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch)
 
 ##Screenshot
-![index Screenshot V0.3](./docs/simpleMediaServer_v0_3.PNG)
+![index Screenshot V0.4](./docs/simpleMediaServer_v0_4.PNG)
 
 
  
