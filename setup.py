@@ -9,7 +9,7 @@ setup(
 			'simpleMediaCenter.player',
 			'simpleMediaCenter.playlist'],
     package_data={
-            'simpleMediaCenter.interface' : ['templates/*.html','static/*.css'],
+            'simpleMediaCenter.interface' : ['templates/*.html','static/*.css','static/*.js'],
             '' : ['LICENSE','README.md']            
     },
     requires = [
@@ -19,6 +19,6 @@ setup(
 	license=open('LICENSE').read(),
 	long_description=open('README.md').read(),
 	author='winlu',
-	author_email='derwinlu+python@gmail.com',
+	author_email='derwinlu+simpleMediaCenter@gmail.com',
 )
 
