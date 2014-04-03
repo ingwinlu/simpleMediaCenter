@@ -4,7 +4,7 @@ setup(
 	name='simpleMediaCenter',
 	version='0.2',
 	packages=['simpleMediaCenter',
-			'simpleMediaCenter.fileCrawler',
+			'simpleMediaCenter.browser',
 			'simpleMediaCenter.interface',
 			'simpleMediaCenter.player',
 			'simpleMediaCenter.playlist'],

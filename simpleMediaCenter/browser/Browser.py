@@ -2,7 +2,7 @@ import os
 import logging
 from interface.Interface import Displayable
 
-class FileCrawler(Displayable):
+class FileBrowser(Displayable):
     workingDir=''
     dirlist = {}
     filelist = {}
