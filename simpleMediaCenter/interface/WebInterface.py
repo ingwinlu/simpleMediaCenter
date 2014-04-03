@@ -39,9 +39,6 @@ class RootController(TGController):
     @expose('index.html')
     def index(self):
         self.updateStatus()
-            
-        #logging.debug(statusDict)
-                         
         return self.statusDict
         
         

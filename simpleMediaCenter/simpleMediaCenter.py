@@ -1,7 +1,7 @@
 from interface.WebInterface import WebInterface
 from player.Omxplayer import Omxplayer
 from fileCrawler.FileCrawler import FileCrawler
-#from fileCrawler.FileCrawler import FileCrawler
+from playlist.Playlist import Single
 import logging
 import os
 
@@ -11,7 +11,8 @@ pathToStatic=os.path.abspath('./interface/static/')
 logging.basicConfig(level=logging.DEBUG)
 omxplayer = Omxplayer("-o hdmi")
 fileCrawler = FileCrawler()
-interface = WebInterface(pathToTemplates,pathToStatic, player=omxplayer, browser=fileCrawler)
+playList = Single()
+interface = WebInterface(pathToTemplates,pathToStatic, player=omxplayer, playlist=playList, browser=fileCrawler)
 interface.run()
 
 

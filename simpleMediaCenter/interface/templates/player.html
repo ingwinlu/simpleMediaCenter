@@ -2,11 +2,11 @@
     <div class="panel-heading">
         <h3 id="player-text" class="panel-title">
         {% if playerStatus == 0 %}
-            Player - stopped
+            Player - {{playerType}} - stopped
         {% elif playerStatus == 1 %}
-            Player - playing {{ currentFile }}
+            Player - {{playerType}} - playing {{ currentFile }}
         {% elif playerStatus == 2 %}
-            Player - paused {{ currentFile }}
+            Player - {{playerType}} - paused {{ currentFile }}
         {% endif %}
         </h3>
     </div>

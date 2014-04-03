@@ -85,6 +85,7 @@ class Omxplayer(Player):
         tempDict['displayPlayerInNav'] = True
         tempDict['playerStatus'] = self.__playerstatus
         tempDict['currentFile'] = self.__currentfile
+        tempDict['playerType'] = self.__class__.__name__
         return tempDict
         
 

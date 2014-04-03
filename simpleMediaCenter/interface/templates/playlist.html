@@ -1,8 +1,12 @@
 <div id="playlist" class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">Playlist</h3>
+        <h3 class="panel-title">Playlist - {{playlistType}}</h3>
     </div>
     <div class="panel-body">
-        inside playlist.html
+        <ul class="list-group">
+          {% for entry in playlistFiles %}
+            <a href="#"  class="list-group-item">{{entry}}</a>
+          {% endfor %}
+        </ul>
     </div>
 </div>

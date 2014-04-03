@@ -69,9 +69,9 @@ class FileCrawler(Displayable):
         """
         tempDict={}
         tempDict['displayBrowser'] = True
-        tempDict['workingDir'] = self.workingDir
-        tempDict['dirs'] = self.dirlist
-        tempDict['files']= self.filelist
+        tempDict['browserWorkingDir'] = self.workingDir
+        tempDict['browserDirs'] = self.dirlist
+        tempDict['browserFiles']= self.filelist
         return tempDict
         
         
