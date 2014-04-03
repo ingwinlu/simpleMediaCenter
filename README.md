@@ -8,12 +8,12 @@ Planned Core Features:
 + omxplayer compability
 
 ##TODO
-+ implement an interface where js or other clients can pull json data from
++ ~~implement an interface where js or other clients can pull json data from~~
 + implement configparser and split up intex page generation from playerstatus
-+ use javascript to disable buttons and display status/warning texts instead of jinja site generation for everything
++ ~~use javascript to disable buttons~~
++ javascript to display status/warning texts
 + ~~move player to the navbar~~
 + implement playlist functionality
-+ implement multithreading
 
 ##Requirements
 + omxplayer
