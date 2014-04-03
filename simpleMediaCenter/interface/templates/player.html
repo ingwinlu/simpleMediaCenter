@@ -1,17 +1,19 @@
 <div id="player" class="panel panel-primary">
     <div class="panel-heading">
+        <h3 id="player-text" class="panel-title">
         {% if playerStatus == 0 %}
-            <h3 class="panel-title">Player - stopped</h3>
+            Player - stopped
         {% elif playerStatus == 1 %}
-            <h3 class="panel-title">Player - playing {{ currentFile }}</h3>
+            Player - playing {{ currentFile }}
         {% elif playerStatus == 2 %}
-            <h3 class="panel-title">Player - paused {{ currentFile }}</h3>
+            Player - paused {{ currentFile }}
         {% endif %}
+        </h3>
     </div>
   {% if displayPlayerInMain %}  
     <div class="panel-body">
         <div class="btn-group btn-group-justified">
-            {% include playerbutton.html %}
+            {% include "playerbutton.html" %}
         </div>
     </div>
   {% endif %}

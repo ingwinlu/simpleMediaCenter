@@ -134,10 +134,10 @@ class WebInterface(Interface):
     def run(self):
         logging.debug("start Webserver")
         while(self.keep_running):
-            logging.debug("wait for request")
+            logging.debug("start serve_forever()")
             try:
-                self.httpd.handle_request()
-                self.controller.updateStatus() # need for improvement
+                #self.httpd.handle_request()
+                self.httpd.serve_forever()
             except KeyboardInterrupt:
                 self.shutdown()
                 
