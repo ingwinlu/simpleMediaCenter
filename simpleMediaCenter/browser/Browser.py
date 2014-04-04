@@ -62,25 +62,9 @@ class FileBrowser(Displayable):
         return True
         
     def getDict(self):
-        """
-        templateVars = { "workingDir" : self.browser.getWorkingDir(),
-                         "dirs"       : self.browser.getDirList(),
-                         "files"      : self.browser.getFileList()}
-        """
         tempDict={}
         tempDict['displayBrowser'] = True
         tempDict['browserWorkingDir'] = self.workingDir
         tempDict['browserDirs'] = self.dirlist
         tempDict['browserFiles']= self.filelist
         return tempDict
-        
-        
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    logging.debug("testing FileCrawler")
-    filecrawler = FileCrawler()
-    logging.debug(filecrawler.getDirList())
-    logging.debug(filecrawler.getFileList())
-    logging.debug(filecrawler.getFileListPath(0))
-    logging.debug(filecrawler.getDirListPath(0))
-    

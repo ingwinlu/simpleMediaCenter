@@ -57,16 +57,3 @@ class Single(Playlist):
         
         return tempDict
         
-            
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    # test subclass
-    logging.debug("creating FiFo object")
-    fifo = FiFo()
-    logging.debug("adding file")
-    fifo.add('testfile.mp3')
-    fifo.add('testfile2.mp3')
-    logging.debug("getting file")
-    logging.debug(fifo.getNext())
-    logging.debug(fifo.getNext())
-    
