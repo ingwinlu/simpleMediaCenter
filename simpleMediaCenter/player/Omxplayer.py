@@ -36,19 +36,22 @@ class Omxplayer(Player):
                 
     
     def send(self, str):
-        logging.debug("Omxplayer send %s", str)
+        logging.debug("Player send %s", str)
         self.poll()
         if(self.__process is not None):
             self.__process.stdin.write(bytes(str, 'UTF-8'))
             self.__process.stdin.flush()
+            
+    def getcmdline(self,file):
+        return self.__playerline + " " + self.__cmdline + " '" + file + "'"
 
     def play(self, file):
         self.poll()
-        logging.debug("playing file: %s",file)
+        logging.debug("playing: %s",file)
         if(self.__process is not None):
             self.stop()
             
-        line = self.__playerline + " " + self.__cmdline + " '" + file + "'"
+        line = self.getcmdline(file)
         self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , close_fds=True)
         self.__playerstatus=1
         self.__currentfile = file
