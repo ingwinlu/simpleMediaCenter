@@ -94,9 +94,7 @@ class RootController(TGController):
         self.updateStatus()
         return json.dumps(self.statusDict)
         
-        
 
-    
 
 class WebInterface(Interface):
     config=None
