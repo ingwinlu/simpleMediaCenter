@@ -16,10 +16,8 @@ class TestOmxplayer(unittest.TestCase):
         self.omxplayer=None
         
     def test_playback(self):
-    
         self.omxplayer.play(self.testfilepath1)
         #time.sleep(2)
-        
         self.assertEqual(self.omxplayer.getDict()['playerStatus'], 1)
         self.assertEqual(self.omxplayer.getDict()['currentFile'], self.testfilepath1)
         self.omxplayer.pause()   

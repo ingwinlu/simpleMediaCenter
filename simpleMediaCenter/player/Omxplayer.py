@@ -52,7 +52,8 @@ class Omxplayer(Player):
             self.stop()
             
         line = self.getcmdline(file)
-        self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , close_fds=True)
+        self.__process = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE, stdin=subprocess.PIPE , 
+            stderr=subprocess.STDOUT, close_fds=True)
         self.__playerstatus=1
         self.__currentfile = file
         self.__paused=False
