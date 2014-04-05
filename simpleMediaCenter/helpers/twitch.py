@@ -1,5 +1,6 @@
 #-*- encoding: utf-8 -*-
-#orginal: https://raw.githubusercontent.com/StateOfTheArt89/Twitch.tv-on-XBMC/master/twitch.py
+#orginal: https://github.com/StateOfTheArt89/Twitch.tv-on-XBMC
+#released under GPL v3
 import sys
 from urllib.request import Request, urlopen
 from urllib.parse import quote_plus
