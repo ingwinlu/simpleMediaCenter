@@ -1,8 +1,8 @@
-#-*- encoding: utf-8 -*- 
-# original: https://raw.githubusercontent.com/StateOfTheArt89/Twitch.tv-on-XBMC/master/twitch.py
-
+#-*- encoding: utf-8 -*-
+#orginal: https://raw.githubusercontent.com/StateOfTheArt89/Twitch.tv-on-XBMC/master/twitch.py
 import sys
-import requests
+from urllib.request import Request, urlopen
+from urllib.parse import quote_plus
 import re
 try:
     import json
@@ -22,16 +22,21 @@ class JSONScraper(object):
         self.logger = logger
         
     def downloadWebData(self, url, headers=None):
-        req = requests.get(url, headers=headers)
-        return req.text
+        req = Request(url)
+        req.add_header(Keys.USER_AGENT, USER_AGENT)
+        response = urlopen(req)
+        data = response.read()
+        response.close()
+        return data
 
     def getJson(self, url, headers=None):
         try:
-            jsonString = requests.get(url, headers=headers)
+            jsonString = self.downloadWebData(url, headers)
         except:
             raise TwitchException(TwitchException.HTTP_ERROR)
         try:
-            jsonDict = jsonString.json()
+            self.logger.debug(jsonString)
+            jsonDict = json.loads(str(jsonString))
             self.logger.debug(json.dumps(jsonDict, indent=4, sort_keys=True))
             return jsonDict
         except:
@@ -57,13 +62,13 @@ class TwitchTV(object):
         return self._fetchItems(url, Keys.TOP)
 
     def getGameStreams(self, gameName, offset=10, limit=10):
-        quotedName = "'" + gameName + "'"
+        quotedName = quote_plus(gameName)
         options = Urls.OPTIONS_OFFSET_LIMIT_GAME.format(offset, limit, quotedName)
         url = ''.join([Urls.BASE, Keys.STREAMS, options])
         return self._fetchItems(url, Keys.STREAMS)
 
     def searchStreams(self, query, offset=10, limit=10):
-        quotedQuery = "'" + query + "'"
+        quotedQuery = quote_plus(query)
         options = Urls.OPTIONS_OFFSET_LIMIT_QUERY.format(offset, limit, quotedQuery)
         url = ''.join([Urls.SEARCH, Keys.STREAMS, options])
         return self._fetchItems(url, Keys.STREAMS)
@@ -93,8 +98,27 @@ class TwitchTV(object):
         url = Urls.VIDEO_INFO.format(id)
         return self._fetchItems(url, 'title')
         
+    def getVideoChunksPlaylist(self, id):
+        vidChunks = self.getVideoChunks(id)
+        chunks = vidChunks['chunks']['live']
+        title = self.getVideoTitle(id)
+        itemTitle = '%s - Part {0} of %s' % (title, len(chunks))
+
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        
+        # For some reason first item is skipped, so added a dummy first item to fix
+        # theres probably a better way
+        playlist.add('', xbmcgui.ListItem('', thumbnailImage=vidChunks['preview']))
+        curN = 0
+        for chunk in chunks:
+            curN += 1
+            playlist.add(chunk['url'], xbmcgui.ListItem(itemTitle.format(curN), thumbnailImage=vidChunks['preview']))
+            
+        return playlist
+
     def getFollowingChannelNames(self, username):
-        quotedUsername = "'" + username + "'"
+        quotedUsername = quote_plus(username)
         url = Urls.FOLLOWED_CHANNELS.format(quotedUsername)
         return self._fetchItems(url, Keys.FOLLOWS)
 
@@ -106,7 +130,7 @@ class TwitchTV(object):
         Consider this method to be unstable, because the
         requested resource is not part of the official Twitch API
         '''
-        quotedTeamName = "'" + teamName + "'"
+        quotedTeamName = quote_plus(teamName)
         url = Urls.TEAMSTREAM.format(quotedTeamName)
         return self._fetchItems(url, Keys.CHANNELS)
 
@@ -209,9 +233,9 @@ class TwitchVideoResolver(object):
         url = Urls.TWITCH_SWF + channelName
         headers = {Keys.USER_AGENT: USER_AGENT,
                    Keys.REFERER: Urls.TWITCH_TV + channelName}
-        req = requests.get(url, headers=headers)
-        self.logger.debug("getSwfUrl:" + req.url)
-        return req.url
+        req = Request(url, None, headers)
+        response = urlopen(req)
+        return response.geturl()
 
     def _streamIsAccessible(self, stream):
         stream_is_public = (stream.get(Keys.NEEDED_INFO) != "channel_subscription")
@@ -223,12 +247,9 @@ class TwitchVideoResolver(object):
         return stream_is_public and stream_has_token
 
     def _getStreamsForChannel(self, channelName):
-        headers = {Keys.USER_AGENT: USER_AGENT}
-        url = Urls.TWITCH_API.format(channel=channelName, headers=headers)
-        ret = requests.get(url).json()
-        self.logger.debug("getStreamsForChannel:")
-        self.logger.debug(json.dumps(ret))
-        return ret
+        scraper = JSONScraper(self.logger)
+        url = Urls.TWITCH_API.format(channel=channelName)
+        return scraper.getJson(url)
 
     def _parseStreamValues(self, stream, swfUrl):
         streamVars = {Keys.SWF_URL: swfUrl}
