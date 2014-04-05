@@ -21,7 +21,7 @@ class TestTwitchplayer(unittest.TestCase):
     def test_playback(self):
         self.assertEqual(self.twitchplayer.getDict()['playerStatus'], 0)
         self.twitchplayer.play(self.playurl)
-        #time.sleep(10)
+        time.sleep(10)
         self.twitchplayer.pause()   
         self.assertEqual(self.twitchplayer.getDict()['playerStatus'], 2)
         self.twitchplayer.pause()  

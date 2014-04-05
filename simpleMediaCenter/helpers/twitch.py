@@ -25,7 +25,7 @@ class JSONScraper(object):
         req = Request(url)
         req.add_header(Keys.USER_AGENT, USER_AGENT)
         response = urlopen(req)
-        data = response.read()
+        data = response.readall().decode('utf-8')
         response.close()
         return data
 
