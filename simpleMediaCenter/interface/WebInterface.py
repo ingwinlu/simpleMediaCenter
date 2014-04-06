@@ -23,21 +23,18 @@ class WebController(TGController):
             'browserArray'  : self.browserList.getArray()
             }
             
-            
     def updateStatus(self):
         logging.debug("updateStatus")
         self.statusDict.update(self.playerList.getActive().getDict())
         self.statusDict.update(self.playlistList.getActive().getDict())
         self.statusDict.update(self.browserList.getActive().getDict())
-        
     
-    
+    #index Page
     @expose('index.html')
     def index(self):
         self.updateStatus()
         logging.debug(self.statusDict)
         return self.statusDict
-        
         
     
     #controls
@@ -95,6 +92,9 @@ class WebController(TGController):
             logging.error("id not in DirList")
         redirect("/")
         
+    #TODO implement new change controls
+        
+    #ajax interface
     @expose()
     def status(self,_=None):
         self.updateStatus()
