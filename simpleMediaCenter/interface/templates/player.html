@@ -1,20 +1,30 @@
 <div id="playerpanel" class="panel panel-primary">
     <div class="panel-heading">
-        <h3 id="player-text" class="panel-title">
-        {% if playerStatus == 0 %}
-            Player - {{playerType}} - stopped
-        {% elif playerStatus == 1 %}
-            Player - {{playerType}} - playing {{ currentFile }}
-        {% elif playerStatus == 2 %}
-            Player - {{playerType}} - paused {{ currentFile }}
-        {% endif %}
-        </h3>
-    </div>
-  {% if displayPlayerInMain %}  
-    <div class="panel-body">
-        <div class="btn-group btn-group-justified">
-            {% include "playerbutton.html" %}
+        <div class="dropdown">
+            <a class="dropbown-toggle panel-title" data-toggle="dropdown" href="#">{{activePlayer}}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              {% for player in playerArray%}
+                <li>
+                    <a href="./selectPlayer?id={{loop.index0}}">{{player}}</a>
+                </li>
+               {% endfor %}
+            </ul>
         </div>
     </div>
-  {% endif %}
+    <div id="player-text" class="panel-body">
+        {# note: disabled template because we no longer use this
+            <div class="btn-group btn-group-justified">
+            {% include "playerbutton.html" %}
+            </div>
+        #}
+        {% if playerStatus == 0 %}
+            Player - {{activePlayer}} - stopped
+        {% elif playerStatus == 1 %}
+            Player - {{activePlayer}} - playing {{ currentFile }}
+        {% elif playerStatus == 2 %}
+            Player - {{activePlayer}} - paused {{ currentFile }}
+        {% endif %}
+    </div>
 </div>

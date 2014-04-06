@@ -1,11 +1,12 @@
 class Interface():
     pass
-    
-    #no idea what i need to abstract here
-    
+    #no idea what i need to abstract here, need to revisit when adding console interface
     
 class Displayable():
     def getDict(self):
+        raise NotImplementedError
+        
+    def getName(self):
         raise NotImplementedError
     
 class InterfaceListable():
@@ -32,4 +33,8 @@ class InterfaceListable():
         return self.__array[self.__current]
         
     def getArray(self):
-        return self.__array
+        temparray = []
+        for i in self.__array:
+            temparray.append(i.getName())
+            
+        return temparray

@@ -6,44 +6,41 @@ import jinja2
 import logging
 import json
 
-class RootController(TGController):  
-    player=None
-    crawler=None
-    playlist=None
+class WebController(TGController):  
+    playerList=None
+    playlistList=None
+    browserList=None
     statusDict=None
 
-    def __init__(self, player=None,playlist=None, browser=None ):
+    def __init__(self, playerList=None, playlistList=None, browserList=None ):
         logging.debug("WebInterface init")
-        self.player=player
-        self.browser=browser
-        self.playlist=playlist
+        self.playerList=playerList
+        self.browserList=browserList
+        self.playlistList=playlistList
         self.statusDict = {
-            'displaySidebar'  : False,
-            'displayPlayerInMain'  : False,
-            'displayPlayerInNav'  : False,
-            'displayBrowser' : False,
-            'displayPlaylist': False
+            'playerArray'  : self.playerList.getArray(),
+            'playlistArray'  : self.playlistList.getArray(),
+            'browserArray'  : self.browserList.getArray()
             }
             
             
     def updateStatus(self):
         logging.debug("updateStatus")
-        if(self.player is not None):
-            self.statusDict.update(self.player.getDict())
-        if(self.playlist is not None):
-            self.statusDict.update(self.playlist.getDict())
-        if(self.browser is not None):
-            self.statusDict.update(self.browser.getDict())
+        self.statusDict.update(self.playerList.getActive().getDict())
+        self.statusDict.update(self.playlistList.getActive().getDict())
+        self.statusDict.update(self.browserList.getActive().getDict())
         
+    
     
     @expose('index.html')
     def index(self):
         self.updateStatus()
+        logging.debug(self.statusDict)
         return self.statusDict
         
         
     
-    #controls
+    #controls NEED REWORK
     @expose()
     def play(self, id=None):
         logging.debug("play called %s", id)
@@ -104,12 +101,11 @@ class WebInterface(Interface):
     player=None
     controller=None
     
-    def __init__(self, templatePath='./templates/', staticPath='./static/', player=None, playlist=None, browser=None):
+    def __init__(self, templatePath, staticPath, controller):
         logging.debug("create WebInterface Instance")
-        self.player=player
   
         logging.debug("setup TurboGears2")
-        self.controller = RootController(player=self.player, playlist=playlist, browser=browser)
+        self.controller = controller
         self.config = AppConfig(minimal=True, root_controller=self.controller)
         
         #jinja stuff
@@ -141,11 +137,4 @@ class WebInterface(Interface):
         logging.info("init shutdown")
         self.keep_running=False
         
-
-        
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    logging.debug("testing WebInterface")
-    webinterface = WebInterface()
-    webinterface.run()
-    
+  

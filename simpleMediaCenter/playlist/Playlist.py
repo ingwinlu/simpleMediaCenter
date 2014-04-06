@@ -51,9 +51,10 @@ class Single(Playlist):
   
     def getDict(self):
         tempDict={}
-        tempDict['displayPlaylist'] = True
-        tempDict['playlistType'] = self.__class__.__name__
+        tempDict['activePlaylist'] = self.getName()
         tempDict['playlistFiles'] = [self.filePath]
-        
         return tempDict
+        
+    def getName(self):
+        return self.__class__.__name__
         

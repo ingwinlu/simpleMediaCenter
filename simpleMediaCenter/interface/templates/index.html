@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    {% if displayPlayerInMain or displayPlayerInNav %}
-        {% include "player.html" %}
-    {% endif %}
-    {% if displayPlaylist %}
-        {% include "playlist.html" %}
-    {% endif %}
-    {% if displayBrowser %}
-        {% include "browser.html" %}
-    {% endif %}
+    {% include "player.html" %}
+    {% include "playlist.html" %}
+    {% include "browser.html" %}
 {% endblock content %}

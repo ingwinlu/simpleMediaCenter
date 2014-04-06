@@ -86,26 +86,10 @@ class Omxplayer(Player):
     def getDict(self):
         self.poll()
         tempDict={}
-        tempDict['displayPlayerInNav'] = True
+        tempDict['activePlayer'] = self.getName()
         tempDict['playerStatus'] = self.__playerstatus
         tempDict['currentFile'] = self.__currentfile
-        tempDict['playerType'] = self.__class__.__name__
         return tempDict
         
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    logging.debug("testing Omxplayer")
-    omxplayer = Omxplayer("");
-    omxplayer.stop()
-    omxplayer.play("test.mp4")
-    logging.debug("sleeping for 10 seconds")
-    time.sleep(10)
-    logging.debug("done sleeping")
-    omxplayer.play("test.mp4")
-    logging.debug("sleeping for 10 seconds")
-    time.sleep(10)
-    logging.debug("done sleeping")
-    omxplayer.stop()
-    
-    
+        

@@ -24,5 +24,4 @@ class Twitchplayer(Omxplayer):
         super(Twitchplayer, self).stop()
         if (os.path.isfile(self.__playlist)):
             os.remove(self.__playlist)
-        
             

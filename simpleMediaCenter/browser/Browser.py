@@ -63,8 +63,11 @@ class FileBrowser(Displayable):
         
     def getDict(self):
         tempDict={}
-        tempDict['displayBrowser'] = True
         tempDict['browserWorkingDir'] = self.workingDir
         tempDict['browserDirs'] = self.dirlist
         tempDict['browserFiles']= self.filelist
+        tempDict['activeBrowser'] = self.getName()
         return tempDict
+    
+    def getName(self):
+        return self.__class__.__name__

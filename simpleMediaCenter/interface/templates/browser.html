@@ -1,6 +1,17 @@
 <div id="filebrowser" class="panel panel-warning">
     <div class="panel-heading">
-        <h3 class="panel-title">File Browser - current dir: {{ browserWorkingDir }}</h3>
+        <div class="dropdown">
+            <a class="dropbown-toggle panel-title" data-toggle="dropdown" href="#">Browser - {{activeBrowser}} - current dir: {{ browserWorkingDir }}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              {% for browser in browserArray%}
+                <li>
+                    <a href="./selectBrowser?id={{loop.index0}}">{{browser}}</a>
+                </li>
+               {% endfor %}
+            </ul>
+        </div>
     </div>
     <div class="panel-body">
         <div class="list-group">
