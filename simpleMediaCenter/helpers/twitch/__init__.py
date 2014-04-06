@@ -1,10 +1,12 @@
 #-*- encoding: utf-8 -*-
-#orginal: https://github.com/StateOfTheArt89/Twitch.tv-on-XBMC
-#released under GPL v3
-import sys
-from urllib.request import Request, urlopen
-from urllib.parse import quote_plus
-import re
+import sys, re
+try:
+    from urllib.request import urlopen, Request
+    from urllib.parse import quote_plus
+except ImportError:
+    from urllib import quote_plus
+    from urllib2 import Request, urlopen
+
 try:
     import json
 except:
@@ -26,18 +28,22 @@ class JSONScraper(object):
         req = Request(url)
         req.add_header(Keys.USER_AGENT, USER_AGENT)
         response = urlopen(req)
-        data = response.readall().decode('utf-8')
+        data = ""
+        if sys.version_info < (3, 0):
+            data = response.read()
+        else:
+            data = response.readall().decode('utf-8')
         response.close()
         return data
-
+        
+    
     def getJson(self, url, headers=None):
         try:
             jsonString = self.downloadWebData(url, headers)
         except:
             raise TwitchException(TwitchException.HTTP_ERROR)
         try:
-            self.logger.debug(jsonString)
-            jsonDict = json.loads(str(jsonString))
+            jsonDict = json.loads(jsonString)
             self.logger.debug(json.dumps(jsonDict, indent=4, sort_keys=True))
             return jsonDict
         except:
@@ -99,12 +105,14 @@ class TwitchTV(object):
         url = Urls.VIDEO_INFO.format(id)
         return self._fetchItems(url, 'title')
         
+    '''
+    needs to be rewritten to return a python list instead of a xbmc playlist
     def getVideoChunksPlaylist(self, id):
         vidChunks = self.getVideoChunks(id)
         chunks = vidChunks['chunks']['live']
         title = self.getVideoTitle(id)
         itemTitle = '%s - Part {0} of %s' % (title, len(chunks))
-
+        
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
         
@@ -117,7 +125,8 @@ class TwitchTV(object):
             playlist.add(chunk['url'], xbmcgui.ListItem(itemTitle.format(curN), thumbnailImage=vidChunks['preview']))
             
         return playlist
-
+    '''
+        
     def getFollowingChannelNames(self, username):
         quotedUsername = quote_plus(username)
         url = Urls.FOLLOWED_CHANNELS.format(quotedUsername)
@@ -296,6 +305,7 @@ class Keys(object):
     FOLLOWS = 'follows'
     GAME = 'game'
     LOGO = 'logo'
+    BOX = 'box'
     LARGE = 'large'
     NAME = 'name'
     NEEDED_INFO = 'needed_info'
