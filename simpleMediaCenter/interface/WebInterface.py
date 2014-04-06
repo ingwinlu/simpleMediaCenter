@@ -40,50 +40,59 @@ class WebController(TGController):
         
         
     
-    #controls NEED REWORK
+    #controls
     @expose()
     def play(self, id=None):
         logging.debug("play called %s", id)
-        if((self.player is None) or (id is None)):
+        if(id is None):
             logging.info("play failed")
             redirect("/")
+            return
         try:
             id = int(id)
-            if(id in self.browser.getFileList()):
-                logging.debug("trying to play %s" ,self.browser.getFileList()[id])
-                self.player.play(self.browser.getFileListPath(id))
-            else:
-                logging.error("id not in FileList")
         except:
             logging.error("could not convert id")
+        if(id in self.browserList.getActive().getFileList()):
+            logging.debug("trying to play %s" ,self.browserList.getActive().getFileList()[id])
+            self.playerList.getActive().play(self.browserList.getActive().getFileListPath(id))
+        else:
+            logging.error("id not in FileList")
+
         redirect("/")
     
     @expose()
     def stop(self):
         logging.debug("stop called")
-        if(self.player is not None):
-            self.player.stop()
+        self.playerList.getActive().stop()
         redirect("/")
         
     @expose()
     def pause(self):
         logging.debug("pause called")
-        if(self.player is not None):
-            self.player.pause()
+        self.playerList.getActive().pause()
         redirect("/")
         
     @expose()
     def change(self,id=None):
+        if(id is None):
+            logging.warning("id is None")
+            redirect("/")
+            return
         logging.debug("change called %s", id)
         try: 
             id = int(id)
-            if(id in self.browser.getDirList()):
-                logging.debug("trying to change into %s" ,self.browser.getDirListPath(id))
-                self.browser.setWorkingDir(self.browser.getDirListPath(id))
-            else:
-                logging.error("id not in DirList")
         except:
             logging.error("could not convert id")
+        if(id in self.browserList.getActive().getDirList()):
+            logging.debug(
+                "trying to change into %s" ,
+                self.browserList.getActive().getDirListPath(id)
+                )
+            self.browserList.getActive().setWorkingDir(
+                self.browserList.getActive().getDirListPath(id)
+                )
+        else:
+            logging.error("id not in DirList")
         redirect("/")
         
     @expose()
