@@ -22,8 +22,9 @@ fileBrowser = FileBrowser()
 browserlist = InterfaceListable([fileBrowser])
 
 logging.info("creating playlist objects")
-playList = Single()
-playlistlist = InterfaceListable([playList])
+#playList = Single()
+#playlistlist = InterfaceListable([playList])
+playlistlist = InterfaceListable([])
 
 logging.info("creating controller")
 controller = WebController(playerList=playerlist, playlistList=playlistlist, browserList=browserlist)

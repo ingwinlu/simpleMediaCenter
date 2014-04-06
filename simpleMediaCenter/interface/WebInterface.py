@@ -25,9 +25,12 @@ class WebController(TGController):
             
     def updateStatus(self):
         #logging.debug("updateStatus")
-        self.statusDict.update(self.playerList.getActive().getDict())
-        self.statusDict.update(self.playlistList.getActive().getDict())
-        self.statusDict.update(self.browserList.getActive().getDict())
+        if(self.playerList.getActive() is not None):
+            self.statusDict.update(self.playerList.getActive().getDict())
+        if(self.playlistList.getActive() is not None):
+            self.statusDict.update(self.playlistList.getActive().getDict())
+        if(self.browserList.getActive() is not None):
+            self.statusDict.update(self.browserList.getActive().getDict())
         
     def parseID(self, id):
         if(id is None):
