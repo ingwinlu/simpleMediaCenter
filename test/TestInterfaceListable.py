@@ -4,14 +4,12 @@ import time
 import requests
 
 class TestInterfaceListable(unittest.TestCase):
-    interfaceListable = None
 
     def setUp(self):
-        self.interfaceListable=InterfaceListable(['a','b','c'])
+        pass
         
     def tearDown(self):
-        interfaceListable = None
-        
+        pass
         
     def test_creation_1(self):
         with self.assertRaises(TypeError):
@@ -23,11 +21,13 @@ class TestInterfaceListable(unittest.TestCase):
             
     def test_set_outofbounds_1(self):
         with self.assertRaises(TypeError):
-            self.interfaceListable.setActive(-1)
+            interfaceListable=InterfaceListable(['a','b','c'])
+            interfaceListable.setActive(-1)
             
     def test_set_outofbounds_2(self):
         with self.assertRaises(TypeError):
-            self.interfaceListable.setActive(3)
+            interfaceListable=InterfaceListable(['a','b','c'])
+            interfaceListable.setActive(3)
             
     def test_getActive(self):
         interfaceListable=InterfaceListable(['a','b','c'])
@@ -37,6 +37,11 @@ class TestInterfaceListable(unittest.TestCase):
         interfaceListable=InterfaceListable(['a','b','c'])
         interfaceListable.setActive(1)
         self.assertEqual(interfaceListable.getActive(), 'b')
+        
+    def test_getArray(self):
+        array = ['a','b','c']
+        interfaceListable=InterfaceListable(array)
+        self.assertEqual(array, interfaceListable.getArray())
         
     def suite(self):
         testSuite = unittest.TestSuite()

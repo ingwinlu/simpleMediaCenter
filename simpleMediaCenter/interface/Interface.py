@@ -30,3 +30,6 @@ class InterfaceListable():
             
     def getActive(self):
         return self.__array[self.__current]
+        
+    def getArray(self):
+        return self.__array
