@@ -7,12 +7,18 @@ Planned Core Features:
 + Web Interface (jinja + turbogears)
 + omxplayer compability
 
-##TODO
+##TODO 
+priority from top to bottom:
 + ~~implement an interface where js or other clients can pull json data from~~
 + ~~use javascript to disable buttons~~
 + ~~move player to the navbar~~
-+ implement configparser and split up index page generation from playerstatus
-+ javascript to display status/warning texts
++ ~~split up index page generation from playerstatus~~
++ exceptions
+   + create exceptionclasses for input/processing errors
+   + create space in templates to display exceptiontext
+   + implement javascript to display exceptions
++ implement configparser
++ implement twitch.tv browser
 + implement playlist functionality
 + improve documentation 
 + improve comments in code
