@@ -24,10 +24,22 @@ class WebController(TGController):
             }
             
     def updateStatus(self):
-        logging.debug("updateStatus")
+        #logging.debug("updateStatus")
         self.statusDict.update(self.playerList.getActive().getDict())
         self.statusDict.update(self.playlistList.getActive().getDict())
         self.statusDict.update(self.browserList.getActive().getDict())
+        
+    def parseID(self, id):
+        if(id is None):
+            logging.warning("id is None")
+            #TODO ADD EXCEPTION
+            return None
+        try: 
+            id = int(id)
+        except:
+            logging.error("could not convert id")
+            #TODO ADD EXCEPTION
+        return id
     
     #index Page
     @expose('index.html')
@@ -41,14 +53,11 @@ class WebController(TGController):
     @expose()
     def play(self, id=None):
         logging.debug("play called %s", id)
+        id = self.parseID(id)
         if(id is None):
             logging.info("play failed")
             redirect("/")
             return
-        try:
-            id = int(id)
-        except:
-            logging.error("could not convert id")
         if(id in self.browserList.getActive().getFileList()):
             logging.debug("trying to play %s" ,self.browserList.getActive().getFileList()[id])
             self.playerList.getActive().play(self.browserList.getActive().getFileListPath(id))
@@ -71,15 +80,12 @@ class WebController(TGController):
         
     @expose()
     def change(self,id=None):
+        id = self.parseID(id)
         if(id is None):
             logging.warning("id is None")
             redirect("/")
             return
         logging.debug("change called %s", id)
-        try: 
-            id = int(id)
-        except:
-            logging.error("could not convert id")
         if(id in self.browserList.getActive().getDirList()):
             logging.debug(
                 "trying to change into %s" ,
@@ -92,7 +98,45 @@ class WebController(TGController):
             logging.error("id not in DirList")
         redirect("/")
         
-    #TODO implement new change controls
+    @expose()
+    def selectPlayer(self, id=None):
+        id = self.parseID(id)
+        if(id is None):
+            logging.warning("id is None")
+            redirect("/")
+            return
+        try:
+            self.playerList.getActive().stop()
+            self.playerList.setActive(id)
+        except:
+            pass    #todo
+        redirect("/")
+    
+    @expose()
+    def selectBrowser(self, id=None):
+        id = self.parseID(id)
+        if(id is None):
+            logging.warning("id is None")
+            redirect("/")
+            return
+        try:
+            self.browserList.setActive(id)
+        except:
+            pass    #todo
+        redirect("/")
+        
+    @expose()
+    def selectPlaylist(self, id=None):
+        id = self.parseID(id)
+        if(id is None):
+            logging.warning("id is None")
+            redirect("/")
+            return
+        try:
+            self.playlistList.setActive(id)
+        except:
+            pass    #todo
+        redirect("/")
         
     #ajax interface
     @expose()
