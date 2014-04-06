@@ -19,6 +19,7 @@ priority from top to bottom:
    + implement javascript to display exceptions
 + implement configparser
 + implement twitch.tv browser
++ couple player with compatible browsers
 + implement playlist functionality
 + improve documentation 
 + improve comments in code
