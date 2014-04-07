@@ -15,8 +15,8 @@ priority from top to bottom:
 + ~~split up index page generation from playerstatus~~
 + exceptions
    + create exceptionclasses for input/processing errors
-   + create space in templates to display exceptiontext
-   + implement javascript to display exceptions
+   + ~~create space in templates to display exceptiontext~~
+   + ~~implement javascript to display exceptions~~
 + implement configparser
 + implement twitch.tv browser
 + couple player with compatible browsers
