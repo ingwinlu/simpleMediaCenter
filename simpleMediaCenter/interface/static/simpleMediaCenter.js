@@ -10,6 +10,13 @@ $( document ).ready(function() {
 function update(){
     $.getJSON("./status/")
         .done(function( json ) {
+            //check if exception occured
+            if(json.exceptionStatus == "1"){ //exception occured
+                showException(json.exceptionTitle,json.exceptionBody)
+            }
+            
+            
+            //set player buttons
             if (json.playerStatus == "0"){ //stopped
                 $("#btn-pause").attr('disabled', true);
                 $("#btn-resume").attr('disabled', true);
@@ -29,8 +36,6 @@ function update(){
                 
                 $("#player-text").text('Player - ' + json.activePlayer + ' - paused ' + json.currentFile)
             }
-            //console.log( "JSON Data: " + json.playerStatus );
-            
         })
         .fail(function( jqxhr, textStatus, error ) {
             clearInterval(runUpdate)
@@ -44,4 +49,9 @@ function showException(title, body){
     $("#exception-title").text(title)
     $("#exception-body").text(body)
     $("#exception").show();
+}
+
+function clearException(){
+    $("#exception").hide();
+    window.location = "./clearException";
 }

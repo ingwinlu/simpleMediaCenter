@@ -7,8 +7,33 @@ class Displayable():
         raise NotImplementedError
         
     def getName(self):
-        raise NotImplementedError
-    
+        return self.__class__.__name__
+        
+class ExceptionDisplayHandler(Displayable):
+    __head=""
+    __body=""
+    __status=0
+
+    def __init__(self):
+        pass
+        
+    def setException(self, head, body):
+        self.__head=head
+        self.__body=body
+        self.__status=1
+        
+    def clearException(self):
+        self.__head=""
+        self.__body=""
+        self.__status=0
+        
+    def getDict(self):
+        tempDict={}
+        tempDict['exceptionStatus'] = self.__status
+        tempDict['exceptionTitle'] = self.__head
+        tempDict['exceptionBody'] = self.__body
+        return tempDict
+        
 class InterfaceListable():
     __array=None
     __current=None

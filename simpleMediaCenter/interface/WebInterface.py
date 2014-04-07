@@ -1,4 +1,4 @@
-from interface.Interface import Interface
+from interface.Interface import Interface, ExceptionDisplayHandler
 from tg import expose, TGController, AppConfig, redirect, config
 from wsgiref.simple_server import make_server
 import os
@@ -11,16 +11,18 @@ class WebController(TGController):
     playlistList=None
     browserList=None
     statusDict=None
+    exceptionDisplayHandler=None
 
     def __init__(self, playerList=None, playlistList=None, browserList=None ):
         logging.debug("WebInterface init")
         self.playerList=playerList
         self.browserList=browserList
         self.playlistList=playlistList
+        self.exceptionDisplayHandler=ExceptionDisplayHandler()
         self.statusDict = {
             'playerArray'  : self.playerList.getArray(),
             'playlistArray'  : self.playlistList.getArray(),
-            'browserArray'  : self.browserList.getArray()
+            'browserArray'  : self.browserList.getArray(),
             }
             
     def updateStatus(self):
@@ -31,6 +33,9 @@ class WebController(TGController):
             self.statusDict.update(self.playlistList.getActive().getDict())
         if(self.browserList.getActive() is not None):
             self.statusDict.update(self.browserList.getActive().getDict())
+        if(self.exceptionDisplayHandler is not None):
+            self.statusDict.update(self.exceptionDisplayHandler.getDict())
+            
         
     def parseID(self, id):
         if(id is None):
@@ -42,6 +47,7 @@ class WebController(TGController):
         except:
             logging.error("could not convert id")
             #TODO ADD EXCEPTION
+            self.exceptionDisplayHandler.setException('ID Parse Exception','Could not convert "' + id + '" to an Integer')
         return id
     
     #index Page
@@ -139,6 +145,11 @@ class WebController(TGController):
             self.playlistList.setActive(id)
         except:
             pass    #todo
+        redirect("/")
+        
+    @expose()
+    def clearException(self):
+        self.exceptionDisplayHandler.clearException()
         redirect("/")
         
     #ajax interface
