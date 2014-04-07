@@ -36,6 +36,12 @@ function update(){
             clearInterval(runUpdate)
             var err = textStatus + ", " + error;
             console.log( "Request Failed: " + err );
-            alert("Could not load json, is the Server running?")
+            showException('Connection lost', 'Connection to Media Center lost, is the server still running?')
         });
+}
+
+function showException(title, body){
+    $("#exception-title").text(title)
+    $("#exception-body").text(body)
+    $("#exception").show();
 }
