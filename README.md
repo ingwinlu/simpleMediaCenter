@@ -14,13 +14,14 @@ priority from top to bottom:
 + ~~move player to the navbar~~
 + ~~split up index page generation from playerstatus~~
 + rework Browser
+   + should use id's to interact with controller, not the actual value, no idea what I was thinking
+   + couple them with player, i.e. don't let any player use any browser
+   + complete TwitchBrowser
 + exceptions
    + create exceptionclasses for input/processing errors
    + ~~create space in templates to display exceptiontext~~
    + ~~implement javascript to display exceptions~~
 + implement configparser
-+ implement twitch.tv browser
-+ couple player with compatible browsers
 + implement playlist functionality
 + improve documentation 
 + improve comments in code
@@ -31,6 +32,17 @@ priority from top to bottom:
 + [TurboGears2](http://turbogears.org/)
 + [jinja2](http://jinja.pocoo.org/)
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch)
+
+   cosmo theme is included
+
+##Installation
+1. install omxplayer
+2. install Turbogears2 and jinja2 via python-pip
+3. clone this repository (on release there will be a package on pypi)
+4. navigate to the simpleMediaCenter/simpleMediaCenter directory
+5. run simpleMediaCenter.py
+
+Please note that this project is still in heavy development and way of installation/configuration will improve
 
 ##Screenshot
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_4.PNG)
