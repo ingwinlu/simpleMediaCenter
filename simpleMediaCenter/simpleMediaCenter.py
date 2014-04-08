@@ -2,7 +2,7 @@ from interface.WebInterface import WebInterface, WebController
 from interface.Interface import InterfaceListable
 from player.Omxplayer import Omxplayer
 from player.Twitchplayer import Twitchplayer
-from browser.Browser import FileBrowser
+from browser.Browser import FileBrowser, TwitchBrowser
 from playlist.Playlist import Single
 import logging
 import os
@@ -19,7 +19,8 @@ playerlist = InterfaceListable([omxplayer,twitchplayer])
 
 logging.info("creating browser objects")
 fileBrowser = FileBrowser()
-browserlist = InterfaceListable([fileBrowser])
+twitchBrowser = TwitchBrowser()
+browserlist = InterfaceListable([fileBrowser,twitchBrowser])
 
 logging.info("creating playlist objects")
 #playList = Single()

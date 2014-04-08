@@ -1,6 +1,7 @@
 import os
 import logging
 from interface.Interface import Displayable
+from helpers.twitch import *
 
 class FileBrowser(Displayable):
     workingDir=''
@@ -31,7 +32,7 @@ class FileBrowser(Displayable):
         
     def getPath(list,key):
         return os.path.join(self.workingDir,list[key])
-        
+      
     def setWorkingDir(self, newWorkingDir):
         if(os.path.isdir(newWorkingDir)):
             dirlistcounter=0
@@ -71,3 +72,62 @@ class FileBrowser(Displayable):
     
     def getName(self):
         return self.__class__.__name__
+
+#super(TwitchBrowser, self).stop()        
+class TwitchBrowser(FileBrowser):
+    twitchTV = TwitchTV(logging)
+
+    def __init__(self):
+        self.setWorkingDir('/')
+        
+    def getFileListPath(self, key):
+        if(key in self.filelist):
+            return self.filelist[key]
+        return None
+        
+    def getDirListPath(self, key):
+        if(key in self.dirlist):
+            self.dirlist[key]
+        return None
+        
+    def setWorkingDir(self, newWorkingDir):
+        logging.debug('setWorkingDir in TwitchBrowser, ' + newWorkingDir)
+        dirlistcounter=0
+        filelistcounter=0
+        
+        self.dirlist = {}
+        self.filelist = {}
+        
+        if(newWorkingDir=='.'):
+            newWorkingDir=self.workingDir
+        
+        if(tempdir=='..'):
+            newWorkingDir='/' #needs to be refined
+            
+          
+        self.workingDir = newWorkingDir
+        
+        logging.debug("setWorkingDir, final: " + newWorkingDir)
+
+        if (newWorkingDir=='/'):
+            self.dirlist[dirlistcounter] = 'Featured'
+            dirlistcounter+=1
+            #self.dirlist[dirlistcounter] = 'Following'
+            #dirlistcounter+=1
+            return True
+        elif (newWorkingDir=='/Featured'):
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+        
+            self.dirlist[dirlistcounter] = '..'
+            dirlistcounter+=1
+            
+            featured = self.twitchTV.getFeaturedStream()
+            for stream in featured:
+                self.filelist[filelistcounter] = stream['stream']['channel']['name']
+                filelistcounter+=1
+            return True  
+        else:
+            raise NotImplementedError
+        return False
+    
