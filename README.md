@@ -13,6 +13,7 @@ priority from top to bottom:
 + ~~use javascript to disable buttons~~
 + ~~move player to the navbar~~
 + ~~split up index page generation from playerstatus~~
++ rework Browser
 + exceptions
    + create exceptionclasses for input/processing errors
    + ~~create space in templates to display exceptiontext~~
