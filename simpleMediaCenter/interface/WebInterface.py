@@ -5,6 +5,7 @@ import os
 import jinja2
 import logging
 import json
+import sys
 
 class WebController(TGController):  
     playerList=None
@@ -38,16 +39,7 @@ class WebController(TGController):
             
         
     def parseID(self, id):
-        if(id is None):
-            logging.warning("id is None")
-            #TODO ADD EXCEPTION
-            return None
-        try: 
-            id = int(id)
-        except:
-            logging.error("could not convert id")
-            #TODO ADD EXCEPTION
-            self.exceptionDisplayHandler.setException('ID Parse Exception','Could not convert "' + id + '" to an Integer')
+        id = int(id)
         return id
     
     #index Page
@@ -61,17 +53,11 @@ class WebController(TGController):
     #controls
     @expose()
     def play(self, id=None):
-        logging.debug("play called %s", id)
-        id = self.parseID(id)
-        if(id is None):
-            logging.info("play failed")
-            redirect("/")
-            return
-        if(id in self.browserList.getActive().getFileList()):
-            logging.debug("trying to play %s" ,self.browserList.getActive().getFileList()[id])
-            self.playerList.getActive().play(self.browserList.getActive().getFileListPath(id))
-        else:
-            logging.error("id not in FileList")
+        try:
+            logging.debug("trying to play %s" ,self.browserList.getActive().getFileList()[id]) ##!!!change
+            self.playerList.getActive().play(self.browserList.getActive().getFileListPath(id)) ##!!!change
+        except:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in play: ' + sys.exc_info()[0])
 
         redirect("/")
     
@@ -89,62 +75,40 @@ class WebController(TGController):
         
     @expose()
     def change(self,id=None):
-        id = self.parseID(id)
-        if(id is None):
-            logging.warning("id is None")
-            redirect("/")
-            return
-        logging.debug("change called %s", id)
-        if(id in self.browserList.getActive().getDirList()):
-            logging.debug(
-                "trying to change into %s" ,
-                self.browserList.getActive().getDirListPath(id)
-                )
-            self.browserList.getActive().setWorkingDir(
-                self.browserList.getActive().getDirListPath(id)
-                )
-        else:
-            logging.error("id not in DirList")
+        try:
+            id = self.parseID(id)
+            logging.debug("change called %s", id)
+            self.browserList.getActive().setWorkingDir(id)
+        except:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + sys.exc_info()[0])
         redirect("/")
         
     @expose()
     def selectPlayer(self, id=None):
-        id = self.parseID(id)
-        if(id is None):
-            logging.warning("id is None")
-            redirect("/")
-            return
         try:
+            id = self.parseID(id)
             self.playerList.getActive().stop()
             self.playerList.setActive(id)
         except:
-            pass    #todo
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlayer: ' + sys.exc_info()[0])
         redirect("/")
     
     @expose()
     def selectBrowser(self, id=None):
-        id = self.parseID(id)
-        if(id is None):
-            logging.warning("id is None")
-            redirect("/")
-            return
         try:
+            id = self.parseID(id)
             self.browserList.setActive(id)
         except:
-            pass    #todo
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectBrowser: ' + sys.exc_info()[0])
         redirect("/")
         
     @expose()
     def selectPlaylist(self, id=None):
-        id = self.parseID(id)
-        if(id is None):
-            logging.warning("id is None")
-            redirect("/")
-            return
         try:
+            id = self.parseID(id)
             self.playlistList.setActive(id)
         except:
-            pass    #todo
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlaylist: ' + sys.exc_info()[0])
         redirect("/")
         
     @expose()
