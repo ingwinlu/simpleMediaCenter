@@ -3,111 +3,123 @@ import logging
 from interface.Interface import Displayable
 from helpers.twitch import *
 
-class FileBrowser(Displayable):
-    workingDir=''
+class Browser(Displayable):
+    workingDir = ''
     dirlist = {}
     filelist = {}
-
-    def __init__(self,startDirectory='~'):
-        self.setWorkingDir(os.path.expanduser(startDirectory))
-        
-    def getDirList(self):
-        return self.dirlist
-        
-    def getDirListPath(self, key):
-        if(key in self.dirlist):
-            return os.path.join(self.workingDir,self.dirlist[key])
-        return None
     
-    def getFileList(self):
-        return self.filelist
+    def __init__(self, startDirectory):
+        self.setWorkingDir(startDirectory)
+       
+    '''
+        Returns a String that can be interpreted by a Player to play a ressource 
+        (filePath for omxplayer, channelname for twitchplayer,...)
+    '''    
+    def getPlayable(self, fileKey):
+        raise NotImplementedError
         
-    def getFileListPath(self, key):
-        if(key in self.filelist):
-            return os.path.join(self.workingDir,self.filelist[key])
-        return None
+    ''' 
+        Returns a String that represents a Path (Directory, or menu level)
+    '''    
+    def getPath(self, pathKey):
+        raise NotImplementedError
+    
+    '''
+        Set new Working Dir 
+        @ param newWorkingDirKey represents a Key in dirlist
+    '''    
+    def setWorkingDir(self, newWorkingDirKey):
+        raise NotImplementedError
         
     def getWorkingDir(self):
         return self.workingDir
         
-    def getPath(list,key):
-        return os.path.join(self.workingDir,list[key])
-      
-    def setWorkingDir(self, newWorkingDir):
-        if(os.path.isdir(newWorkingDir)):
-            dirlistcounter=0
-            filelistcounter=0
-            self.dirlist = {}
-            self.filelist = {}
+    def getPathList(self):
+        return self.dirlist
         
-            self.workingDir = os.path.abspath(newWorkingDir)
-            list = os.listdir(self.workingDir)
-
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-            
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
-            
-            for entry in list:
-                testentry = os.path.join(self.workingDir,entry)
-                #logging.debug(testentry + " " + str(os.path.isfile(testentry)))
-                if(os.path.isfile(testentry)):
-                    self.filelist[filelistcounter] = entry
-                    filelistcounter+=1
-                else:
-                    self.dirlist[dirlistcounter] = entry
-                    dirlistcounter+=1
-        else:
-            return False
-        return True
+    def getFileList(self):
+        return self.filelist
         
     def getDict(self):
         tempDict={}
-        tempDict['browserWorkingDir'] = self.workingDir
-        tempDict['browserDirs'] = self.dirlist
-        tempDict['browserFiles']= self.filelist
+        tempDict['browserWorkingDir'] = self.getWorkingDir()
+        tempDict['browserDirs'] = self.getPathList()
+        tempDict['browserFiles']= self.getFileList()
         tempDict['activeBrowser'] = self.getName()
         return tempDict
     
     def getName(self):
         return self.__class__.__name__
 
-#super(TwitchBrowser, self).stop()        
+
+class FileBrowser(Displayable):
+    def __init__(self,startDirectory='~'):
+        self.setWorkingDir(os.path.expanduser(startDirectory))
+    
+    def getPlayable(self, fileKey):
+        return os.path.join(self.workingDir,self.filelist[fileKey])
+        
+    def getPath(self, pathKey):
+        tempPath = os.path.join(self.workingDir,self.dirlist[pathKey])
+        tempPath = os.path.abspath(tempPath)
+        return tempPath
+      
+    def setWorkingDir(self, newWorkingDirID):
+        dirlistcounter=0
+        filelistcounter=0
+        self.dirlist = {}
+        self.filelist = {}
+        
+        self.workingDir = self.getPath(newWorkingDirID)
+        list = os.listdir(self.workingDir)
+        
+        self.dirlist[dirlistcounter] = '.'
+        dirlistcounter+=1
+        
+        self.dirlist[dirlistcounter] = '..'
+        dirlistcounter+=1
+        
+        for entry in list:
+            testentry = os.path.join(self.workingDir,entry)
+            if(os.path.isfile(testentry)):
+                self.filelist[filelistcounter] = entry
+                filelistcounter+=1
+            else:
+                self.dirlist[dirlistcounter] = entry
+                dirlistcounter+=1
+
+
 class TwitchBrowser(FileBrowser):
     twitchTV = TwitchTV(logging)
 
     def __init__(self):
         self.setWorkingDir('/')
         
-    def getFileListPath(self, key):
-        if(key in self.filelist):
-            return self.filelist[key]
-        return None
+    def getPlayable(self, fileKey):
+        return self.filelist[fileKey]
         
-    def getDirListPath(self, key):
-        if(key in self.dirlist):
-            self.dirlist[key]
-        return None
-        
-    def setWorkingDir(self, newWorkingDir):
+    def getPath(self, pathKey):
+        return self.dirlist[pathKey]
+    
+    def setWorkingDir(self, newWorkingDirID):
         logging.debug('setWorkingDir in TwitchBrowser, ' + newWorkingDir)
         dirlistcounter=0
         filelistcounter=0
-        
         self.dirlist = {}
         self.filelist = {}
         
-        if(newWorkingDir=='.'):
-            newWorkingDir=self.workingDir
+        self.workingDir = self.getPath(newWorkingDirID)
         
-        if(tempdir=='..'):
-            newWorkingDir='/' #needs to be refined
+        if(newWorkingDir=='.'):
+            pass
+        
+        if(newWorkingDir=='..'):
+            self.workingDir='/' #needs to be refined
             
           
         self.workingDir = newWorkingDir
         
-        logging.debug("setWorkingDir, final: " + newWorkingDir)
+        logging.debug("setWorkingDir, final: " + self.workingDir)
 
         if (newWorkingDir=='/'):
             self.dirlist[dirlistcounter] = 'Featured'
