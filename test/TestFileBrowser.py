@@ -17,22 +17,10 @@ class TestFileBrowser(unittest.TestCase):
         dic = self.fileBrowser.getDict()
         self.assertEqual(dic['browserWorkingDir'], os.path.abspath("."))
         
-    def test_fileFind(self):
-        dic = self.fileBrowser.getDict()
-        self.assertEqual(dic['browserWorkingDir'], os.path.abspath("."))
+    #need more testcases for navigation testing and wrong input
         
     def suite(self):
         testSuite = unittest.TestSuite()
         testSuite.addTest(unittest.makeSuite(TestFileBrowser))
         return testSuite
         
-        
-        
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    logging.debug("testing FileCrawler")
-    filecrawler = FileCrawler()
-    logging.debug(filecrawler.getDirList())
-    logging.debug(filecrawler.getFileList())
-    logging.debug(filecrawler.getFileListPath(0))
-    logging.debug(filecrawler.getDirListPath(0))

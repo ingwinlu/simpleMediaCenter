@@ -115,7 +115,7 @@ class TwitchBrowser(Browser):
         return tempPath
     
     def setWorkingDir(self, newWorkingDirID):
-        logging.debug('setWorkingDir in TwitchBrowser, ' + newWorkingDir)
+        logging.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
         self.workingDir = self.getPath(newWorkingDirID)
         
         dirlistcounter=0
