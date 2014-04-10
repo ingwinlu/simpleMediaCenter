@@ -52,9 +52,14 @@ class Browser(Displayable):
         return self.__class__.__name__
 
 
-class FileBrowser(Displayable):
+class FileBrowser(Browser):
     def __init__(self,startDirectory='~'):
-        self.setWorkingDir(os.path.expanduser(startDirectory))
+        tempDir = os.path.expanduser(startDirectory)
+        tempDir = os.path.abspath(tempDir)
+        self.dirlist = {
+                0 : tempDir
+            }
+        self.setWorkingDir(0)
     
     def getPlayable(self, fileKey):
         return os.path.join(self.workingDir,self.filelist[fileKey])
@@ -65,13 +70,13 @@ class FileBrowser(Displayable):
         return tempPath
       
     def setWorkingDir(self, newWorkingDirID):
+        self.workingDir = self.getPath(newWorkingDirID)
+        list = os.listdir(self.workingDir)
+        
         dirlistcounter=0
         filelistcounter=0
         self.dirlist = {}
         self.filelist = {}
-        
-        self.workingDir = self.getPath(newWorkingDirID)
-        list = os.listdir(self.workingDir)
         
         self.dirlist[dirlistcounter] = '.'
         dirlistcounter+=1
@@ -88,46 +93,45 @@ class FileBrowser(Displayable):
                 self.dirlist[dirlistcounter] = entry
                 dirlistcounter+=1
 
-
-class TwitchBrowser(FileBrowser):
+                
+class TwitchBrowser(Browser):
     twitchTV = TwitchTV(logging)
 
     def __init__(self):
-        self.setWorkingDir('/')
+        self.dirlist = {
+                0 : '/'
+            }
+        self.setWorkingDir(0)
         
     def getPlayable(self, fileKey):
         return self.filelist[fileKey]
         
     def getPath(self, pathKey):
-        return self.dirlist[pathKey]
+        tempPath = self.dirlist[pathKey]
+        if(tempPath=='.'):
+            tempPath=self.getWorkingDir()
+        elif(tempPath=='..'):
+            tempPath='/' # needs to be refineda
+        return tempPath
     
     def setWorkingDir(self, newWorkingDirID):
         logging.debug('setWorkingDir in TwitchBrowser, ' + newWorkingDir)
+        self.workingDir = self.getPath(newWorkingDirID)
+        
         dirlistcounter=0
         filelistcounter=0
         self.dirlist = {}
         self.filelist = {}
-        
-        self.workingDir = self.getPath(newWorkingDirID)
-        
-        if(newWorkingDir=='.'):
-            pass
-        
-        if(newWorkingDir=='..'):
-            self.workingDir='/' #needs to be refined
-            
-          
-        self.workingDir = newWorkingDir
-        
+       
         logging.debug("setWorkingDir, final: " + self.workingDir)
 
-        if (newWorkingDir=='/'):
+        if (self.workingDir=='/'):
             self.dirlist[dirlistcounter] = 'Featured'
             dirlistcounter+=1
             #self.dirlist[dirlistcounter] = 'Following'
             #dirlistcounter+=1
             return True
-        elif (newWorkingDir=='/Featured'):
+        elif (self.workingDir=='Featured'):
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
         

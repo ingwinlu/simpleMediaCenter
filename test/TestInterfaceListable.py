@@ -14,11 +14,12 @@ class TestInterfaceListable(unittest.TestCase):
     def test_creation_1(self):
         with self.assertRaises(TypeError):
             InterfaceListable(None)
-        
+    '''    
+    it is now allowed to create an empty InterfaceListable
     def test_creation_2(self):
         with self.assertRaises(TypeError):
             InterfaceListable([])
-            
+    '''        
     def test_set_outofbounds_1(self):
         with self.assertRaises(TypeError):
             interfaceListable=InterfaceListable(['a','b','c'])
