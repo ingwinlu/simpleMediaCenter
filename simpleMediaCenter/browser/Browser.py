@@ -96,8 +96,10 @@ class FileBrowser(Browser):
                 
 class TwitchBrowser(Browser):
     twitchTV = TwitchTV(logging)
+    username = None
 
-    def __init__(self):
+    def __init__(self, username=None):
+        self.username = username
         self.dirlist = {
                 0 : '/'
             }
@@ -128,8 +130,8 @@ class TwitchBrowser(Browser):
         if (self.workingDir=='/'):
             self.dirlist[dirlistcounter] = 'Featured'
             dirlistcounter+=1
-            #self.dirlist[dirlistcounter] = 'Following'
-            #dirlistcounter+=1
+            self.dirlist[dirlistcounter] = 'Following'
+            dirlistcounter+=1
             return True
         elif (self.workingDir=='Featured'):
             self.dirlist[dirlistcounter] = '.'
@@ -143,7 +145,30 @@ class TwitchBrowser(Browser):
                 self.filelist[filelistcounter] = stream['stream']['channel']['name']
                 filelistcounter+=1
             return True  
+        elif (self.workingDir=='Following'):
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+        
+            self.dirlist[dirlistcounter] = '..'
+            dirlistcounter+=1
+            
+            logging.debug(self.username)
+            
+            if(self.username is None):
+                return False # temporary workaround if no username is set
+            
+            following = self.twitchTV.getFollowingStreams(self.username)
+            for stream in following['live']:
+                #print("-----")
+                #print(stream['channel']['name'])
+                #print("-----")
+                self.filelist[filelistcounter] = stream['channel']['name']
+                filelistcounter+=1
+            return True  
         else:
             raise NotImplementedError
         return False
+        
+    def setUsername(self, username):
+        self.username = username
     

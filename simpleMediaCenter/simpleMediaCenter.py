@@ -19,7 +19,7 @@ playerlist = InterfaceListable([omxplayer,twitchplayer])
 
 logging.info("creating browser objects")
 fileBrowser = FileBrowser()
-twitchBrowser = TwitchBrowser()
+twitchBrowser = TwitchBrowser('winlu')
 browserlist = InterfaceListable([fileBrowser,twitchBrowser])
 
 logging.info("creating playlist objects")

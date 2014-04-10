@@ -19,7 +19,7 @@ class TestTwitchBrowser(unittest.TestCase):
         self.assertEqual(dic['browserWorkingDir'], "/")
         
     def test_basic_navigation(self):
-        tempBrowser = TwitchBrowser()
+        tempBrowser = TwitchBrowser(username='winlu')
         tempBrowser.setWorkingDir(0)
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Featured")
         tempBrowser.setWorkingDir(0) # should refresh
@@ -28,6 +28,10 @@ class TestTwitchBrowser(unittest.TestCase):
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/")
         tempBrowser.setWorkingDir(0) # should go to Featured
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Featured")
+        tempBrowser.setWorkingDir(1) # should go to root directory
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/")
+        tempBrowser.setWorkingDir(1) # should go to Following
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Following")
         
     #need more testcases for navigation and wrong input
         

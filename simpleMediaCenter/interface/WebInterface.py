@@ -54,8 +54,9 @@ class WebController(TGController):
     @expose()
     def play(self, id=None):
         try:
-            logging.debug("trying to play %s" ,self.browserList.getActive().getFileList()[id]) ##!!!change
-            self.playerList.getActive().play(self.browserList.getActive().getFileListPath(id)) ##!!!change
+            id = self.parseID(id)
+            logging.debug("trying to play %s" ,self.browserList.getActive().getPlayable(id))
+            self.playerList.getActive().play(self.browserList.getActive().getPlayable(id))
         except:
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in play: ' + sys.exc_info()[0])
 

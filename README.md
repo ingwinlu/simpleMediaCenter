@@ -13,9 +13,9 @@ priority from top to bottom:
 + ~~use javascript to disable buttons~~
 + ~~move player to the navbar~~
 + ~~split up index page generation from playerstatus~~
-+ rework Browser
-   + should use id's to interact with controller, not the actual value, no idea what I was thinking
-   + couple them with player, i.e. don't let any player use any browser
++ ~~rework Browser~~
+   + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
+   + ~~couple them with player, i.e. don't let any player use any browser~~
    + complete TwitchBrowser
 + exceptions
    + create exceptionclasses for input/processing errors
@@ -25,6 +25,7 @@ priority from top to bottom:
 + implement playlist functionality
 + improve documentation 
 + improve comments in code
++ loading feedback (twitchbrowser)
 + drag and drop between browser/playlist
 
 ##Requirements
