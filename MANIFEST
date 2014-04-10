@@ -13,6 +13,7 @@ simpleMediaCenter/interface/static/reset.css
 simpleMediaCenter/interface/static/respond.min.js
 simpleMediaCenter/interface/static/simpleMediaCenter.js
 simpleMediaCenter/interface/static/style.css
+simpleMediaCenter/interface/templates/alertbox.html
 simpleMediaCenter/interface/templates/base.html
 simpleMediaCenter/interface/templates/browser.html
 simpleMediaCenter/interface/templates/index.html
