@@ -6,6 +6,11 @@ from browser.Browser import FileBrowser, TwitchBrowser
 from playlist.Playlist import Single
 import logging
 import os
+import configparser
+
+#config = configparser.ConfigParser()
+#config_file = 'simpleMediaCenter-config.ini'
+#load config sections over modules
 
 pathToTemplates=os.path.abspath('./interface/templates/')
 pathToStatic=os.path.abspath('./interface/static/')
