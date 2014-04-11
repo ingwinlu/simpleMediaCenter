@@ -10,7 +10,7 @@ import configparser
 
 #config = configparser.ConfigParser()
 #config_file = 'simpleMediaCenter-config.ini'
-#load config sections over mod
+#load config sections over modules
 
 pathToTemplates=os.path.abspath('./interface/templates/')
 pathToStatic=os.path.abspath('./interface/static/')
