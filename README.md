@@ -25,6 +25,7 @@ priority from top to bottom:
 + implement playlist functionality
 + improve documentation 
 + improve comments in code
++ rework omxplayer to use dbus interface
 + loading feedback (twitchbrowser)
 + drag and drop between browser/playlist
 
