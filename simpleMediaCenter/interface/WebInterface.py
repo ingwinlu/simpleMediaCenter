@@ -5,7 +5,6 @@ import os
 import jinja2
 import logging
 import json
-import sys
 
 class WebController(TGController):  
     playerList=None
@@ -57,8 +56,8 @@ class WebController(TGController):
             id = self.parseID(id)
             logging.debug("trying to play %s" ,self.browserList.getActive().getPlayable(id))
             self.playerList.getActive().play(self.browserList.getActive().getPlayable(id))
-        except:
-            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in play: ' + sys.exc_info()[0])
+        except Exception as e:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in play: ' + repr(e))
 
         redirect("/")
     
@@ -80,8 +79,10 @@ class WebController(TGController):
             id = self.parseID(id)
             logging.debug("change called %s", id)
             self.browserList.getActive().setWorkingDir(id)
-        except:
-            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + sys.exc_info()[0])
+        except KeyError as e:
+            self.exceptionDisplayHandler.setException('KeyError','Passed id not in range: ' + repr(e))
+        except Exception as e:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + repr(e))
         redirect("/")
         
     @expose()
@@ -90,8 +91,8 @@ class WebController(TGController):
             id = self.parseID(id)
             self.playerList.getActive().stop()
             self.playerList.setActive(id)
-        except:
-            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlayer: ' + sys.exc_info()[0])
+        except Exception as e:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlayer: ' + repr(e))
         redirect("/")
     
     @expose()
@@ -99,8 +100,8 @@ class WebController(TGController):
         try:
             id = self.parseID(id)
             self.browserList.setActive(id)
-        except:
-            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectBrowser: ' + sys.exc_info()[0])
+        except Exception as e:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectBrowser: ' + repr(e))
         redirect("/")
         
     @expose()
@@ -108,8 +109,8 @@ class WebController(TGController):
         try:
             id = self.parseID(id)
             self.playlistList.setActive(id)
-        except:
-            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlaylist: ' + sys.exc_info()[0])
+        except Exception as e:
+            self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlaylist: ' + repr(e))
         redirect("/")
         
     @expose()
