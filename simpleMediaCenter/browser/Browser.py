@@ -171,4 +171,10 @@ class TwitchBrowser(Browser):
         
     def setUsername(self, username):
         self.username = username
+        
+    def getName(self):
+        if(self.username is None):
+            return self.__class__.__name__
+        return self.__class__.__name__ + " user: " + self.username
+
     
