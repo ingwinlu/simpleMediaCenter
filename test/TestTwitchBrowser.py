@@ -9,7 +9,7 @@ class TestTwitchBrowser(unittest.TestCase):
     
 
     def setUp(self):
-        self.twitchBrowser = TwitchBrowser()
+        self.twitchBrowser = TwitchBrowser('winlu')
         
     def tearDown(self):
         self.twitchBrowser = None

@@ -24,8 +24,9 @@ playerlist = InterfaceListable([omxplayer,twitchplayer])
 
 logging.info("creating browser objects")
 fileBrowser = FileBrowser()
-twitchBrowser = TwitchBrowser('winlu')
-browserlist = InterfaceListable([fileBrowser,twitchBrowser])
+twitchWinluBrowser = TwitchBrowser('winlu')
+twitchKillerkakaduBrowser = TwitchBrowser('killerkakadu')
+browserlist = InterfaceListable([fileBrowser,twitchWinluBrowser,twitchKillerkakaduBrowser])
 
 logging.info("creating playlist objects")
 #playList = Single()
