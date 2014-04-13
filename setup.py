@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
 	name='simpleMediaCenter',
-	version='0.5.1',
+	version='0.5.2',
 	packages=['simpleMediaCenter',
 			'simpleMediaCenter.browser',
 			'simpleMediaCenter.helpers.twitch',
