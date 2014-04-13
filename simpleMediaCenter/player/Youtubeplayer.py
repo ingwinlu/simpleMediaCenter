@@ -1,3 +1,6 @@
+#import youtube_dl
+#rework to use youtube_dl module and not process for improved performance
+
 from player.Omxplayer import Omxplayer
 import logging
 import sys
