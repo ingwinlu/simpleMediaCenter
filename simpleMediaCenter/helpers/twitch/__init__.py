@@ -24,19 +24,34 @@ class JSONScraper(object):
         object.__init__(self)
         self.logger = logger
         
+    '''
+        Download Data from an url and returns it as a String
+        @param url Url to download from (e.g. http://www.google.com)
+        @param headers currently unused, backwards compability
+        @returns String of data from URL
+    '''
     def downloadWebData(self, url, headers=None):
-        req = Request(url)
-        req.add_header(Keys.USER_AGENT, USER_AGENT)
-        response = urlopen(req)
         data = ""
-        if sys.version_info < (3, 0):
-            data = response.read()
-        else:
-            data = response.readall().decode('utf-8')
-        response.close()
+        try:
+            req = Request(url)
+            req.add_header(Keys.USER_AGENT, USER_AGENT)
+            response = urlopen(req)
+            
+            if sys.version_info < (3, 0):
+                data = response.read()
+            else:
+                data = response.readall().decode('utf-8')
+            response.close()
+        except:
+            raise TwitchException(TwitchException.HTTP_ERROR)
         return data
         
-    
+    '''
+        Download Data from an url and returns it as JSON
+        @param url Url to download from
+        @param headers currently unused, backwards compability
+        @returns JSON Object with data from URL
+    '''
     def getJson(self, url, headers=None):
         try:
             jsonString = self.downloadWebData(url, headers)
@@ -224,11 +239,11 @@ class TwitchVideoResolver(object):
                         playlist = '#EXTM3U\n'
                         #Add 3 Quality Specific Applicable Lines From Multiple Quality Stream Playlist To Our Custom Playlist Var
                         playlist += streamurls[line] + '\n' + streamurls[(line + 1)] + '\n' + streamurls[(line + 2)]
-                        print(playlist)
+                        self.logger.info("playlist:\n" + playlist)
             else:
                 #Preferred quality is unavailable so let's play the highest available quality
                 playlist += '\n'.join(streamurls)
-                print(playlist)
+                self.logger.info("playlist:\n" + playlist)
                 
             #Write Custom Playlist
             text_file = open(fileName, "w")
