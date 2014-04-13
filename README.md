@@ -33,11 +33,15 @@ priority from top to bottom:
 + [omxplayer](http://omxplayer.sconde.net/)
 + [TurboGears2](http://turbogears.org/)
 + [jinja2](http://jinja.pocoo.org/)
++ [youtube-dl](https://github.com/rg3/youtube-dl)
+    
+    for youtube playback
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch)
-
-   cosmo theme is included
+    
+    cosmo theme is included
 
 ##Installation
+0. install youtube-dl
 1. install omxplayer
 2. install Turbogears2 and jinja2 via python-pip
 3. clone this repository (on release there will be a package on pypi)
