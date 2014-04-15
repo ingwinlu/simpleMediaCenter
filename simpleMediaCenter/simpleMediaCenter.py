@@ -2,7 +2,8 @@ from interface.WebInterface import WebInterface, WebController
 from interface.Interface import InterfaceListable
 from player.Omxplayer import Omxplayer
 from player.Twitchplayer import Twitchplayer
-from browser.Browser import FileBrowser, TwitchBrowser
+from player.Youtubeplayer import Youtubeplayer
+from browser.Browser import *
 from playlist.Playlist import Single
 import logging
 import os
@@ -20,15 +21,17 @@ logging.basicConfig(level=logging.DEBUG)
 logging.info("creating player objects")
 omxplayer = Omxplayer("-o both")
 twitchplayer = Twitchplayer("-o both")
-playerlist = InterfaceListable([omxplayer,twitchplayer])
+youtubeplayer = Youtubeplayer("-o both")
+playerlist = InterfaceListable([omxplayer,twitchplayer, youtubeplayer])
 
 logging.info("creating browser objects")
 fileBrowser = FileBrowser()
 twitchWinluBrowser = TwitchBrowser('winlu')
 twitchKillerkakaduBrowser = TwitchBrowser('killerkakadu')
-browserlist = InterfaceListable([fileBrowser,twitchWinluBrowser,twitchKillerkakaduBrowser])
+youtubeBrowser = YoutubeBrowser()
+browserlist = InterfaceListable([fileBrowser,twitchWinluBrowser,twitchKillerkakaduBrowser,youtubeBrowser])
 
-logging.info("creating playlist objects")
+#logging.info("creating playlist objects")
 #playList = Single()
 #playlistlist = InterfaceListable([playList])
 playlistlist = InterfaceListable([])

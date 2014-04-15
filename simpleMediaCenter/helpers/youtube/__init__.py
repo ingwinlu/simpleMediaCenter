@@ -58,5 +58,5 @@ class Youtube():
         
     def listChannelVideos(self, channelName, startindex=1, maxresults=25):
         url = self.__prepareURL('uploads', (channelName, startindex, maxresults))
-        tree = self.__scraper.downloadXML(url)
+        return self.__scraper.downloadXML(url)
         

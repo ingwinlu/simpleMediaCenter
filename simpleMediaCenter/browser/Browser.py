@@ -2,6 +2,7 @@ import os
 import logging
 from interface.Interface import Displayable
 from helpers.twitch import *
+from helpers.youtube import *
 
 class Browser(Displayable):
     workingDir = ''
@@ -113,7 +114,7 @@ class TwitchBrowser(Browser):
         if(tempPath=='.'):
             tempPath=self.getWorkingDir()
         elif(tempPath=='..'):
-            tempPath='/' # needs to be refineda
+            tempPath='/' # needs to be refined
         return tempPath
     
     def setWorkingDir(self, newWorkingDirID):
@@ -176,5 +177,59 @@ class TwitchBrowser(Browser):
         if(self.username is None):
             return self.__class__.__name__
         return self.__class__.__name__ + " user: " + self.username
-
     
+    
+class YoutubeBrowser(Browser):
+    yt = Youtube()
+
+    def __init__(self):
+        self.dirlist = {
+                0 : '/'
+            }
+        self.setWorkingDir(0)
+        
+    def getPlayable(self, fileKey):
+        return self.filelist[fileKey]
+        
+    def getPath(self, pathKey):
+        tempPath = self.dirlist[pathKey]
+        if(tempPath=='.'):
+            tempPath=self.getWorkingDir()
+        elif(tempPath=='..'):
+            tempPath='/' # needs to be refined
+        return tempPath
+    
+    def setWorkingDir(self, newWorkingDirID):
+        logging.debug('setWorkingDir in YoutubeBrowser, ' + str(newWorkingDirID))
+        self.workingDir = self.getPath(newWorkingDirID)
+        
+        dirlistcounter=0
+        filelistcounter=0
+        self.dirlist = {}
+        self.filelist = {}
+       
+        logging.debug("setWorkingDir, final: " + self.workingDir)
+
+        if (self.workingDir=='/'):
+            self.dirlist[dirlistcounter] = 'MrSuicideSheep' #TODO 
+            dirlistcounter+=1
+            return 
+        elif (self.workingDir=='MrSuicideSheep'):
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+        
+            self.dirlist[dirlistcounter] = '..'
+            dirlistcounter+=1
+            
+            logging.debug('getting videolist')
+            videos = self.yt.listChannelVideos('MrSuicideSheep')
+            logging.debug('searching videolist')
+            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                self.filelist[filelistcounter] = video.find(
+                    ".//Atom:link[@rel='alternate']", 
+                    namespaces=self.yt.NAMESPACES).get('href')
+                filelistcounter+=1
+            return   
+        raise NotImplementedError
+        
+   
