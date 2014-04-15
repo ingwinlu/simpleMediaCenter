@@ -180,6 +180,7 @@ class TwitchBrowser(Browser):
     
     
 class YoutubeBrowser(Browser):
+    urllist = {}
     yt = Youtube()
 
     def __init__(self):
@@ -189,7 +190,7 @@ class YoutubeBrowser(Browser):
         self.setWorkingDir(0)
         
     def getPlayable(self, fileKey):
-        return self.filelist[fileKey]
+        return self.urllist[fileKey]
         
     def getPath(self, pathKey):
         tempPath = self.dirlist[pathKey]
@@ -207,6 +208,7 @@ class YoutubeBrowser(Browser):
         filelistcounter=0
         self.dirlist = {}
         self.filelist = {}
+        self.urllist = {}
        
         logging.debug("setWorkingDir, final: " + self.workingDir)
 
@@ -225,9 +227,12 @@ class YoutubeBrowser(Browser):
             videos = self.yt.listChannelVideos('MrSuicideSheep')
             logging.debug('searching videolist')
             for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
-                self.filelist[filelistcounter] = video.find(
+                self.urllist[filelistcounter] = video.find(
                     ".//Atom:link[@rel='alternate']", 
                     namespaces=self.yt.NAMESPACES).get('href')
+                self.filelist[filelistcounter] = video.find(
+                    'Atom:title',
+                    namespaces=self.yt.NAMESPACES).text
                 filelistcounter+=1
             return   
         raise NotImplementedError
