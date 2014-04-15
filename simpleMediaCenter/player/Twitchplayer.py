@@ -5,7 +5,7 @@ import sys
 import os
 
 class Twitchplayer(Omxplayer):
-    __playerline="omxplayer"
+    __playerline="omxplayer -b"
     __cmdline="-o both"
     __playlist="twitchplaylist.m3u8"
     

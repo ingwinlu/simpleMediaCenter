@@ -14,11 +14,12 @@ class TestYoutubeplayer(unittest.TestCase):
     def tearDown(self):
         self.youtubeplayer.stop()
         self.youtubeplayer=None
-        
+    
+    '''
     def test_download(self):
         filename = self.youtubeplayer.startDownload(self.youtubeurl)
         self.assertTrue(os.path.isfile(filename))
-        
+    '''
     def test_playback(self):
         self.assertEqual(self.youtubeplayer.getDict()['playerStatus'], 0)
         self.youtubeplayer.play(self.youtubeurl)

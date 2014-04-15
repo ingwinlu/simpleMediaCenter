@@ -6,13 +6,13 @@ import time
 
 class Omxplayer(Player):
     __cmdline=""
-    __playerline="omxplayer"
+    __playerline="omxplayer -b"
     __playerstatus=0 # 0 stopped, 1 playing, 2 paused
     __currentfile=""
     __process=None
     
 
-    def __init__(self, cmdline):
+    def __init__(self, cmdline = "-o both"):
         logging.debug("Omxplayer init")
         self.cmdline=cmdline
         
