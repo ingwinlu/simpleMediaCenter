@@ -15,6 +15,7 @@ class Browser(Displayable):
     '''
         Returns a String that can be interpreted by a Player to play a ressource 
         (filePath for omxplayer, channelname for twitchplayer,...)
+        maybe return a dict with the path and a reference to which player should be used for a better user experience
     '''    
     def getPlayable(self, fileKey):
         raise NotImplementedError
