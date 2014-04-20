@@ -26,10 +26,10 @@ class Browser(Displayable):
         raise NotImplementedError
       
     '''
-	get supported Players, first match gets used to play file returned by getPlayable
+        get supported Players, first match gets used to play file returned by getPlayable
     '''
     def getSupportedPlayers(self):
-	raise NotImplementedError
+        raise NotImplementedError
     
     '''
         Set new Working Dir 
@@ -75,6 +75,9 @@ class FileBrowser(Browser):
         tempPath = os.path.join(self.workingDir,self.dirlist[pathKey])
         tempPath = os.path.abspath(tempPath)
         return tempPath
+      
+    def getSupportedPlayers(self):
+        return ['Omxplayer']
       
     def setWorkingDir(self, newWorkingDirID):
         self.workingDir = self.getPath(newWorkingDirID)
@@ -122,6 +125,9 @@ class TwitchBrowser(Browser):
         elif(tempPath=='..'):
             tempPath='/' # needs to be refined
         return tempPath
+
+    def getSupportedPlayers(self):
+        return ['Twitchplayer']
     
     def setWorkingDir(self, newWorkingDirID):
         logging.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
@@ -205,6 +211,9 @@ class YoutubeBrowser(Browser):
         elif(tempPath=='..'):
             tempPath='/' # needs to be refined
         return tempPath
+
+    def getSupportedPlayers(self):
+        return ['Youtubeplayer']
     
     def setWorkingDir(self, newWorkingDirID):
         logging.debug('setWorkingDir in YoutubeBrowser, ' + str(newWorkingDirID))
@@ -217,7 +226,7 @@ class YoutubeBrowser(Browser):
         self.urllist = {}
        
         logging.debug("setWorkingDir, final: " + self.workingDir)
-
+        
         if (self.workingDir=='/'):
             self.dirlist[dirlistcounter] = 'MrSuicideSheep' #TODO 
             dirlistcounter+=1
@@ -225,7 +234,7 @@ class YoutubeBrowser(Browser):
         elif (self.workingDir=='MrSuicideSheep'):
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
-        
+            
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
             

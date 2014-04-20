@@ -33,6 +33,10 @@ class TestTwitchBrowser(unittest.TestCase):
         tempBrowser.setWorkingDir(1) # should go to Following
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Following")
         
+    def test_supported_Players(self):
+        self.assertIn('Twitchplayer', self.twitchBrowser.getSupportedPlayers())
+        self.assertNotIn('Omxplayer', self.twitchBrowser.getSupportedPlayers())
+        
     #need more testcases for navigation and wrong input
         
     def suite(self):

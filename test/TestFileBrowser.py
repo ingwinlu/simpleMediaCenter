@@ -17,6 +17,10 @@ class TestFileBrowser(unittest.TestCase):
         dic = self.fileBrowser.getDict()
         self.assertEqual(dic['browserWorkingDir'], os.path.abspath("."))
         
+    def test_supported_Players(self):
+        self.assertIn('Omxplayer', self.fileBrowser.getSupportedPlayers())
+        self.assertNotIn('Twitchplayer', self.fileBrowser.getSupportedPlayers())
+        
     #need more testcases for navigation testing and wrong input
         
     def suite(self):
