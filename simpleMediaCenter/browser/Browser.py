@@ -15,7 +15,6 @@ class Browser(Displayable):
     '''
         Returns a String that can be interpreted by a Player to play a ressource 
         (filePath for omxplayer, channelname for twitchplayer,...)
-        maybe return a dict with the path and a reference to which player should be used for a better user experience
     '''    
     def getPlayable(self, fileKey):
         raise NotImplementedError
@@ -25,6 +24,12 @@ class Browser(Displayable):
     '''    
     def getPath(self, pathKey):
         raise NotImplementedError
+      
+    '''
+	get supported Players, first match gets used to play file returned by getPlayable
+    '''
+    def getSupportedPlayers(self):
+	raise NotImplementedError
     
     '''
         Set new Working Dir 
@@ -32,7 +37,7 @@ class Browser(Displayable):
     '''    
     def setWorkingDir(self, newWorkingDirKey):
         raise NotImplementedError
-        
+      
     def getWorkingDir(self):
         return self.workingDir
         
