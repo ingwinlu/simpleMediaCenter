@@ -13,10 +13,13 @@ priority from top to bottom:
 + ~~use javascript to disable buttons~~
 + ~~move player to the navbar~~
 + ~~split up index page generation from playerstatus~~
++ ~~implement automatic player choosing~~
 + ~~rework Browser~~
    + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
    + ~~couple them with player, i.e. don't let any player use any browser~~
+   + implement sendToBrowser in REST Interface 
    + complete TwitchBrowser
+   + complete YoutubeBrowser
 + exceptions
    + create exceptionclasses for input/processing errors
    + ~~create space in templates to display exceptiontext~~
@@ -26,7 +29,9 @@ priority from top to bottom:
 + improve documentation 
 + improve comments in code
 + rework omxplayer to use dbus interface
-+ loading feedback (twitchbrowser)
++ feedback for longer loads
+   + convince artist to paint a loading please wait image for beer
+   + implement 'holding' page while load
 + drag and drop between browser/playlist
 
 ##Requirements
