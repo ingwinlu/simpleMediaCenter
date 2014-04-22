@@ -63,6 +63,7 @@ class WebController(TGController):
                     break
             if (playerid is None):
                 raise Exception('no compatible player found in supportedPlayers')
+            self.playerList.getActive().stop()
             self.playerList.setActive(playerid)
             self.playerList.getActive().play(self.browserList.getActive().getPlayable(id))
         except Exception as e:
