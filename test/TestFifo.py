@@ -1,6 +1,5 @@
 from playlist.Playlist import FiFo
 import unittest
-import time
 
 class TestFifo(unittest.TestCase):
     fifo = None

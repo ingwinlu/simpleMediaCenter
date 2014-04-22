@@ -55,11 +55,15 @@ class WebController(TGController):
         try:
             id = self.parseID(id)
             logging.debug("trying to play %s" ,self.browserList.getActive().getPlayable(id))
-            # TODO implement player select according tu playlist.getSupportedPlayers()
-            #logging.debug("searching for compatible Browser") 
-            #for supportedPlayer in self.browserList.getActive().getSupportedPlayers(): #search for a compatible player
-            #    logging.debug("searching for " + supportedPlayer)
-            #    
+            # TODO implement player select according to playlist.getSupportedPlayers()
+            logging.debug("searching for compatible Browser") 
+            for supportedPlayer in self.browserList.getActive().getSupportedPlayers():
+                playerid = self.playerList.getIDfromName(supportedPlayer)
+                if (playerid is not None):
+                    break
+            if (playerid is None):
+                raise Exception('no compatible player found in supportedPlayers')
+            self.playerList.setActive(playerid)
             self.playerList.getActive().play(self.browserList.getActive().getPlayable(id))
         except Exception as e:
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in play: ' + repr(e))

@@ -65,6 +65,15 @@ class InterfaceListable():
             return None
         return self.__array[self.__current]
         
+    def getIDfromName(self, name):
+        tempid=0
+        for entry in self.getArray():
+            if(entry==name):
+                return tempid
+            else:
+                tempid = tempid + 1
+        return None
+        
     def getArray(self):
         if(self.__array is None):
             return None
