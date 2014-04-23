@@ -17,6 +17,7 @@ priority from top to bottom:
 + ~~rework Browser~~
    + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
    + ~~couple them with player, i.e. don't let any player use any browser~~
+   + implement pagination
    + implement sendToBrowser in REST Interface 
    + complete TwitchBrowser
    + complete YoutubeBrowser
@@ -47,12 +48,13 @@ priority from top to bottom:
     cosmo theme is included
 
 ##Installation
-0. install youtube-dl
-1. install omxplayer
-2. install Turbogears2 and jinja2 via python-pip
-3. clone this repository (on release there will be a package on pypi)
-4. navigate to the simpleMediaCenter/simpleMediaCenter directory
-5. run simpleMediaCenter.py
+1. install python3
+2. install youtube-dl
+3. install omxplayer
+4. install Turbogears2 and jinja2 via python-pip
+5. clone this repository (on release there will be a package on pypi)
+6. navigate to the simpleMediaCenter/simpleMediaCenter directory
+7. run simpleMediaCenter.py
 
 Please note that this project is still in heavy development and way of installation/configuration will improve
 

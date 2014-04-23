@@ -6,6 +6,7 @@ from helpers.youtube import *
 
 class Browser(Displayable):
     workingDir = ''
+    oldWorkingDir = ''
     dirlist = {}
     filelist = {}
     
@@ -59,7 +60,7 @@ class Browser(Displayable):
         return self.__class__.__name__
 
 
-class FileBrowser(Browser):
+class FileBrowser(Browser):    
     def __init__(self,startDirectory='~'):
         tempDir = os.path.expanduser(startDirectory)
         tempDir = os.path.abspath(tempDir)
@@ -80,6 +81,7 @@ class FileBrowser(Browser):
         return ['Omxplayer']
       
     def setWorkingDir(self, newWorkingDirID):
+        self.oldWorkingDir = self.workingDir
         self.workingDir = self.getPath(newWorkingDirID)
         list = os.listdir(self.workingDir)
         
@@ -105,6 +107,8 @@ class FileBrowser(Browser):
 
                 
 class TwitchBrowser(Browser):
+    offset=0
+    limit=10
     twitchTV = TwitchTV(logging)
     username = None
 
@@ -123,7 +127,14 @@ class TwitchBrowser(Browser):
         if(tempPath=='.'):
             tempPath=self.getWorkingDir()
         elif(tempPath=='..'):
-            tempPath='/' # needs to be refined
+            self.offset=0
+            tempPath=self.oldWorkingDir
+        elif(tempPath=='next Page >'):
+            self.offset=self.offset+10
+            tempPath=self.getWorkingDir()
+        elif(tempPath=='< previous Page'):
+            self.offset=self.offset-10
+            tempPath=self.getWorkingDir()
         return tempPath
 
     def getSupportedPlayers(self):
@@ -131,6 +142,7 @@ class TwitchBrowser(Browser):
     
     def setWorkingDir(self, newWorkingDirID):
         logging.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
+        self.oldWorkingDir = self.workingDir
         self.workingDir = self.getPath(newWorkingDirID)
         
         dirlistcounter=0
@@ -139,6 +151,7 @@ class TwitchBrowser(Browser):
         self.filelist = {}
        
         logging.debug("setWorkingDir, final: " + self.workingDir)
+        logging.debug("oldWorkingDir: " + self.oldWorkingDir)
 
         if (self.workingDir=='/'):
             self.dirlist[dirlistcounter] = 'Featured'
@@ -167,10 +180,16 @@ class TwitchBrowser(Browser):
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
             
-            games = self.twitchTV.getGames()
+            self.dirlist[dirlistcounter] = '< previous Page'
+            dirlistcounter+=1
+            
+            logging.debug('offset:' + str(self.offset) + ' limit:' + str(self.limit))
+            games = self.twitchTV.getGames(offset=self.offset, limit=self.limit)
             for game in games:
                 self.dirlist[dirlistcounter] = game['game']['name']
                 dirlistcounter+=1
+            self.dirlist[dirlistcounter] = 'next Page >'
+            dirlistcounter+=1
             return True  
         elif (self.workingDir=='Following'):
             self.dirlist[dirlistcounter] = '.'
@@ -178,8 +197,6 @@ class TwitchBrowser(Browser):
         
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
-            
-            logging.debug(self.username)
             
             if(self.username is None):
                 return False # temporary workaround if no username is set
@@ -192,6 +209,19 @@ class TwitchBrowser(Browser):
                 self.filelist[filelistcounter] = stream['channel']['name']
                 filelistcounter+=1
             return True  
+        elif (self.oldWorkingDir=='Games'):
+            logging.debug("list channels which play game: " + self.workingDir)
+            
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+        
+            self.dirlist[dirlistcounter] = '..'
+            dirlistcounter+=1
+            
+            gamestreams = self.twitchTV.getGameStreams(self.workingDir)
+            for stream in gamestreams:
+                self.filelist[filelistcounter] = stream['channel']['name']
+                filelistcounter+=1
         else:
             raise NotImplementedError
         return False
