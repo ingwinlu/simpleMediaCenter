@@ -35,6 +35,7 @@ priority from top to bottom:
 + drag and drop between browser/playlist
 
 ##Requirements
++ python3
 + [omxplayer](http://omxplayer.sconde.net/)
 + [TurboGears2](http://turbogears.org/)
 + [jinja2](http://jinja.pocoo.org/)
