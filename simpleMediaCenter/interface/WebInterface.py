@@ -1,4 +1,5 @@
 from interface.Interface import Interface, ExceptionDisplayHandler
+from helpers.twitch import TwitchException
 from tg import expose, TGController, AppConfig, redirect, config
 from wsgiref.simple_server import make_server
 import os
@@ -91,6 +92,8 @@ class WebController(TGController):
             self.browserList.getActive().setWorkingDir(id)
         except KeyError as e:
             self.exceptionDisplayHandler.setException('KeyError','Passed id not in range: ' + repr(e))
+        except TwitchException as e:
+            self.exceptionDisplayHandler.setException('TwitchException',repr(e))
         except Exception as e:
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + repr(e))
         redirect("/")

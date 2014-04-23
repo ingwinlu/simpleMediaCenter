@@ -6,7 +6,7 @@ from helpers.youtube import *
 
 class Browser(Displayable):
     workingDir = ''
-    oldWorkingDir = ''
+    parentDir = ''
     dirlist = {}
     filelist = {}
     
@@ -81,7 +81,6 @@ class FileBrowser(Browser):
         return ['Omxplayer']
       
     def setWorkingDir(self, newWorkingDirID):
-        self.oldWorkingDir = self.workingDir
         self.workingDir = self.getPath(newWorkingDirID)
         list = os.listdir(self.workingDir)
         
@@ -128,12 +127,13 @@ class TwitchBrowser(Browser):
             tempPath=self.getWorkingDir()
         elif(tempPath=='..'):
             self.offset=0
-            tempPath=self.oldWorkingDir
+            tempPath=self.parentDir
         elif(tempPath=='next Page >'):
             self.offset=self.offset+10
             tempPath=self.getWorkingDir()
         elif(tempPath=='< previous Page'):
-            self.offset=self.offset-10
+            if(self.offset-10>=0):
+                self.offset=self.offset-10
             tempPath=self.getWorkingDir()
         return tempPath
 
@@ -142,7 +142,7 @@ class TwitchBrowser(Browser):
     
     def setWorkingDir(self, newWorkingDirID):
         logging.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
-        self.oldWorkingDir = self.workingDir
+
         self.workingDir = self.getPath(newWorkingDirID)
         
         dirlistcounter=0
@@ -151,9 +151,10 @@ class TwitchBrowser(Browser):
         self.filelist = {}
        
         logging.debug("setWorkingDir, final: " + self.workingDir)
-        logging.debug("oldWorkingDir: " + self.oldWorkingDir)
 
         if (self.workingDir=='/'):
+            self.parentDir = '/'
+            
             self.dirlist[dirlistcounter] = 'Featured'
             dirlistcounter+=1
             self.dirlist[dirlistcounter] = 'Games'
@@ -162,6 +163,8 @@ class TwitchBrowser(Browser):
             dirlistcounter+=1
             return True
         elif (self.workingDir=='Featured'):
+            self.parentDir = '/'
+        
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
         
@@ -174,6 +177,8 @@ class TwitchBrowser(Browser):
                 filelistcounter+=1
             return True  
         elif (self.workingDir=='Games'):
+            self.parentDir = '/'
+            
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
         
@@ -192,6 +197,8 @@ class TwitchBrowser(Browser):
             dirlistcounter+=1
             return True  
         elif (self.workingDir=='Following'):
+            self.parentDir = '/'
+        
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
         
@@ -210,6 +217,7 @@ class TwitchBrowser(Browser):
                 filelistcounter+=1
             return True  
         elif (self.oldWorkingDir=='Games'):
+            self.parentDir = '/'
             logging.debug("list channels which play game: " + self.workingDir)
             
             self.dirlist[dirlistcounter] = '.'
