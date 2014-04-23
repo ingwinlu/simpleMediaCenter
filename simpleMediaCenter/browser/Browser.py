@@ -143,6 +143,8 @@ class TwitchBrowser(Browser):
         if (self.workingDir=='/'):
             self.dirlist[dirlistcounter] = 'Featured'
             dirlistcounter+=1
+            self.dirlist[dirlistcounter] = 'Games'
+            dirlistcounter+=1
             self.dirlist[dirlistcounter] = 'Following'
             dirlistcounter+=1
             return True
@@ -157,6 +159,18 @@ class TwitchBrowser(Browser):
             for stream in featured:
                 self.filelist[filelistcounter] = stream['stream']['channel']['name']
                 filelistcounter+=1
+            return True  
+        elif (self.workingDir=='Games'):
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+        
+            self.dirlist[dirlistcounter] = '..'
+            dirlistcounter+=1
+            
+            games = self.twitchTV.getGames()
+            for game in games:
+                self.dirlist[dirlistcounter] = game['game']['name']
+                dirlistcounter+=1
             return True  
         elif (self.workingDir=='Following'):
             self.dirlist[dirlistcounter] = '.'
