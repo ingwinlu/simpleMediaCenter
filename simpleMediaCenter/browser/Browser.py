@@ -276,12 +276,14 @@ class TwitchBrowser(Browser):
     
 class YoutubeBrowser(Browser):
     __logger=logging.getLogger(__name__)
+    pagination = None
     urllist = {}
     yt = None
 
     def __init__(self):
         from helpers.youtube import Youtube
         self.yt = Youtube()
+        self.pagination = Pagination(startoffset=1,limit=10)
         self.dirlist = {
                 0 : '/'
             }
@@ -325,7 +327,7 @@ class YoutubeBrowser(Browser):
             dirlistcounter+=1
             
             self.__logger.debug('getting videolist')
-            videos = self.yt.listChannelVideos('MrSuicideSheep')
+            videos = self.yt.listChannelVideos('MrSuicideSheep', offset=self.pagination.offset, self.pagination.limit)
             self.__logger.debug('searching videolist')
             for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
                 self.urllist[filelistcounter] = video.find(
