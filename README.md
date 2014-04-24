@@ -1,7 +1,7 @@
 simpleMediaCenter
 =================
 
-simpleMediaCenter aims to provide an easy on Ressources way to use your computer as an Media Center. 
+simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi. 
 
 Planned Core Features:
 + Web Interface (jinja + turbogears)
