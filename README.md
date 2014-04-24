@@ -5,9 +5,9 @@ simpleMediaCenter aims to provide an easy on Ressources way to use your computer
 
 Planned Core Features:
 + Web Interface (jinja + turbogears)
-+ omxplayer compability
++ omxplayer compatibility
 
-##TODO 
+##TO-DO and IDEAS
 priority from top to bottom:
 + ~~implement an interface where js or other clients can pull json data from~~
 + ~~use javascript to disable buttons~~
@@ -41,13 +41,10 @@ priority from top to bottom:
 + [TurboGears2](http://turbogears.org/)
 + [jinja2](http://jinja.pocoo.org/)
 + [youtube-dl](https://github.com/rg3/youtube-dl)
-    
     for youtube playback
-+ [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch)
-    
-    cosmo theme is included
++ [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch) (included)
 
-##Installation
+##Installation and Configuration
 1. install python3
 2. install youtube-dl
 3. install omxplayer
@@ -55,6 +52,7 @@ priority from top to bottom:
 5. clone this repository (on release there will be a package on pypi)
 6. navigate to the simpleMediaCenter/simpleMediaCenter directory
 7. run simpleMediaCenter.py
+8. after the first launch a config file will be generated at ~/.simpleMediaCenter-config.ini which can be edited to customize behaviour
 
 Please note that this project is still in heavy development and way of installation/configuration will improve
 
