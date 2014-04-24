@@ -119,7 +119,7 @@ class TwitchBrowser(Browser):
     username = None
 
     def __init__(self, username=None):
-        twitchTV = TwitchTV(self.__logger)
+        self.twitchTV = TwitchTV(self.__logger)
         
         self.username = username
         self.dirlist = {
