@@ -57,6 +57,29 @@ class Browser(Displayable):
     
     def getName(self):
         return self.__class__.__name__
+        
+
+class Pagination():
+    minimum = 0
+    offset = 0
+    limit = 0
+    nextPageString = 'next Page >'
+    prevPageString = '< previous Page'
+
+    def __init__(self, startoffset, limit):
+        self.offset = startoffset
+        self.minimum = startoffset
+        self.limit = limit
+        
+    def increase(self):
+        self.offset = self.offset + self.limit
+        
+    def decrease(self):
+        if(self.offset - self.limit >= self.minimum):
+            self.offset = self.offset - self.limit
+            
+    def reset(self):
+        self.offset = self.minimum
 
 
 class FileBrowser(Browser):    
@@ -112,14 +135,14 @@ class FileBrowser(Browser):
                 
 class TwitchBrowser(Browser):
     __logger=logging.getLogger(__name__)
-    offset=0
-    limit=10
+    pagination = None
     twitchTV = None
     username = None
-
+    
     def __init__(self, username=None):
         from helpers.twitch import TwitchTV
         self.twitchTV = TwitchTV(self.__logger)
+        self.pagination = Pagination(startoffset=0,limit=10)
         
         self.username = username
         self.dirlist = {
@@ -137,14 +160,13 @@ class TwitchBrowser(Browser):
         if(tempPath=='.'):
             tempPath=self.getWorkingDir()
         elif(tempPath=='..'):
-            self.offset=0
+            self.pagination.reset()
             tempPath=self.parentDir
-        elif(tempPath=='next Page >'):
-            self.offset=self.offset+self.limit
+        elif(tempPath==self.pagination.nextPageString):
+            self.pagination.increase()
             tempPath=self.getWorkingDir()
-        elif(tempPath=='< previous Page'):
-            if(self.offset-self.limit>=0):
-                self.offset=self.offset-self.limit
+        elif(tempPath==self.pagination.prevPageString):
+            self.pagination.decrease()
             tempPath=self.getWorkingDir()
         self.__logger.debug('getPath, final, tempPath:' + tempPath)
         return tempPath
@@ -197,15 +219,15 @@ class TwitchBrowser(Browser):
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
             
-            self.dirlist[dirlistcounter] = '< previous Page'
+            self.dirlist[dirlistcounter] = self.__prevPageString
             dirlistcounter+=1
             
             self.__logger.debug('offset:' + str(self.offset) + ' limit:' + str(self.limit))
-            games = self.twitchTV.getGames(offset=self.offset, limit=self.limit)
+            games = self.twitchTV.getGames(offset=self.pagination.offset, limit=self.pagination.limit)
             for game in games:
                 self.dirlist[dirlistcounter] = game['game']['name']
                 dirlistcounter+=1
-            self.dirlist[dirlistcounter] = 'next Page >'
+            self.dirlist[dirlistcounter] = self.__nextPageString
             dirlistcounter+=1
             return True  
         elif (self.workingDir=='Following'):
