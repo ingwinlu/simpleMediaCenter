@@ -10,11 +10,43 @@ import os
 import configparser
 
 class simpleMediaCenter():
+    __logger=logging.getLogger(__name__)
+    config_file = os.path.expanduser('~/.simpleMediaCenter-config.ini')
+    config = None
+    
+    '''
+        init simpleMediaCenter, parse config
+    '''
+    def __setDefaultConfig(self, input_config):
+        output_config = input_config
+        output_config['LOGGING'] =
+            {
+                'level' : logging.DEBUG
+            }
+        output_config['WEBINTERFACE'] =
+            {
+                'templatePath' : os.path.abspath('./interface/templates/'),
+                'staticPath' : os.path.abspath('./interface/static/')
+            }
+            
+            
+        return output_config
+    
     def __init__(self):
+        self.config = configparser.ConfigParser()
+        self.config = self.__setDefaultConfig(self.config)
         pass
         
+    '''
+        run a setup media center class
+    '''
+    def run(self):
+        pass
+        # save current config to file
+        
     
-
+if __name__ == "__main__":
+    pass
 #config = configparser.ConfigParser()
 #config_file = 'simpleMediaCenter-config.ini'
 #load config sections over modules

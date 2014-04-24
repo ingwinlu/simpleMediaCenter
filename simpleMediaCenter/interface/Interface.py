@@ -4,6 +4,9 @@ class Interface():
     pass
     #no idea what i need to abstract here, need to revisit when adding console interface
     
+'''
+    provides an interface for objects to be queried by the UI
+'''
 class Displayable():
     def getDict(self):
         raise NotImplementedError
@@ -11,6 +14,10 @@ class Displayable():
     def getName(self):
         return self.__class__.__name__
         
+        
+'''
+    provides feedback to the user if an exception occurs
+'''
 class ExceptionDisplayHandler(Displayable):
     __logger=logging.getLogger(__name__)
     __head=""
@@ -48,9 +55,9 @@ class ExceptionDisplayHandler(Displayable):
         tempDict['exceptionBody'] = self.__body
         return tempDict
         
-    '''
-        provides an interface for objects to be queried by the UI
-    '''
+'''
+    lists in the interface, for example players/playlists/browsers
+'''
 class InterfaceListable():
     __array=None
     __current=None
