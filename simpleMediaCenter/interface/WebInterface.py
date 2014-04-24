@@ -8,6 +8,7 @@ import logging
 import json
 
 class WebController(TGController):  
+    __logger=logging.getLogger(__name__)
     playerList=None
     playlistList=None
     browserList=None
@@ -15,7 +16,7 @@ class WebController(TGController):
     exceptionDisplayHandler=None
 
     def __init__(self, playerList=None, playlistList=None, browserList=None ):
-        logging.debug("WebInterface init")
+        self.__logger.debug("WebInterface init")
         self.playerList=playerList
         self.browserList=browserList
         self.playlistList=playlistList
@@ -27,7 +28,7 @@ class WebController(TGController):
             }
             
     def updateStatus(self):
-        #logging.debug("updateStatus")
+        self.__logger.debug("updateStatus")
         if(self.playerList.getActive() is not None):
             self.statusDict.update(self.playerList.getActive().getDict())
         if(self.playlistList.getActive() is not None):
@@ -45,8 +46,9 @@ class WebController(TGController):
     #index Page
     @expose('index.html')
     def index(self):
+        self.__logger.debug('index called')
         self.updateStatus()
-        logging.debug(self.statusDict)
+        self.__logger.debug(self.statusDict)
         return self.statusDict
         
     
@@ -55,9 +57,9 @@ class WebController(TGController):
     def play(self, id=None):
         try:
             id = self.parseID(id)
-            logging.debug("trying to play %s" ,self.browserList.getActive().getPlayable(id))
+            self.__logger.debug("trying to play %s" ,self.browserList.getActive().getPlayable(id))
             # TODO implement player select according to playlist.getSupportedPlayers()
-            logging.debug("searching for compatible Browser") 
+            self.__logger.debug("searching for compatible Browser") 
             for supportedPlayer in self.browserList.getActive().getSupportedPlayers():
                 playerid = self.playerList.getIDfromName(supportedPlayer)
                 if (playerid is not None):
@@ -74,13 +76,13 @@ class WebController(TGController):
     
     @expose()
     def stop(self):
-        logging.debug("stop called")
+        self.__logger.debug("stop called")
         self.playerList.getActive().stop()
         redirect("/")
         
     @expose()
     def pause(self):
-        logging.debug("pause called")
+        self.__logger.debug("pause called")
         self.playerList.getActive().pause()
         redirect("/")
         
@@ -88,7 +90,7 @@ class WebController(TGController):
     def change(self,id=None):
         try:
             id = self.parseID(id)
-            logging.debug("change called %s", id)
+            self.__logger.debug("change called %s", id)
             self.browserList.getActive().setWorkingDir(id)
         except KeyError as e:
             self.exceptionDisplayHandler.setException('KeyError','Passed id not in range: ' + repr(e))
@@ -140,6 +142,7 @@ class WebController(TGController):
 
 
 class WebInterface(Interface):
+    __logger=logging.getLogger(__name__)
     config=None
     httpd=None
     application=None
@@ -148,9 +151,9 @@ class WebInterface(Interface):
     controller=None
     
     def __init__(self, templatePath, staticPath, controller):
-        logging.debug("create WebInterface Instance")
+        self.__logger.debug("create WebInterface Instance")
   
-        logging.debug("setup TurboGears2")
+        self.__logger.debug("setup TurboGears2")
         self.controller = controller
         self.config = AppConfig(minimal=True, root_controller=self.controller)
         
@@ -169,9 +172,9 @@ class WebInterface(Interface):
         self.httpd.timeout = 5
     
     def run(self):
-        logging.debug("start Webserver")
+        self.__logger.debug("start Webserver")
         while(self.keep_running):
-            logging.debug("start serve_forever()")
+            self.__logger.debug("start serve_forever()")
             try:
                 #self.httpd.handle_request()
                 self.httpd.serve_forever()
@@ -180,7 +183,7 @@ class WebInterface(Interface):
                 
         
     def shutdown(self):
-        logging.info("init shutdown")
+        self.__logger.info("init shutdown")
         self.keep_running=False
         
   

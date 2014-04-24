@@ -1,3 +1,5 @@
+import logging
+
 class Interface():
     pass
     #no idea what i need to abstract here, need to revisit when adding console interface
@@ -10,6 +12,7 @@ class Displayable():
         return self.__class__.__name__
         
 class ExceptionDisplayHandler(Displayable):
+    __logger=logging.getLogger(__name__)
     __head=""
     __body=""
     __status=0
@@ -17,16 +20,27 @@ class ExceptionDisplayHandler(Displayable):
     def __init__(self):
         pass
         
+    '''
+        set an Exception that is to be displayed by javascript in a client window
+        @param head Header of the Exception
+        @body body text of th eException
+    '''
     def setException(self, head, body):
+        __self.logger.info('setException with head: ' + head + ' and body: ' + body)
         self.__head=head
         self.__body=body
         self.__status=1
         
+    '''
+        clears the Exception from the System
+    '''
     def clearException(self):
+        __self.logger.info('clearing Exception')
         self.__head=""
         self.__body=""
         self.__status=0
         
+    #@override
     def getDict(self):
         tempDict={}
         tempDict['exceptionStatus'] = self.__status
@@ -34,6 +48,9 @@ class ExceptionDisplayHandler(Displayable):
         tempDict['exceptionBody'] = self.__body
         return tempDict
         
+    '''
+        provides an interface for objects to be queried by the UI
+    '''
 class InterfaceListable():
     __array=None
     __current=None

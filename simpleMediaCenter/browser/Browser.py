@@ -61,7 +61,10 @@ class Browser(Displayable):
 
 
 class FileBrowser(Browser):    
+    __logger=logging.getLogger(__name__)
+
     def __init__(self,startDirectory='~'):
+        self.__logger.debug('init')
         tempDir = os.path.expanduser(startDirectory)
         tempDir = os.path.abspath(tempDir)
         self.dirlist = {
@@ -70,11 +73,14 @@ class FileBrowser(Browser):
         self.setWorkingDir(0)
     
     def getPlayable(self, fileKey):
-        return os.path.join(self.workingDir,self.filelist[fileKey])
+        temp = os.path.join(self.workingDir,self.filelist[fileKey])
+        self.__logger.debug('getPlayable:' + temp)
+        return temp
         
     def getPath(self, pathKey):
         tempPath = os.path.join(self.workingDir,self.dirlist[pathKey])
         tempPath = os.path.abspath(tempPath)
+        self.__logger.debug('getPath:' + tempPath)
         return tempPath
       
     def getSupportedPlayers(self):
@@ -106,12 +112,15 @@ class FileBrowser(Browser):
 
                 
 class TwitchBrowser(Browser):
+    __logger=logging.getLogger(__name__)
     offset=0
     limit=10
-    twitchTV = TwitchTV(logging)
+    twitchTV = None
     username = None
 
     def __init__(self, username=None):
+        twitchTV = TwitchTV(self.__logger)
+        
         self.username = username
         self.dirlist = {
                 0 : '/'
@@ -119,29 +128,32 @@ class TwitchBrowser(Browser):
         self.setWorkingDir(0)
         
     def getPlayable(self, fileKey):
+        self.__logger.debug('getPlayable:' + self.filelist[fileKey])
         return self.filelist[fileKey]
-        
+       
     def getPath(self, pathKey):
         tempPath = self.dirlist[pathKey]
+        self.__logger.debug('getPath, tempPath:' + tempPath)
         if(tempPath=='.'):
             tempPath=self.getWorkingDir()
         elif(tempPath=='..'):
             self.offset=0
             tempPath=self.parentDir
         elif(tempPath=='next Page >'):
-            self.offset=self.offset+10
+            self.offset=self.offset+self.limit
             tempPath=self.getWorkingDir()
         elif(tempPath=='< previous Page'):
-            if(self.offset-10>=0):
-                self.offset=self.offset-10
+            if(self.offset-self.limit>=0):
+                self.offset=self.offset-self.limit
             tempPath=self.getWorkingDir()
+        self.__logger.debug('getPath, final, tempPath:' + tempPath)
         return tempPath
 
     def getSupportedPlayers(self):
         return ['Twitchplayer']
     
     def setWorkingDir(self, newWorkingDirID):
-        logging.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
+        self.__logger.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
 
         self.workingDir = self.getPath(newWorkingDirID)
         
@@ -150,7 +162,7 @@ class TwitchBrowser(Browser):
         self.dirlist = {}
         self.filelist = {}
        
-        logging.debug("setWorkingDir, final: " + self.workingDir)
+        self.__logger.debug("setWorkingDir, final: " + self.workingDir)
 
         if (self.workingDir=='/'):
             self.parentDir = '/'
@@ -188,7 +200,7 @@ class TwitchBrowser(Browser):
             self.dirlist[dirlistcounter] = '< previous Page'
             dirlistcounter+=1
             
-            logging.debug('offset:' + str(self.offset) + ' limit:' + str(self.limit))
+            self.__logger.debug('offset:' + str(self.offset) + ' limit:' + str(self.limit))
             games = self.twitchTV.getGames(offset=self.offset, limit=self.limit)
             for game in games:
                 self.dirlist[dirlistcounter] = game['game']['name']
@@ -210,15 +222,12 @@ class TwitchBrowser(Browser):
             
             following = self.twitchTV.getFollowingStreams(self.username)
             for stream in following['live']:
-                #print("-----")
-                #print(stream['channel']['name'])
-                #print("-----")
                 self.filelist[filelistcounter] = stream['channel']['name']
                 filelistcounter+=1
             return True  
         elif (self.oldWorkingDir=='Games'):
             self.parentDir = '/'
-            logging.debug("list channels which play game: " + self.workingDir)
+            self.__logger.debug("list channels which play game: " + self.workingDir)
             
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
@@ -244,6 +253,7 @@ class TwitchBrowser(Browser):
     
     
 class YoutubeBrowser(Browser):
+    __logger=logging.getLogger(__name__)
     urllist = {}
     yt = Youtube()
 
@@ -268,7 +278,7 @@ class YoutubeBrowser(Browser):
         return ['Youtubeplayer']
     
     def setWorkingDir(self, newWorkingDirID):
-        logging.debug('setWorkingDir in YoutubeBrowser, ' + str(newWorkingDirID))
+        self.__logger.debug('setWorkingDir in YoutubeBrowser, ' + str(newWorkingDirID))
         self.workingDir = self.getPath(newWorkingDirID)
         
         dirlistcounter=0
@@ -277,7 +287,7 @@ class YoutubeBrowser(Browser):
         self.filelist = {}
         self.urllist = {}
        
-        logging.debug("setWorkingDir, final: " + self.workingDir)
+        self.__logger.debug("setWorkingDir, final: " + self.workingDir)
         
         if (self.workingDir=='/'):
             self.dirlist[dirlistcounter] = 'MrSuicideSheep' #TODO 
@@ -290,9 +300,9 @@ class YoutubeBrowser(Browser):
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
             
-            logging.debug('getting videolist')
+            self.__logger.debug('getting videolist')
             videos = self.yt.listChannelVideos('MrSuicideSheep')
-            logging.debug('searching videolist')
+            self.__logger.debug('searching videolist')
             for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
                 self.urllist[filelistcounter] = video.find(
                     ".//Atom:link[@rel='alternate']", 

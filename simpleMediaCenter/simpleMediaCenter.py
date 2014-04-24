@@ -9,6 +9,12 @@ import logging
 import os
 import configparser
 
+class simpleMediaCenter():
+    def __init__(self):
+        pass
+        
+    
+
 #config = configparser.ConfigParser()
 #config_file = 'simpleMediaCenter-config.ini'
 #load config sections over modules
