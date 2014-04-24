@@ -33,7 +33,7 @@ class Browser(Displayable):
     
     '''
         Set new Working Dir 
-        @ param newWorkingDirKey represents a Key in dirlist
+        @param newWorkingDirKey represents a Key in dirlist
     '''    
     def setWorkingDir(self, newWorkingDirKey):
         raise NotImplementedError
