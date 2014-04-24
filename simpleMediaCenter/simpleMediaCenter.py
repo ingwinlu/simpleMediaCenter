@@ -177,5 +177,3 @@ if __name__ == "__main__":
     smc.run()
     logging.shutdown()
 
-
-

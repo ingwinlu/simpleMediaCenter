@@ -33,7 +33,7 @@ class ExceptionDisplayHandler(Displayable):
         @body body text of th eException
     '''
     def setException(self, head, body):
-        __self.logger.info('setException with head: ' + head + ' and body: ' + body)
+        self.__logger.info('setException with head: ' + head + ' and body: ' + body)
         self.__head=head
         self.__body=body
         self.__status=1
@@ -42,7 +42,7 @@ class ExceptionDisplayHandler(Displayable):
         clears the Exception from the System
     '''
     def clearException(self):
-        __self.logger.info('clearing Exception')
+        self.__logger.info('clearing Exception')
         self.__head=""
         self.__body=""
         self.__status=0

@@ -176,7 +176,8 @@ class TwitchBrowser(Browser):
     
     def setWorkingDir(self, newWorkingDirID):
         self.__logger.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
-
+        
+        oldWorkingDir = self.workingDir
         self.workingDir = self.getPath(newWorkingDirID)
         
         dirlistcounter=0
@@ -219,15 +220,15 @@ class TwitchBrowser(Browser):
             self.dirlist[dirlistcounter] = '..'
             dirlistcounter+=1
             
-            self.dirlist[dirlistcounter] = self.__prevPageString
+            self.dirlist[dirlistcounter] = self.pagination.prevPageString
             dirlistcounter+=1
             
-            self.__logger.debug('offset:' + str(self.offset) + ' limit:' + str(self.limit))
+            self.__logger.debug('offset:' + str(self.pagination.offset) + ' limit:' + str(self.pagination.limit))
             games = self.twitchTV.getGames(offset=self.pagination.offset, limit=self.pagination.limit)
             for game in games:
                 self.dirlist[dirlistcounter] = game['game']['name']
                 dirlistcounter+=1
-            self.dirlist[dirlistcounter] = self.__nextPageString
+            self.dirlist[dirlistcounter] = self.pagination.nextPageString
             dirlistcounter+=1
             return True  
         elif (self.workingDir=='Following'):
@@ -247,8 +248,8 @@ class TwitchBrowser(Browser):
                 self.filelist[filelistcounter] = stream['channel']['name']
                 filelistcounter+=1
             return True  
-        elif (self.oldWorkingDir=='Games'):
-            self.parentDir = '/'
+        elif (oldWorkingDir=='Games'):
+            self.parentDir = 'Games'
             self.__logger.debug("list channels which play game: " + self.workingDir)
             
             self.dirlist[dirlistcounter] = '.'
@@ -262,6 +263,7 @@ class TwitchBrowser(Browser):
                 self.filelist[filelistcounter] = stream['channel']['name']
                 filelistcounter+=1
         else:
+            self.__logger.critical('no suiting menu found workingDir: ' + self.workingDir + ', parentDir: ' + self.parentDir)
             raise NotImplementedError
         return False
         
@@ -297,7 +299,7 @@ class YoutubeBrowser(Browser):
         if(tempPath=='.'):
             tempPath=self.getWorkingDir()
         elif(tempPath=='..'):
-            tempPath='/' # needs to be refined
+            tempPath=self.parentDir
         return tempPath
 
     def getSupportedPlayers(self):
@@ -316,10 +318,14 @@ class YoutubeBrowser(Browser):
         self.__logger.debug("setWorkingDir, final: " + self.workingDir)
         
         if (self.workingDir=='/'):
+            self.parentDir = '/'
+            
             self.dirlist[dirlistcounter] = 'MrSuicideSheep' #TODO 
             dirlistcounter+=1
             return 
         elif (self.workingDir=='MrSuicideSheep'):
+            self.parentDir = '/'
+        
             self.dirlist[dirlistcounter] = '.'
             dirlistcounter+=1
             
@@ -327,7 +333,7 @@ class YoutubeBrowser(Browser):
             dirlistcounter+=1
             
             self.__logger.debug('getting videolist')
-            videos = self.yt.listChannelVideos('MrSuicideSheep', offset=self.pagination.offset, self.pagination.limit)
+            videos = self.yt.listChannelVideos('MrSuicideSheep', offset=self.pagination.offset, limit=self.pagination.limit)
             self.__logger.debug('searching videolist')
             for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
                 self.urllist[filelistcounter] = video.find(
