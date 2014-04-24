@@ -13,6 +13,11 @@ class SimpleMediaCenter():
     __logger=logging.getLogger(__name__)
     config_file = os.path.expanduser('~/.simpleMediaCenter-config.ini')
     config = None
+    playerlist = None
+    browserlist = None
+    playlistlist = None
+    controller = None
+    interface = None
     
     '''
         init simpleMediaCenter, parse config
@@ -26,6 +31,84 @@ class SimpleMediaCenter():
         except FileNotFoundError as e:
             self.__logger.warning('config file not found, using default settings')
         #parse config 
+        self.__logger.info('parse config')
+        ##logging settings
+        self.__logger.debug('parse logging settings')
+        try:
+            self.__logger.setLevel(self.config.getint('LOGGING','level'))
+        except Exception as e:
+            self.__logger.critical('value error while parsing logging settings in  config file: ' + repr(e))
+        ##init players
+        self.__logger.debug('parse players')
+        array=[]
+        try:
+            if (self.config.getboolean('OMXPLAYER','use')):
+                omxplayer = Omxplayer(self.config.get('OMXPLAYER','cmdline'))
+                array.append(omxplayer)
+            if (self.config.getboolean('TWITCHPLAYER','use')):
+                twitchplayer = Twitchplayer(self.config.get('TWITCHPLAYER','cmdline'))
+                array.append(twitchplayer)
+            if (self.config.getboolean('YOUTUBEPLAYER','use')):
+                youtubeplayer = Youtubeplayer(self.config.get('YOUTUBEPLAYER','cmdline'))
+                array.append(youtubeplayer)            
+        except ValueError as e:
+            self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
+        self.playerlist = InterfaceListable(array)
+        ##init browsers
+        self.__logger.debug('parse browsers')
+        array=[]
+        try:
+            if (self.config.getboolean('FILEBROWSER','use')):
+                fileBrowser = FileBrowser()
+                array.append(fileBrowser)
+            if (self.config.getboolean('TWITCHBROWSER','use')):
+                for username in self.config.get('TWITCHBROWSER','usernames').split(','):
+                    tb = TwitchBrowser(username)
+                    array.append(tb)
+            if (self.config.getboolean('YOUTUBEBROWSER','use')):
+                youtubeBrowser = YoutubeBrowser()
+                array.append(youtubeBrowser)            
+        except ValueError as e:
+            self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
+        self.browserlist = InterfaceListable(array)
+        ##init playlists
+        self.__logger.debug('parse playlists')
+        array=[]
+        try:
+            if (self.config.getboolean('SINGLEPLAYLIST','use')):
+                playList = Single()
+                array.append(playList)          
+        except ValueError as e:
+            self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
+        self.playlistlist = InterfaceListable(array)
+        ##create controller
+        ##init webinterface
+        self.__logger.debug('parse interface')
+        try:
+            if (self.config.getboolean('WEBINTERFACE','use')):
+                pathToTemplates = self.config.get('WEBINTERFACE','templatePath')
+                pathToStatic = self.config.get('WEBINTERFACE','staticPath')
+                #TODO check if paths are valid
+                port = self.config.getint('WEBINTERFACE', 'port')
+                
+                self.__logger.info('creating controller')
+                self.controller = WebController(
+                    playerList=self.playerlist, 
+                    playlistList=self.playlistlist, 
+                    browserList=self.browserlist)
+                self.__logger.info('creating webinterface')
+                self.interface = WebInterface(
+                    pathToTemplates,
+                    pathToStatic, 
+                    port,
+                    self.controller)
+        
+        except ValueError as e:
+            self.__logger.critical('value error while parsing webinterface in  config file: ' + repr(e))
+        except Exception as e:
+            self.__logger.critical('error while parsing webinterface in  config file: ' + repr(e))
+        #finished parsing
+        
         
 
     def __setDefaultConfig(self, input_config):
@@ -36,7 +119,8 @@ class SimpleMediaCenter():
         output_config['WEBINTERFACE'] = {
                 'use'          : 'yes',
                 'templatePath' : os.path.abspath('./interface/templates/'),
-                'staticPath'   : os.path.abspath('./interface/static/')
+                'staticPath'   : os.path.abspath('./interface/static/'),
+                'port'         : '8080'
             }
         output_config['OMXPLAYER'] = {
                 'use'     : 'yes',
@@ -75,9 +159,10 @@ class SimpleMediaCenter():
             self.config.write(configfile)
     
     '''
-        run the media center
+        run the media center by starting the previously setup interface
     '''
     def run(self):
+        self.interface.run()
         try:
             self.__saveConfig()
         except Exception as e:
@@ -86,47 +171,10 @@ class SimpleMediaCenter():
         
     
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     smc = SimpleMediaCenter()
     smc.run()
-    pass
-'''
-#config = configparser.ConfigParser()
-#config_file = 'simpleMediaCenter-config.ini'
-#load config sections over modules
+    logging.shutdown()
 
-pathToTemplates=os.path.abspath('./interface/templates/')
-pathToStatic=os.path.abspath('./interface/static/')
 
-logging.basicConfig(level=logging.DEBUG)
-
-logging.info("creating player objects")
-omxplayer = Omxplayer("-o both")
-twitchplayer = Twitchplayer("-o both")
-youtubeplayer = Youtubeplayer("-o both")
-playerlist = InterfaceListable([omxplayer,twitchplayer, youtubeplayer])
-
-logging.info("creating browser objects")
-fileBrowser = FileBrowser()
-twitchWinluBrowser = TwitchBrowser('winlu')
-twitchKillerkakaduBrowser = TwitchBrowser('killerkakadu')
-youtubeBrowser = YoutubeBrowser()
-browserlist = InterfaceListable([fileBrowser,twitchWinluBrowser,twitchKillerkakaduBrowser,youtubeBrowser])
-
-#logging.info("creating playlist objects")
-#playList = Single()
-#playlistlist = InterfaceListable([playList])
-playlistlist = InterfaceListable([])
-
-logging.info("creating controller")
-controller = WebController(playerList=playerlist, playlistList=playlistlist, browserList=browserlist)
-
-logging.info("creating webinterface")
-interface = WebInterface(
-    pathToTemplates,
-    pathToStatic, 
-    controller
-    )
-    
-interface.run()
-'''
 

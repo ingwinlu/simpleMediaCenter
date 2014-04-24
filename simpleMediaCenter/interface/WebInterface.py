@@ -150,7 +150,7 @@ class WebInterface(Interface):
     player=None
     controller=None
     
-    def __init__(self, templatePath, staticPath, controller):
+    def __init__(self, templatePath, staticPath, port, controller):
         self.__logger.debug("create WebInterface Instance")
   
         self.__logger.debug("setup TurboGears2")
@@ -168,7 +168,7 @@ class WebInterface(Interface):
         self.config.paths['static_files'] = staticPath
         
         self.application = self.config.make_wsgi_app()
-        self.httpd = make_server('', 8080, self.application)
+        self.httpd = make_server('', port, self.application)
         self.httpd.timeout = 5
     
     def run(self):
