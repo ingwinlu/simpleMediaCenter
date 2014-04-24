@@ -101,6 +101,23 @@ class WebController(TGController):
         redirect("/")
         
     @expose()
+    def searchFile(self, search):
+        self.__logger.debug("searchFile called")
+        #check if browser has search extension enabled, KEY ERROR
+        if(self.browserList.getActive().getDict()['browserSearch']==True):
+            self.browserList.getActive().setWorkingDir(search, search='File')
+        redirect("/")
+        
+    @expose()
+    def searchDir(self, search):
+        self.__logger.debug("searchDir called")
+        #check if browser has search extension enabled, KEY ERROR
+        if(self.browserList.getActive().getDict()['browserSearch']==True):
+            self.__logger.debug("browser Search enabled")
+            self.browserList.getActive().setWorkingDir(search, search='Dir')
+        redirect("/")
+        
+    @expose()
     def selectPlayer(self, id=None):
         try:
             id = self.parseID(id)

@@ -15,6 +15,19 @@
         </div>
     </div>
     <div class="panel-body">
+      {% if browserSearch  %}
+        <div class="input-group">
+          <input type="text" id="browserSearch" class="form-control">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Search <span class="caret"></span></button>
+            <ul class="dropdown-menu pull-right">
+              <li><a id="searchFile" href="#">Search File</a></li>
+              <li><a id="searchDir" href="#">Search Directory</a></li>
+            </ul>
+          </div><!-- /btn-group -->
+        </div><!-- /input-group -->
+        <hr>
+      {% endif %}
         <div class="list-group">
             {% for key,value in browserDirs.items() %}
               <a href="./change?id={{ key }}"  class="list-group-item">{{value}}</a>

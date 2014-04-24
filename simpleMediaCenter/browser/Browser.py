@@ -53,6 +53,7 @@ class Browser(Displayable):
         tempDict['browserDirs'] = self.getPathList()
         tempDict['browserFiles']= self.getFileList()
         tempDict['activeBrowser'] = self.getName()
+        tempDict['browserSearch'] = False
         return tempDict
     
     def getName(self):
@@ -305,9 +306,12 @@ class YoutubeBrowser(Browser):
     def getSupportedPlayers(self):
         return ['Youtubeplayer']
     
-    def setWorkingDir(self, newWorkingDirID):
-        self.__logger.debug('setWorkingDir in YoutubeBrowser, ' + str(newWorkingDirID))
-        self.workingDir = self.getPath(newWorkingDirID)
+    def setWorkingDir(self, newWorkingDirID, search=None):
+        self.__logger.debug('setWorkingDir in YoutubeBrowser, ' + repr(newWorkingDirID))
+        if(search==None):
+            self.workingDir = self.getPath(newWorkingDirID)
+        else:
+            self.workingDir = newWorkingDirID
         
         dirlistcounter=0
         filelistcounter=0
@@ -343,7 +347,57 @@ class YoutubeBrowser(Browser):
                     'Atom:title',
                     namespaces=self.yt.NAMESPACES).text
                 filelistcounter+=1
-            return   
-        raise NotImplementedError
+            return  
+        elif (search=='File'):
+            self.parentDir = "/"
+            
+            self.__logger.debug("file search for " + self.workingDir)
+            videos = self.yt.searchVideo(self.workingDir, offset=self.pagination.offset, limit=self.pagination.limit)
+            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                self.urllist[filelistcounter] = video.find(
+                    ".//Atom:link[@rel='alternate']", 
+                    namespaces=self.yt.NAMESPACES).get('href')
+                title = video.find('Atom:title',namespaces=self.yt.NAMESPACES).text
+                title = title + " - Channel:" + video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
+                self.filelist[filelistcounter] = title
+                filelistcounter+=1
+           
+            return
+        elif (search=='Dir'):
+            self.parentDir = "/"
+            
+            self.__logger.debug("dir search for " + self.workingDir)
+            videos = self.yt.searchVideo(self.workingDir, offset=self.pagination.offset, limit=self.pagination.limit)
+            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                title = video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
+                self.dirlist[dirlistcounter] = title
+                dirlistcounter+=1
+            return
+        else:
+            self.parentDir = '/'
         
-   
+            self.dirlist[dirlistcounter] = '.'
+            dirlistcounter+=1
+            
+            self.dirlist[dirlistcounter] = '..'
+            dirlistcounter+=1
+            
+            self.__logger.debug('getting videolist')
+            videos = self.yt.listChannelVideos(self.workingDir, offset=self.pagination.offset, limit=self.pagination.limit)
+            self.__logger.debug('searching videolist')
+            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                self.urllist[filelistcounter] = video.find(
+                    ".//Atom:link[@rel='alternate']", 
+                    namespaces=self.yt.NAMESPACES).get('href')
+                self.filelist[filelistcounter] = video.find(
+                    'Atom:title',
+                    namespaces=self.yt.NAMESPACES).text
+                filelistcounter+=1
+            return  
+            
+        raise NotImplementedError
+       
+    def getDict(self):
+        tempDict=super().getDict()
+        tempDict['browserSearch'] = True
+        return tempDict

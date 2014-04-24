@@ -2,6 +2,8 @@ var runUpdate = 0;
 
 $( document ).ready(function() {
     $.ajaxSetup({ cache: false });
+    $("#searchFile").click(function(){searchFile()})
+    $("#searchDir").click(function(){searchDir()})
     update()
     runUpdate = setInterval("update()", 3000);
 });
@@ -53,5 +55,13 @@ function showException(title, body){
 
 function clearException(){
     $("#exception").hide();
-    window.location = "./clearException";
+    window.location = './clearException';
+}
+
+function searchFile(){
+    window.location = './searchFile?search=' + $("#browserSearch").val();
+}
+
+function searchDir(){
+    window.location = './searchDir?search=' + $("#browserSearch").val();
 }
