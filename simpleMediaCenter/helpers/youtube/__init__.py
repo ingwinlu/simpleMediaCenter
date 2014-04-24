@@ -13,6 +13,7 @@ import xml.etree.ElementTree as et
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'
 
 class XMLScraper():
+    __logger=logging.getLogger(__name__)
     
     def downloadWebData(self, url):
         data = ""
@@ -34,7 +35,7 @@ class XMLScraper():
         try:
             xmlString = self.downloadWebData(url)
             tree = et.fromstring(xmlString)
-            logging.debug(et.dump(tree))
+            self.__logger.debug(et.dump(tree))
             return tree
         except:
             raise Exception()
@@ -56,7 +57,13 @@ class Youtube():
     def __prepareURL(self, url_key, replacement_list):
         return self.URLS[url_key].format(replacement_list)
         
-    def listChannelVideos(self, channelName, startindex=1, maxresults=25):
-        url = self.__prepareURL('uploads', (channelName, startindex, maxresults))
+    '''
+        list all Channel videos
+        @param channelName name of the channel
+        @param offset where to start(smallest is 1)
+        @param limit max amount of videos to pull, max limit is 25
+    '''
+    def listChannelVideos(self, channelName, offset=1, limit=25):
+        url = self.__prepareURL('uploads', (channelName, offset, limit))
         return self.__scraper.downloadXML(url)
         
