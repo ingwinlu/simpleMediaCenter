@@ -1,8 +1,7 @@
 import os
 import logging
 from interface.Interface import Displayable
-from helpers.twitch import *
-from helpers.youtube import *
+
 
 class Browser(Displayable):
     workingDir = ''
@@ -119,6 +118,7 @@ class TwitchBrowser(Browser):
     username = None
 
     def __init__(self, username=None):
+        from helpers.twitch import TwitchTV
         self.twitchTV = TwitchTV(self.__logger)
         
         self.username = username
@@ -255,9 +255,11 @@ class TwitchBrowser(Browser):
 class YoutubeBrowser(Browser):
     __logger=logging.getLogger(__name__)
     urllist = {}
-    yt = Youtube()
+    yt = None
 
     def __init__(self):
+        from helpers.youtube import Youtube
+        self.yt = Youtube()
         self.dirlist = {
                 0 : '/'
             }

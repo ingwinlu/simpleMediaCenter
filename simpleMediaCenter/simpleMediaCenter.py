@@ -1,9 +1,6 @@
 from interface.WebInterface import WebInterface, WebController
 from interface.Interface import InterfaceListable
-from player.Omxplayer import Omxplayer
-from player.Twitchplayer import Twitchplayer
-from player.Youtubeplayer import Youtubeplayer
-from browser.Browser import *
+from browser.Browser import YoutubeBrowser
 from playlist.Playlist import Single
 import logging
 import os
@@ -27,6 +24,7 @@ class SimpleMediaCenter():
         self.config = configparser.ConfigParser()
         self.config = self.__setDefaultConfig(self.config)
         try:
+            self.__logger.info('using config file at ' + self.config_file)
             self.config.read_file(open(self.config_file))
         except FileNotFoundError as e:
             self.__logger.warning('config file not found, using default settings')
@@ -43,12 +41,15 @@ class SimpleMediaCenter():
         array=[]
         try:
             if (self.config.getboolean('OMXPLAYER','use')):
+                from player.Omxplayer import Omxplayer
                 omxplayer = Omxplayer(self.config.get('OMXPLAYER','cmdline'))
                 array.append(omxplayer)
             if (self.config.getboolean('TWITCHPLAYER','use')):
+                from player.Twitchplayer import Twitchplayer
                 twitchplayer = Twitchplayer(self.config.get('TWITCHPLAYER','cmdline'))
                 array.append(twitchplayer)
             if (self.config.getboolean('YOUTUBEPLAYER','use')):
+                from player.Youtubeplayer import Youtubeplayer
                 youtubeplayer = Youtubeplayer(self.config.get('YOUTUBEPLAYER','cmdline'))
                 array.append(youtubeplayer)            
         except ValueError as e:
@@ -59,13 +60,16 @@ class SimpleMediaCenter():
         array=[]
         try:
             if (self.config.getboolean('FILEBROWSER','use')):
+                from browser.Browser import FileBrowser
                 fileBrowser = FileBrowser()
                 array.append(fileBrowser)
             if (self.config.getboolean('TWITCHBROWSER','use')):
+                from browser.Browser import TwitchBrowser
                 for username in self.config.get('TWITCHBROWSER','usernames').split(','):
                     tb = TwitchBrowser(username)
                     array.append(tb)
             if (self.config.getboolean('YOUTUBEBROWSER','use')):
+                from browser.Browser import YoutubeBrowser
                 youtubeBrowser = YoutubeBrowser()
                 array.append(youtubeBrowser)            
         except ValueError as e:
