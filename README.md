@@ -18,21 +18,22 @@ priority from top to bottom:
    + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
    + ~~couple them with player, i.e. don't let any player use any browser~~
    + implement pagination
-   + implement sendToBrowser in REST Interface 
+   + ~~implement sendToBrowser in REST Interface~~
    + complete TwitchBrowser
    + complete YoutubeBrowser
 + exceptions
    + create exceptionclasses for input/processing errors
    + ~~create space in templates to display exceptiontext~~
    + ~~implement javascript to display exceptions~~
-+ implement configparser
++ ~~implement configparser~~
 + implement playlist functionality
-+ improve documentation 
-+ improve comments in code
++ improve documentation 5%
++ improve comments in code 5%
 + rework omxplayer to use dbus interface
 + feedback for longer loads
-   + convince artist to paint a loading please wait image for beer
+   + convince artist to paint a loading please wait image in exchange for beer
    + implement 'holding' page while load
++ add webinterface to change settings
 + drag and drop between browser/playlist
 
 ##Requirements
