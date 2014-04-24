@@ -109,7 +109,15 @@ class SimpleMediaCenter():
             self.__logger.critical('error while parsing webinterface in  config file: ' + repr(e))
         #finished parsing
         
-        
+    '''
+        run the media center by starting the previously setup interface
+    '''
+    def run(self):
+        self.interface.run()
+        try:
+            self.__saveConfig()
+        except Exception as e:
+            self.__logger.critical('exception while saving config file: ' + repr(e))
 
     def __setDefaultConfig(self, input_config):
         output_config = input_config
@@ -158,18 +166,7 @@ class SimpleMediaCenter():
         with open(self.config_file, 'w') as configfile:
             self.config.write(configfile)
     
-    '''
-        run the media center by starting the previously setup interface
-    '''
-    def run(self):
-        self.interface.run()
-        try:
-            self.__saveConfig()
-        except Exception as e:
-            self.__logger.critical('exception while saving config file: ' + repr(e))
 
-        
-    
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     smc = SimpleMediaCenter()
