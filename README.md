@@ -58,6 +58,7 @@ priority from top to bottom:
 Please note that this project is still in heavy development and way of installation/configuration will improve
 
 ##Screenshot
+![index Screenshot V0.4](./docs/simpleMediaServer_v0_5_4.PNG)
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_4.PNG)
 
 
