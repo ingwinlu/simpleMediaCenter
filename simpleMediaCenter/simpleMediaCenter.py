@@ -9,7 +9,7 @@ import logging
 import os
 import configparser
 
-class simpleMediaCenter():
+class SimpleMediaCenter():
     __logger=logging.getLogger(__name__)
     config_file = os.path.expanduser('~/.simpleMediaCenter-config.ini')
     config = None
@@ -17,36 +17,79 @@ class simpleMediaCenter():
     '''
         init simpleMediaCenter, parse config
     '''
-    def __setDefaultConfig(self, input_config):
-        output_config = input_config
-        output_config['LOGGING'] =
-            {
-                'level' : logging.DEBUG
-            }
-        output_config['WEBINTERFACE'] =
-            {
-                'templatePath' : os.path.abspath('./interface/templates/'),
-                'staticPath' : os.path.abspath('./interface/static/')
-            }
-            
-            
-        return output_config
-    
     def __init__(self):
+        self.__logger.debug('init')
         self.config = configparser.ConfigParser()
         self.config = self.__setDefaultConfig(self.config)
-        pass
+        try:
+            self.config.read_file(open(self.config_file))
+        except FileNotFoundError as e:
+            self.__logger.warning('config file not found, using default settings')
+        #parse config 
         
+
+    def __setDefaultConfig(self, input_config):
+        output_config = input_config
+        output_config['LOGGING'] = {
+                'level' : logging.DEBUG
+            }
+        output_config['WEBINTERFACE'] = {
+                'use'          : 'yes',
+                'templatePath' : os.path.abspath('./interface/templates/'),
+                'staticPath'   : os.path.abspath('./interface/static/')
+            }
+        output_config['OMXPLAYER'] = {
+                'use'     : 'yes',
+                'cmdline' : '-o both'
+            }
+        output_config['TWITCHPLAYER'] = {
+                'use'     : 'no',
+                'cmdline' : '-o both'
+            }
+        output_config['YOUTUBEPLAYER'] = {
+                'use'     : 'no',
+                'cmdline' : '-o both'
+            }
+            
+        output_config['FILEBROWSER'] = {
+                'use'   : 'yes'
+            }
+            
+        output_config['TWITCHBROWSER'] = {
+                'use'   : 'no',
+                'usernames' : 'user1,user2'
+            }
+            
+        output_config['YOUTUBEBROWSER'] = {
+                'use'   : 'no'
+            }
+            
+        output_config['SINGLEPLAYLIST'] = {
+                'use'   : 'no'
+            }
+            
+        return output_config
+        
+    def __saveConfig(self):
+        with open(self.config_file, 'w') as configfile:
+            self.config.write(configfile)
+    
     '''
-        run a setup media center class
+        run the media center
     '''
     def run(self):
-        pass
-        # save current config to file
+        try:
+            self.__saveConfig()
+        except Exception as e:
+            self.__logger.critical('exception while saving config file: ' + repr(e))
+
         
     
 if __name__ == "__main__":
+    smc = SimpleMediaCenter()
+    smc.run()
     pass
+'''
 #config = configparser.ConfigParser()
 #config_file = 'simpleMediaCenter-config.ini'
 #load config sections over modules
@@ -85,5 +128,5 @@ interface = WebInterface(
     )
     
 interface.run()
-
+'''
 
