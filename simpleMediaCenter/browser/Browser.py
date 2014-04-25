@@ -187,18 +187,16 @@ class TwitchBrowser(Browser):
     '''
     def getPath(self, pathKey):
         tempPath = self.dirlist[pathKey]
-        self.__logger.debug("oldWorkingDir: " + self.getWorkingDir())
         oldWorkingDir = self.splitPath(self.getWorkingDir())
+        self.__logger.debug("oldWorkingDir: " + self.getWorkingDir())
         self.__logger.debug('getPath, tempPath:' + tempPath)
         if(tempPath=='.'):
             tempPath=oldWorkingDir
         elif(tempPath=='..'):
-            self.__logger.critical("|".join(oldWorkingDir))
-            if(len(oldWorkingDir)>0): # check if not on top level, alternative check size
+            if(len(oldWorkingDir)>0): # check if not on top level
                 del oldWorkingDir[-1] # delete last element in list
             else:
                 oldWorkingDir = []
-            self.__logger.critical("|".join(oldWorkingDir))
             tempPath = oldWorkingDir
             self.pagination.reset()
         elif(tempPath==self.pagination.nextPageString):
@@ -210,15 +208,13 @@ class TwitchBrowser(Browser):
         else:
             tempPath = oldWorkingDir + [tempPath]
             self.pagination.reset()
-        #tempPath = '/'.join(tempPath) # temporary, better to pass unjoined to save a split?
-        #self.__logger.debug('getPath, final, tempPath:' + tempPath)
         return tempPath
 
     def getSupportedPlayers(self):
         return ['Twitchplayer']
     
     def setWorkingDir(self, newWorkingDirID):
-        self.__logger.debug('setWorkingDir id: ' + str(newWorkingDirID))
+        self.__logger.debug('setWorkingDir id: ' + repr(newWorkingDirID))
         
         pathArray = self.getPath(newWorkingDirID)
         
@@ -326,6 +322,7 @@ class TwitchBrowser(Browser):
     
 class YoutubeBrowser(Browser):
     __logger=logging.getLogger(__name__)
+    favorites = []
     pagination = None
     urllist = {}
     yt = None
@@ -335,7 +332,7 @@ class YoutubeBrowser(Browser):
         self.yt = Youtube()
         self.pagination = Pagination(startoffset=1,limit=10)
         self.dirlist = {
-                0 : '/'
+                0 : '.'
             }
         self.setWorkingDir(0)
         
@@ -344,21 +341,50 @@ class YoutubeBrowser(Browser):
         
     def getPath(self, pathKey):
         tempPath = self.dirlist[pathKey]
+        oldWorkingDir = self.splitPath(self.getWorkingDir())
+        self.__logger.debug("oldWorkingDir: " + self.getWorkingDir())
+        self.__logger.debug('getPath, tempPath:' + tempPath)
         if(tempPath=='.'):
-            tempPath=self.getWorkingDir()
+            tempPath=oldWorkingDir
         elif(tempPath=='..'):
-            tempPath=self.parentDir
+            if(len(oldWorkingDir)>0): # check if not on top level
+                del oldWorkingDir[-1] # delete last element in list
+            else:
+                oldWorkingDir = []
+            tempPath = oldWorkingDir
+            self.pagination.reset()
+        elif(tempPath==self.pagination.nextPageString):
+            self.pagination.increase()
+            tempPath=oldWorkingDir
+        elif(tempPath==self.pagination.prevPageString):
+            self.pagination.decrease()
+            tempPath=oldWorkingDir
+        elif(tempPath=='/'):
+            tempPath = []
+        else:
+            tempPath = oldWorkingDir + [tempPath]
+            self.pagination.reset()
         return tempPath
 
     def getSupportedPlayers(self):
         return ['Youtubeplayer']
+        
+    def splitPath(self, path):# take away root / and split by '/', return empty array if on root
+        if(path=='/'):
+            return []
+        if(path==''):
+            return []
+        return path[1:].split('/')
+        
+    def buildPath(self, patharray):
+        return '/' + '/'.join(patharray)
     
     def setWorkingDir(self, newWorkingDirID, search=None):
         self.__logger.debug('setWorkingDir in YoutubeBrowser, ' + repr(newWorkingDirID))
         if(search==None):
-            self.workingDir = self.getPath(newWorkingDirID)
+            pathArray = self.getPath(newWorkingDirID)
         else:
-            self.workingDir = newWorkingDirID
+            pathArray = ['search',search,newWorkingDirID]
         
         dirlistcounter=0
         filelistcounter=0
@@ -366,83 +392,95 @@ class YoutubeBrowser(Browser):
         self.filelist = {}
         self.urllist = {}
        
+       
+       
         self.__logger.debug("setWorkingDir, final: " + self.workingDir)
         
-        if (self.workingDir=='/'):
-            self.parentDir = '/'
-            
-            self.dirlist[dirlistcounter] = 'MrSuicideSheep' #TODO 
+        if (len(pathArray)==0):
+            self.dirlist[dirlistcounter] = 'Favorites' #TODO 
             dirlistcounter+=1
-            return 
-        elif (self.workingDir=='MrSuicideSheep'):
-            self.parentDir = '/'
         
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-            
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
-            
-            self.__logger.debug('getting videolist')
-            videos = self.yt.listChannelVideos('MrSuicideSheep', offset=self.pagination.offset, limit=self.pagination.limit)
-            self.__logger.debug('searching videolist')
-            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
-                self.urllist[filelistcounter] = video.find(
-                    ".//Atom:link[@rel='alternate']", 
-                    namespaces=self.yt.NAMESPACES).get('href')
-                self.filelist[filelistcounter] = video.find(
-                    'Atom:title',
-                    namespaces=self.yt.NAMESPACES).text
-                filelistcounter+=1
-            return  
-        elif (search=='File'):
-            self.parentDir = "/"
-            
-            self.__logger.debug("file search for " + self.workingDir)
-            videos = self.yt.searchVideo(self.workingDir, offset=self.pagination.offset, limit=self.pagination.limit)
-            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
-                self.urllist[filelistcounter] = video.find(
-                    ".//Atom:link[@rel='alternate']", 
-                    namespaces=self.yt.NAMESPACES).get('href')
-                title = video.find('Atom:title',namespaces=self.yt.NAMESPACES).text
-                title = title + " - Channel:" + video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
-                self.filelist[filelistcounter] = title
-                filelistcounter+=1
-           
-            return
-        elif (search=='Dir'):
-            self.parentDir = "/"
-            
-            self.__logger.debug("dir search for " + self.workingDir)
-            videos = self.yt.searchVideo(self.workingDir, offset=self.pagination.offset, limit=self.pagination.limit)
-            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
-                title = video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
-                self.dirlist[dirlistcounter] = title
-                dirlistcounter+=1
-            return
+        elif (len(pathArray)>=1):
+            if (pathArray[0]=='Favorites'):
+                if(len(pathArray)==1):
+                    self.dirlist[dirlistcounter] = '..'
+                    dirlistcounter+=1
+                    
+                    for fav in self.favorites:
+                        self.dirlist[dirlistcounter] = fav
+                        dirlistcounter+=1
+
+                elif(len(pathArray)==2):
+                    self.dirlist[dirlistcounter] = '.'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = '..'
+                    dirlistcounter+=1
+                    
+                    self.__logger.debug('getting videolist')
+                    videos = self.yt.listChannelVideos(pathArray[1], offset=self.pagination.offset, limit=self.pagination.limit)
+                    self.__logger.debug('searching videolist')
+                    for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                        self.urllist[filelistcounter] = video.find(
+                            ".//Atom:link[@rel='alternate']", 
+                            namespaces=self.yt.NAMESPACES).get('href')
+                        self.filelist[filelistcounter] = video.find(
+                            'Atom:title',
+                            namespaces=self.yt.NAMESPACES).text
+                        filelistcounter+=1
+                else:
+                    self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                    raise NotImplementedError
+
+            elif (pathArray[0]=='search'):
+                if(len(pathArray)==3):
+                    self.__logger.debug("search for " + pathArray[1] + " " + pathArray[2])
+                    self.dirlist[dirlistcounter] = '.'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = '/'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.prevPageString
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.nextPageString
+                    dirlistcounter+=1
+                    
+                    if(pathArray[1]=='File'):                    
+                        videos = self.yt.searchVideo(pathArray[2], offset=self.pagination.offset, limit=self.pagination.limit)
+                        for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                            self.urllist[filelistcounter] = video.find(
+                                ".//Atom:link[@rel='alternate']", 
+                                namespaces=self.yt.NAMESPACES).get('href')
+                            title = video.find('Atom:title',namespaces=self.yt.NAMESPACES).text
+                            title = title + " - Channel:" + video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
+                            self.filelist[filelistcounter] = title
+                            filelistcounter+=1
+               
+                    elif (pathArray[1]=='Dir'):    
+                        videos = self.yt.searchVideo(pathArray[2], offset=self.pagination.offset, limit=self.pagination.limit)
+                        for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                            title = video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
+                            self.dirlist[dirlistcounter] = title
+                            dirlistcounter+=1
+                    else:
+                        self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                        raise NotImplementedError
+                        
+            else:
+                self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                raise NotImplementedError
         else:
-            self.parentDir = '/'
+            self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+            raise NotImplementedError
+                
+            
+        self.workingDir = self.buildPath(pathArray)
+        self.__logger.debug("setWorkingDir to: " + self.workingDir)
         
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-            
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
-            
-            self.__logger.debug('getting videolist')
-            videos = self.yt.listChannelVideos(self.workingDir, offset=self.pagination.offset, limit=self.pagination.limit)
-            self.__logger.debug('searching videolist')
-            for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
-                self.urllist[filelistcounter] = video.find(
-                    ".//Atom:link[@rel='alternate']", 
-                    namespaces=self.yt.NAMESPACES).get('href')
-                self.filelist[filelistcounter] = video.find(
-                    'Atom:title',
-                    namespaces=self.yt.NAMESPACES).text
-                filelistcounter+=1
-            return  
-            
-        raise NotImplementedError
+    def addFavorite(self, newFavorite):
+        self.favorites.append(newFavorite)
        
     def getDict(self):
         tempDict=super().getDict()

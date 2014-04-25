@@ -14,18 +14,18 @@ priority from top to bottom:
 + ~~move player to the navbar~~
 + ~~split up index page generation from playerstatus~~
 + ~~implement automatic player choosing~~
-+ ~~rework Browser~~
-   + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
-   + ~~couple them with player, i.e. don't let any player use any browser~~
-   + implement pagination
-   + ~~implement sendToBrowser in REST Interface~~
-   + complete TwitchBrowser
-   + complete YoutubeBrowser
-+ exceptions
-   + create exceptionclasses for input/processing errors
++ ~~exceptions~~
+   + ~~create exceptionclasses for input/processing errors~~
    + ~~create space in templates to display exceptiontext~~
    + ~~implement javascript to display exceptions~~
 + ~~implement configparser~~
++ ~~rework Browser~~
+   + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
+   + ~~couple them with player, i.e. don't let any player use any browser~~
+   + ~~implement pagination~~
+   + ~~implement sendToBrowser in REST Interface~~
+   + complete TwitchBrowser 80%
+   + complete YoutubeBrowser 80%
 + implement playlist functionality
 + improve documentation 5%
 + improve comments in code 5%

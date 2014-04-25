@@ -71,6 +71,8 @@ class SimpleMediaCenter():
             if (self.config.getboolean('YOUTUBEBROWSER','use')):
                 from browser.Browser import YoutubeBrowser
                 youtubeBrowser = YoutubeBrowser()
+                for favorite in self.config.get('YOUTUBEBROWSER','favorites').split(','):
+                    youtubeBrowser.addFavorite(favorite)
                 array.append(youtubeBrowser)            
         except ValueError as e:
             self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
@@ -157,6 +159,7 @@ class SimpleMediaCenter():
             }
             
         output_config['YOUTUBEBROWSER'] = {
+                'favorites' : 'MrSuicideSheep,Escapist,TopGear',
                 'use'   : 'no'
             }
             
