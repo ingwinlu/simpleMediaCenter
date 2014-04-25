@@ -1,3 +1,8 @@
+#needs rework, pathing needs to be done via a full path, not just parent dir
+#similar to a rest interface would be best 
+#/ marks root
+#/Games/Game Name/1 could display the first page and so on
+
 import os
 import logging
 from interface.Interface import Displayable
