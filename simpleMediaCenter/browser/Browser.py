@@ -1,7 +1,17 @@
 #needs rework, pathing needs to be done via a full path, not just parent dir
 #similar to a rest interface would be best 
 #/ marks root
-#/Games/Game Name/1 could display the first page and so on
+#/Games/Game Name/1 could display the first page and so on <- workingDir
+'''
+>>> path = "/Games/Garry's Mod/1"
+>>> path.split('/')
+['', 'Games', "Garry's Mod", '1']
+>>> sp = path.split('/')
+>>> '/'.join(sp)
+"/Games/Garry's Mod/1"
+>>>
+
+'''
 
 import os
 import logging
@@ -10,7 +20,6 @@ from interface.Interface import Displayable
 
 class Browser(Displayable):
     workingDir = ''
-    parentDir = ''
     dirlist = {}
     filelist = {}
     
@@ -152,126 +161,159 @@ class TwitchBrowser(Browser):
         
         self.username = username
         self.dirlist = {
-                0 : '/'
+                0 : '.'
             }
         self.setWorkingDir(0)
         
     def getPlayable(self, fileKey):
         self.__logger.debug('getPlayable:' + self.filelist[fileKey])
         return self.filelist[fileKey]
+        
+    def splitPath(self, path):# take away root / and split by '/', return empty array if on root
+        if(path=='/'):
+            return []
+        if(path==''):
+            return []
+        return path[1:].split('/')
+        
+    def buildPath(self, patharray):
+        return '/' + '/'.join(patharray)
        
+    '''
+        returns a split path array 
+        >>> tempPath
+        ['menu','submenu']
+        ['']
+    '''
     def getPath(self, pathKey):
         tempPath = self.dirlist[pathKey]
+        self.__logger.debug("oldWorkingDir: " + self.getWorkingDir())
+        oldWorkingDir = self.splitPath(self.getWorkingDir())
         self.__logger.debug('getPath, tempPath:' + tempPath)
         if(tempPath=='.'):
-            tempPath=self.getWorkingDir()
+            tempPath=oldWorkingDir
         elif(tempPath=='..'):
+            self.__logger.critical("|".join(oldWorkingDir))
+            if(len(oldWorkingDir)>0): # check if not on top level, alternative check size
+                del oldWorkingDir[-1] # delete last element in list
+            else:
+                oldWorkingDir = []
+            self.__logger.critical("|".join(oldWorkingDir))
+            tempPath = oldWorkingDir
             self.pagination.reset()
-            tempPath=self.parentDir
         elif(tempPath==self.pagination.nextPageString):
             self.pagination.increase()
-            tempPath=self.getWorkingDir()
+            tempPath=oldWorkingDir
         elif(tempPath==self.pagination.prevPageString):
             self.pagination.decrease()
-            tempPath=self.getWorkingDir()
-        self.__logger.debug('getPath, final, tempPath:' + tempPath)
+            tempPath=oldWorkingDir
+        else:
+            tempPath = oldWorkingDir + [tempPath]
+            self.pagination.reset()
+        #tempPath = '/'.join(tempPath) # temporary, better to pass unjoined to save a split?
+        #self.__logger.debug('getPath, final, tempPath:' + tempPath)
         return tempPath
 
     def getSupportedPlayers(self):
         return ['Twitchplayer']
     
     def setWorkingDir(self, newWorkingDirID):
-        self.__logger.debug('setWorkingDir in TwitchBrowser, ' + str(newWorkingDirID))
+        self.__logger.debug('setWorkingDir id: ' + str(newWorkingDirID))
         
-        oldWorkingDir = self.workingDir
-        self.workingDir = self.getPath(newWorkingDirID)
+        pathArray = self.getPath(newWorkingDirID)
         
         dirlistcounter=0
         filelistcounter=0
         self.dirlist = {}
         self.filelist = {}
        
-        self.__logger.debug("setWorkingDir, final: " + self.workingDir)
+        self.__logger.debug("setWorkingDir, | seperated: " + "|".join(pathArray))
 
-        if (self.workingDir=='/'):
-            self.parentDir = '/'
-            
+        '''
+            parse every element of path array to find destination
+        '''
+        if (len(pathArray)==0):
             self.dirlist[dirlistcounter] = 'Featured'
             dirlistcounter+=1
             self.dirlist[dirlistcounter] = 'Games'
             dirlistcounter+=1
             self.dirlist[dirlistcounter] = 'Following'
             dirlistcounter+=1
-            return True
-        elif (self.workingDir=='Featured'):
-            self.parentDir = '/'
-        
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-        
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
             
-            featured = self.twitchTV.getFeaturedStream()
-            for stream in featured:
-                self.filelist[filelistcounter] = stream['stream']['channel']['name']
-                filelistcounter+=1
-            return True  
-        elif (self.workingDir=='Games'):
-            self.parentDir = '/'
-            
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-        
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
-            
-            self.dirlist[dirlistcounter] = self.pagination.prevPageString
-            dirlistcounter+=1
-            
-            self.__logger.debug('offset:' + str(self.pagination.offset) + ' limit:' + str(self.pagination.limit))
-            games = self.twitchTV.getGames(offset=self.pagination.offset, limit=self.pagination.limit)
-            for game in games:
-                self.dirlist[dirlistcounter] = game['game']['name']
+        elif (len(pathArray)>=1):
+            if (pathArray[0]=='Featured'):
+                self.dirlist[dirlistcounter] = '.'
                 dirlistcounter+=1
-            self.dirlist[dirlistcounter] = self.pagination.nextPageString
-            dirlistcounter+=1
-            return True  
-        elif (self.workingDir=='Following'):
-            self.parentDir = '/'
+            
+                self.dirlist[dirlistcounter] = '..'
+                dirlistcounter+=1
+                
+                featured = self.twitchTV.getFeaturedStream()
+                for stream in featured:
+                    self.filelist[filelistcounter] = stream['stream']['channel']['name']
+                    filelistcounter+=1
+                    
+            elif (pathArray[0]=='Games'):   
+                if(len(pathArray)==1):
+                    self.dirlist[dirlistcounter] = '.'
+                    dirlistcounter+=1
+                
+                    self.dirlist[dirlistcounter] = '..'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.prevPageString
+                    dirlistcounter+=1
+                    
+                    self.__logger.debug('offset:' + str(self.pagination.offset) + ' limit:' + str(self.pagination.limit))
+                    games = self.twitchTV.getGames(offset=self.pagination.offset, limit=self.pagination.limit)
+                    for game in games:
+                        self.dirlist[dirlistcounter] = game['game']['name']
+                        dirlistcounter+=1
+                    self.dirlist[dirlistcounter] = self.pagination.nextPageString
+                    dirlistcounter+=1
+                elif(len(pathArray)==2):
+                    self.__logger.debug("list channels which play game: " + pathArray[1])
+                    
+                    self.dirlist[dirlistcounter] = '.'
+                    dirlistcounter+=1
+                
+                    self.dirlist[dirlistcounter] = '..'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.prevPageString
+                    dirlistcounter+=1
+                    
+                    gamestreams = self.twitchTV.getGameStreams(gameName=pathArray[1], offset=self.pagination.offset, limit=self.pagination.limit)
+                    for stream in gamestreams:
+                        self.filelist[filelistcounter] = stream['channel']['name']
+                        filelistcounter+=1
+                        
+                    self.dirlist[dirlistcounter] = self.pagination.nextPageString
+                    dirlistcounter+=1
+                
+            elif (pathArray[0]=='Following'):
+                self.dirlist[dirlistcounter] = '.'
+                dirlistcounter+=1
+            
+                self.dirlist[dirlistcounter] = '..'
+                dirlistcounter+=1
+                
+                if(self.username is None):
+                    return False # temporary workaround if no username is set
+                
+                following = self.twitchTV.getFollowingStreams(self.username)
+                for stream in following['live']:
+                    self.filelist[filelistcounter] = stream['channel']['name']
+                    filelistcounter+=1
+
+            else:
+                self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                raise NotImplementedError
+            
         
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-        
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
-            
-            if(self.username is None):
-                return False # temporary workaround if no username is set
-            
-            following = self.twitchTV.getFollowingStreams(self.username)
-            for stream in following['live']:
-                self.filelist[filelistcounter] = stream['channel']['name']
-                filelistcounter+=1
-            return True  
-        elif (oldWorkingDir=='Games'):
-            self.parentDir = 'Games'
-            self.__logger.debug("list channels which play game: " + self.workingDir)
-            
-            self.dirlist[dirlistcounter] = '.'
-            dirlistcounter+=1
-        
-            self.dirlist[dirlistcounter] = '..'
-            dirlistcounter+=1
-            
-            gamestreams = self.twitchTV.getGameStreams(self.workingDir)
-            for stream in gamestreams:
-                self.filelist[filelistcounter] = stream['channel']['name']
-                filelistcounter+=1
-        else:
-            self.__logger.critical('no suiting menu found workingDir: ' + self.workingDir + ', parentDir: ' + self.parentDir)
-            raise NotImplementedError
-        return False
+        self.workingDir = self.buildPath(pathArray)
+        self.__logger.debug("setWorkingDir to: " + self.workingDir)
+
         
     def setUsername(self, username):
         self.username = username
