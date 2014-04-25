@@ -1,7 +1,6 @@
 from player.Omxplayer import Omxplayer
 from helpers.twitch import TwitchVideoResolver
 import logging
-import sys
 import os
 
 class Twitchplayer(Omxplayer):

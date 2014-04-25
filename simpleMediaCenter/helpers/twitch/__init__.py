@@ -1,5 +1,5 @@
 #-*- encoding: utf-8 -*-
-import sys#, re
+import sys
 try:
     from urllib.request import urlopen, Request
     from urllib.parse import quote_plus
@@ -244,7 +244,7 @@ class TwitchVideoResolver(object):
             else:
                 #Preferred quality is unavailable so let's play the highest available quality
                 playlist += '\n'.join(streamurls)
-                self.logger.info("prefered quality unavailable, usin ghighest available quality")
+                self.logger.info("prefered quality unavailable, using highest available quality")
                 
             #Write Custom Playlist
             text_file = open(fileName, "w")
