@@ -21,17 +21,17 @@ class TestTwitchBrowser(unittest.TestCase):
     def test_basic_navigation(self):
         tempBrowser = TwitchBrowser(username='winlu')
         tempBrowser.setWorkingDir(0)
-        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Featured")
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Featured")
         tempBrowser.setWorkingDir(0) # should refresh
-        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Featured")
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Featured")
         tempBrowser.setWorkingDir(1) # should go to root directory
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/")
         tempBrowser.setWorkingDir(0) # should go to Featured
-        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Featured")
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Featured")
         tempBrowser.setWorkingDir(1) # should go to root directory
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/")
         tempBrowser.setWorkingDir(1) # should go to Following
-        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "Following")
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Games")
         
     def test_supported_Players(self):
         self.assertIn('Twitchplayer', self.twitchBrowser.getSupportedPlayers())
