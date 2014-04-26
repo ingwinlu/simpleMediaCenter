@@ -143,8 +143,8 @@ class SimpleMediaCenter():
         #webinterface
         output_config['WEBINTERFACE'] = {
                 'use'          : 'yes',
-                'templatePath' : os.path.abspath('./interface/templates/'),
-                'staticPath'   : os.path.abspath('./interface/static/'),
+                'templatePath' : os.path.abspath('./interface/templates/'), # bad default
+                'staticPath'   : os.path.abspath('./interface/static/'),    # bad default
                 'port'         : '8080'
             }
         #players
