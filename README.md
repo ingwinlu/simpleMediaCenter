@@ -26,6 +26,7 @@ priority from top to bottom:
    + ~~implement sendToBrowser in REST Interface~~
    + complete TwitchBrowser 80%
    + complete YoutubeBrowser 80%
++ flush out mplayer support
 + implement playlist functionality
 + improve documentation 5%
 + improve comments in code 5%
@@ -38,7 +39,9 @@ priority from top to bottom:
 
 ##Requirements
 + python3
-+ [omxplayer](http://omxplayer.sconde.net/)
++ player (pick one)
+    + [omxplayer](http://omxplayer.sconde.net/)
+    + mplayer
 + [TurboGears2](http://turbogears.org/)
 + [jinja2](http://jinja.pocoo.org/)
 + [youtube-dl](https://github.com/rg3/youtube-dl)
