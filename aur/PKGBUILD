@@ -31,5 +31,5 @@ pkgver() {
 package() {
     cd "$srcdir/$_pkgname"
     python setup.py install --prefix=/usr --root="$pkgdir"
-    install -m 755 "$_pkgname/simpleMC" "$pkgdir/usr/bin/simpleMC"
+    install -m 755 "$srcdir/$_pkgname/simpleMC" "$pkgdir/usr/bin/simpleMC"
 }
