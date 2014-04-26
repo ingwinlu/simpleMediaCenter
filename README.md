@@ -45,18 +45,20 @@ priority from top to bottom:
     for youtube playback
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch) (included)
 
-##Installation and Configuration
+##Installation
+###Archlinuxarm and Archlinux
+simpleMediaCenter is available on the [aur](https://aur.archlinux.org/packages/simplemediacenter-git/).
 
-###Packages
-####Archlinuxarm and Archlinux
-simpleMediaCenter is available on the [aur](https://aur.archlinux.org/packages/simplemediacenter-git/)
+###pypi
+please note that you have to make sure that omxplayer is available yourself if you install via [pypi](https://pypi.python.org/pypi/simpleMediaCenter).
 
-####pypi
-please note that you have to make sure that omxplayer is installed yourself if you install via pypi
+install via pip:
+```
+    pip install simpleMediaCenter
+```
 
 
-
-####installation from github
+###installation from github
 1. install python3
 2. install youtube-dl
 3. install omxplayer
@@ -64,13 +66,14 @@ please note that you have to make sure that omxplayer is installed yourself if y
 5. clone this repository (on release there will be a package on pypi)
 6. navigate to the simpleMediaCenter/simpleMediaCenter directory
 7. run ./simpleMC
-8. after the first launch a config file will be generated at ~/.simpleMediaCenter-config.ini which can be edited to customize behaviour
 
-Please note that this project is still in heavy development and way of installation/configuration will improve
+Please note that this project is still in heavy development and way of installation/configuration will improve.
+
+##Configuration
+After the first launch a config file will be generated at ~/.simpleMediaCenter-config.ini which can be edited to customize behaviour.
 
 ##Screenshot
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_5_4.PNG)
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_4.PNG)
 
 
- 
