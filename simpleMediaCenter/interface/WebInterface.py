@@ -1,5 +1,5 @@
-from interface.Interface import Interface, ExceptionDisplayHandler
-from helpers.twitch import TwitchException
+from simpleMediaCenter.interface.Interface import Interface, ExceptionDisplayHandler
+from simpleMediaCenter.helpers.twitch import TwitchException
 from tg import expose, TGController, AppConfig, redirect, config
 from wsgiref.simple_server import make_server
 import os

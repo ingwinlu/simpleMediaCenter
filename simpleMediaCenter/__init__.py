@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from interface.WebInterface import WebInterface, WebController
-from interface.Interface import InterfaceListable
-from browser.Browser import YoutubeBrowser
-from playlist.Playlist import Single
+from simpleMediaCenter.interface.WebInterface import WebInterface, WebController
+from simpleMediaCenter.interface.Interface import InterfaceListable
+from simpleMediaCenter.browser.Browser import YoutubeBrowser
+from simpleMediaCenter.playlist.Playlist import Single
 import logging
 import os
 import configparser
@@ -43,15 +43,15 @@ class SimpleMediaCenter():
         array=[]
         try:
             if (self.config.getboolean('OMXPLAYER','use')):
-                from player.Omxplayer import Omxplayer
+                from simpleMediaCenter.player.Omxplayer import Omxplayer
                 omxplayer = Omxplayer(self.config.get('OMXPLAYER','cmdline'))
                 array.append(omxplayer)
             if (self.config.getboolean('TWITCHPLAYER','use')):
-                from player.Twitchplayer import Twitchplayer
+                from simpleMediaCenter.player.Twitchplayer import Twitchplayer
                 twitchplayer = Twitchplayer(self.config.get('TWITCHPLAYER','cmdline'))
                 array.append(twitchplayer)
             if (self.config.getboolean('YOUTUBEPLAYER','use')):
-                from player.Youtubeplayer import Youtubeplayer
+                from simpleMediaCenter.player.Youtubeplayer import Youtubeplayer
                 youtubeplayer = Youtubeplayer(self.config.get('YOUTUBEPLAYER','cmdline'))
                 array.append(youtubeplayer)            
         except ValueError as e:
@@ -62,16 +62,16 @@ class SimpleMediaCenter():
         array=[]
         try:
             if (self.config.getboolean('FILEBROWSER','use')):
-                from browser.Browser import FileBrowser
+                from simpleMediaCenter.browser.Browser import FileBrowser
                 fileBrowser = FileBrowser()
                 array.append(fileBrowser)
             if (self.config.getboolean('TWITCHBROWSER','use')):
-                from browser.Browser import TwitchBrowser
+                from simpleMediaCenter.browser.Browser import TwitchBrowser
                 for username in self.config.get('TWITCHBROWSER','usernames').split(','):
                     tb = TwitchBrowser(username)
                     array.append(tb)
             if (self.config.getboolean('YOUTUBEBROWSER','use')):
-                from browser.Browser import YoutubeBrowser
+                from simpleMediaCenter.browser.Browser import YoutubeBrowser
                 youtubeBrowser = YoutubeBrowser()
                 for favorite in self.config.get('YOUTUBEBROWSER','favorites').split(','):
                     youtubeBrowser.addFavorite(favorite)

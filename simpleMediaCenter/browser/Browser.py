@@ -15,7 +15,7 @@
 
 import os
 import logging
-from interface.Interface import Displayable
+from simpleMediaCenter.interface.Interface import Displayable
 
 
 class Browser(Displayable):
@@ -155,7 +155,7 @@ class TwitchBrowser(Browser):
     username = None
     
     def __init__(self, username=None):
-        from helpers.twitch import TwitchTV
+        from simpleMediaCenter.helpers.twitch import TwitchTV
         self.twitchTV = TwitchTV(self.__logger)
         self.pagination = Pagination(startoffset=0,limit=10)
         
@@ -328,7 +328,7 @@ class YoutubeBrowser(Browser):
     yt = None
 
     def __init__(self):
-        from helpers.youtube import Youtube
+        from simpleMediaCenter.helpers.youtube import Youtube
         self.yt = Youtube()
         self.pagination = Pagination(startoffset=1,limit=10)
         self.dirlist = {

@@ -1,4 +1,4 @@
-from interface.Interface import Displayable
+from simpleMediaCenter.interface.Interface import Displayable
 
 class Player(Displayable):
 

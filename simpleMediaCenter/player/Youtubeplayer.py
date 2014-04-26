@@ -1,4 +1,4 @@
-from player.Omxplayer import Omxplayer
+from simpleMediaCenter.player.Omxplayer import Omxplayer
 import youtube_dl
 import logging
 import sys

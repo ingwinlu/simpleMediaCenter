@@ -1,5 +1,5 @@
-from player.Omxplayer import Omxplayer
-from helpers.twitch import TwitchVideoResolver
+from simpleMediaCenter.player.Omxplayer import Omxplayer
+from simpleMediaCenter.helpers.twitch import TwitchVideoResolver
 import logging
 import os
 

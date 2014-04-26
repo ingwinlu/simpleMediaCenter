@@ -1,7 +1,7 @@
 import os
 import logging
 from collections import deque
-from interface.Interface import Displayable
+from simpleMediaCenter.interface.Interface import Displayable
 
 class Playlist(Displayable):
     #list of some sort

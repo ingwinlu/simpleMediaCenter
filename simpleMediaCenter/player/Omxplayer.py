@@ -1,4 +1,4 @@
-from player.Player import Player
+from simpleMediaCenter.player.Player import Player
 import logging
 import subprocess
 import shlex
