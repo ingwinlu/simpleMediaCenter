@@ -4,7 +4,7 @@ import os
 
 class MPlayer(Omxplayer):
     __logger=logging.getLogger(__name__)
-    __playerline="mplayer -slave"
+    __playerline="mplayer -slave -fs"
     
     keymapping = {
         'pause' : 'pause\n',
