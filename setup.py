@@ -2,10 +2,11 @@ from distutils.core import setup
 
 setup(
     name='simpleMediaCenter',
-    version='0.5.5',
+    version='0.5.6',
     packages=['simpleMediaCenter',
             'simpleMediaCenter.browser',
             'simpleMediaCenter.helpers.twitch',
+            'simpleMediaCenter.helpers.youtube',
             'simpleMediaCenter.interface',
             'simpleMediaCenter.player',
             'simpleMediaCenter.playlist'],
