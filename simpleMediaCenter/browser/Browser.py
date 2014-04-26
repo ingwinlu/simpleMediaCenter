@@ -121,7 +121,7 @@ class FileBrowser(Browser):
         return tempPath
       
     def getSupportedPlayers(self):
-        return ['Omxplayer']
+        return ['Omxplayer', 'MPlayer']
       
     def setWorkingDir(self, newWorkingDirID):
         self.workingDir = self.getPath(newWorkingDirID)

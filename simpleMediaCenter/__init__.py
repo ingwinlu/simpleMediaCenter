@@ -24,7 +24,9 @@ class SimpleMediaCenter():
     def __init__(self):
         self.__logger.debug('init')
         self.config = configparser.ConfigParser()
+        self.__logger.debug('setting default config')
         self.config = self.__setDefaultConfig(self.config)
+        self.__logger.debug('trying to read config')
         try:
             self.__logger.info('using config file at ' + self.config_file)
             self.config.read_file(open(self.config_file))
@@ -53,7 +55,11 @@ class SimpleMediaCenter():
             if (self.config.getboolean('YOUTUBEPLAYER','use')):
                 from simpleMediaCenter.player.Youtubeplayer import Youtubeplayer
                 youtubeplayer = Youtubeplayer(self.config.get('YOUTUBEPLAYER','cmdline'))
-                array.append(youtubeplayer)            
+                array.append(youtubeplayer)
+            if (self.config.getboolean('MPLAYER','use')):
+                from simpleMediaCenter.player.MPlayer import MPlayer
+                mplayer = MPlayer()
+                array.append(mplayer)
         except ValueError as e:
             self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
         self.playerlist = InterfaceListable(array)
@@ -129,15 +135,19 @@ class SimpleMediaCenter():
 
     def __setDefaultConfig(self, input_config):
         output_config = input_config
+        
+        #Logging
         output_config['LOGGING'] = {
                 'level' : logging.DEBUG
             }
+        #webinterface
         output_config['WEBINTERFACE'] = {
                 'use'          : 'yes',
                 'templatePath' : os.path.abspath('./interface/templates/'),
                 'staticPath'   : os.path.abspath('./interface/static/'),
                 'port'         : '8080'
             }
+        #players
         output_config['OMXPLAYER'] = {
                 'use'     : 'yes',
                 'cmdline' : '-o both'
@@ -150,28 +160,28 @@ class SimpleMediaCenter():
                 'use'     : 'no',
                 'cmdline' : '-o both'
             }
-            
+        output_config['MPLAYER'] = {
+                'use'     : 'no'
+            }
+        #browser
         output_config['FILEBROWSER'] = {
                 'use'   : 'yes'
             }
-            
         output_config['TWITCHBROWSER'] = {
                 'use'   : 'no',
                 'usernames' : 'user1,user2'
             }
-            
         output_config['YOUTUBEBROWSER'] = {
                 'favorites' : 'MrSuicideSheep,Escapist,TopGear',
                 'use'   : 'no'
             }
-            
+        #playlists
         output_config['SINGLEPLAYLIST'] = {
                 'use'   : 'no'
             }
-            
+        
         return output_config
         
     def __saveConfig(self):
         with open(self.config_file, 'w') as configfile:
             self.config.write(configfile)
-    
