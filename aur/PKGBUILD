@@ -5,11 +5,13 @@ pkgname=simplemediacenter-git
 pkgver=162
 pkgrel=3
 pkgdesc="a simple Alternative to XBMC, controlled via a webinterface, omxplayer support"
-arch=('armv6h') #for now as there are only omxplayer modules
+arch=('any')
 url="https://github.com/ingwinlu/${_pkgname}"
 license=('gplv3')
-depends=('python3' 'omxplayer')
-optdepends=('python-jinja2: webinterface',
+depends=('python3')
+optdepends=('omxplayer: for video playback on rpi',
+            'mplayer: for video playback on other devices',
+            'python-jinja2: webinterface',
             'python-turbogears: webinterface2',
             'youtube_dl: youtube playback')
 provides=("${_pkgname}")
