@@ -44,6 +44,7 @@ twitchplaylist.m3u8
 
 #makepkg files
 aur/*.xz
+aur/*.gz
 aur/pkg
 aur/simpleMediaCenter
 aur/src
