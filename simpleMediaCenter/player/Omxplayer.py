@@ -12,6 +12,11 @@ class Omxplayer(Player):
     __currentfile=""
     __process=None
     
+    keymapping = {
+        'pause' = 'p',
+        'quit'  = 'q'
+        }
+    
 
     def __init__(self, cmdline = "-o both"):
         self.__logger.debug("Omxplayer init")
@@ -67,7 +72,7 @@ class Omxplayer(Player):
         self.poll()
         self.__logger.debug("pause called")
         if(self.__process is not None):
-            self.send('p')
+            self.send(self.keymapping['pause'])
             if(self.__playerstatus==1):
                 self.__playerstatus=2
             else:
@@ -77,7 +82,7 @@ class Omxplayer(Player):
         self.poll()
         self.__logger.debug("stopping")
         if(self.__process is not None):
-            self.send('q')
+            self.send(self.keymapping['quit'])
             try:
                 self.__logger.debug("waiting for process to close")
                 self.__process.wait(timeout=5)

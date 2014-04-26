@@ -31,6 +31,10 @@ class TestOmxplayer(unittest.TestCase):
         self.omxplayer.play(self.testfilepath1)
         self.omxplayer.play(self.testfilepath2)
         self.assertEqual(self.omxplayer.getDict()['currentFile'], self.testfilepath2)
+        
+    def test_keymapping(self):
+        self.assertEqual(self.omxplayer.keymapping['pause'], 'p')
+        self.assertEqual(self.omxplayer.keymapping['quit'], 'q')
 
         
     def suite(self):

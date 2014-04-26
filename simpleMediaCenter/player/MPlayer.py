@@ -6,6 +6,10 @@ class MPlayer(Omxplayer):
     __logger=logging.getLogger(__name__)
     __playerline="mplayer -slave"
     
+    keymapping = {
+        'pause' = 'pause\n',
+        'quit'  = 'quit\n'
+        }
 
     def __init__(self):
         self.__logger.debug("init")
