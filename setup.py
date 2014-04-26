@@ -2,7 +2,8 @@ from distutils.core import setup
 
 setup(
     name='simpleMediaCenter',
-    version='0.5.6',
+    description='simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi.',
+    version='0.5.7',
     packages=['simpleMediaCenter',
             'simpleMediaCenter.browser',
             'simpleMediaCenter.helpers.twitch',

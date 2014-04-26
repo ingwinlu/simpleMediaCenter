@@ -46,13 +46,24 @@ priority from top to bottom:
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch) (included)
 
 ##Installation and Configuration
+
+###Packages
+####Archlinuxarm and Archlinux
+simpleMediaCenter is available on the [aur](https://aur.archlinux.org/packages/simplemediacenter-git/)
+
+####pypi
+please note that you have to make sure that omxplayer is installed yourself if you install via pypi
+
+
+
+####installation from github
 1. install python3
 2. install youtube-dl
 3. install omxplayer
 4. install Turbogears2 and jinja2 via python-pip
 5. clone this repository (on release there will be a package on pypi)
 6. navigate to the simpleMediaCenter/simpleMediaCenter directory
-7. run simpleMediaCenter.py
+7. run ./simpleMC
 8. after the first launch a config file will be generated at ~/.simpleMediaCenter-config.ini which can be edited to customize behaviour
 
 Please note that this project is still in heavy development and way of installation/configuration will improve
