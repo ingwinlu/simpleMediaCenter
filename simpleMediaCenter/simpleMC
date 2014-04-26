@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+import logging
+from simpleMediaCenter import SimpleMediaCenter
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+    smc = SimpleMediaCenter()
+    smc.run()
+    logging.shutdown()

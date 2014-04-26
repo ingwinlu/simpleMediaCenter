@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from interface.WebInterface import WebInterface, WebController
 from interface.Interface import InterfaceListable
 from browser.Browser import YoutubeBrowser
@@ -176,7 +178,6 @@ class SimpleMediaCenter():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    smc = SimpleMediaCenter()
-    smc.run()
+    logging.info('Please run ./simpleMC instead')
     logging.shutdown()
 

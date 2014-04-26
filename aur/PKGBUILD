@@ -8,7 +8,7 @@ pkgdesc='a simple Alternative to xmbc, controlled via a webinterface, omxplayer 
 arch=('armv6h') #for now as there are only omxplayer modules
 url="https://github.com/ingwinlu/${_pkgname}"
 license=('gplv3')
-depends=('python3' 'omxplayer' 'python-pip')
+depends=('python3' 'omxplayer')
 optdepends=('python-jinja2: webinterface',
             'python-turbogears: webinterface2',
             'youtube_dl: youtube playback')
@@ -30,5 +30,6 @@ pkgver() {
 
 package() {
     cd "$srcdir/$_pkgname"
-    python setup.py install --prefix="$pkgdir/usr"
+    python setup.py install --prefix=/usr --root="$pkgdir"
+    install -m 755 simpleMC "$pkgdir/usr/bin"
 }
