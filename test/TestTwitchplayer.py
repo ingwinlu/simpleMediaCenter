@@ -1,4 +1,4 @@
-from player.Twitchplayer import Twitchplayer
+from simpleMediaCenter.player.Twitchplayer import Twitchplayer
 import unittest
 import time
 import requests

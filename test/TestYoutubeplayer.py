@@ -1,4 +1,4 @@
-from player.Youtubeplayer import Youtubeplayer
+from simpleMediaCenter.player.Youtubeplayer import Youtubeplayer
 import unittest
 import time
 import requests

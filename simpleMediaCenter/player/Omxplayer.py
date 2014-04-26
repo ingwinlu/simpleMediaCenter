@@ -13,8 +13,8 @@ class Omxplayer(Player):
     __process=None
     
     keymapping = {
-        'pause' = 'p',
-        'quit'  = 'q'
+        'pause' : 'p',
+        'quit'  : 'q'
         }
     
 

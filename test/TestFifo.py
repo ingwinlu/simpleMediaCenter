@@ -1,4 +1,4 @@
-from playlist.Playlist import FiFo
+from simpleMediaCenter.playlist.Playlist import FiFo
 import unittest
 
 class TestFifo(unittest.TestCase):

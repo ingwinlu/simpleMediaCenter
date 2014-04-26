@@ -1,8 +1,8 @@
-from interface.Interface import InterfaceListable
-from player.Omxplayer import Omxplayer
-from player.Twitchplayer import Twitchplayer
-from player.Youtubeplayer import Youtubeplayer
-from browser.Browser import *
+from simpleMediaCenter.interface.Interface import InterfaceListable
+from simpleMediaCenter.player.Omxplayer import Omxplayer
+from simpleMediaCenter.player.Twitchplayer import Twitchplayer
+from simpleMediaCenter.player.Youtubeplayer import Youtubeplayer
+from simpleMediaCenter.browser.Browser import *
 import logging
 import unittest
 

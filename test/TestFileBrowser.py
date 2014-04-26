@@ -1,4 +1,4 @@
-from browser.Browser import FileBrowser
+from simpleMediaCenter.browser.Browser import FileBrowser
 import unittest
 import time
 import os

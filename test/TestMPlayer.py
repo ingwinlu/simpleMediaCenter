@@ -1,9 +1,8 @@
-from player.MPlayer import MPlayer
+from simpleMediaCenter.player.MPlayer import MPlayer
 import unittest
 import time
 
 class TestMPlayer(unittest.TestCase):
-    omxplayer = None
     testfilepath1 = "TEST VIDEO-1.mp4"
     testfilepath2 = "TEST VIDEO-2.mp4"
     

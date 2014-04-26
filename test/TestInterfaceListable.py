@@ -1,4 +1,4 @@
-from interface.Interface import InterfaceListable
+from simpleMediaCenter.interface.Interface import InterfaceListable
 import unittest
 import time
 import requests

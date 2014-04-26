@@ -1,4 +1,4 @@
-from browser.Browser import TwitchBrowser
+from simpleMediaCenter.browser.Browser import TwitchBrowser
 import unittest
 import time
 import os

@@ -7,8 +7,8 @@ class MPlayer(Omxplayer):
     __playerline="mplayer -slave"
     
     keymapping = {
-        'pause' = 'pause\n',
-        'quit'  = 'quit\n'
+        'pause' : 'pause\n',
+        'quit'  : 'quit\n'
         }
 
     def __init__(self):
