@@ -6,6 +6,7 @@ import os
 class Twitchplayer(Omxplayer):
     __logger=logging.getLogger(__name__)
     __cmdline="-o both"
+    __playerline="omxplayer -b"
     __playlist="twitchplaylist.m3u8"
     
 

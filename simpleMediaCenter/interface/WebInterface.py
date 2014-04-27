@@ -201,6 +201,7 @@ class WebInterface(Interface):
         
     def shutdown(self):
         self.__logger.info("init shutdown")
+        self.controller.playerList.getActive().stop()
         self.keep_running=False
         
   
