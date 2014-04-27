@@ -5,7 +5,6 @@ import os
 
 class Twitchplayer(Omxplayer):
     __logger=logging.getLogger(__name__)
-    __playerline="omxplayer -b"
     __cmdline="-o both"
     __playlist="twitchplaylist.m3u8"
     
@@ -16,7 +15,11 @@ class Twitchplayer(Omxplayer):
                
     
     def getcmdline(self,file):
-        return self.__playerline + " " + self.__cmdline + " '" + file + "'"
+        tvr = TwitchVideoResolver(self.__logger) 
+        tvr.saveHLSToPlaylist(file, 0, self.__playlist)
+        cmdline = self.__playerline + " " + self.__cmdline + " '" + self.__playlist + "'"
+        self.__logger.debug('twitchplayer cmdline: ' + cmdline)
+        return cmdline
         
     def stop(self):
         super(Twitchplayer, self).stop()
