@@ -6,6 +6,7 @@ from simpleMediaCenter.browser.Browser import YoutubeBrowser
 from simpleMediaCenter.playlist.Playlist import Single
 import logging
 import os
+import sys
 import configparser
 
 class SimpleMediaCenter():
@@ -143,8 +144,8 @@ class SimpleMediaCenter():
         #webinterface
         output_config['WEBINTERFACE'] = {
                 'use'          : 'yes',
-                'templatePath' : os.path.abspath('./interface/templates/'), # bad default
-                'staticPath'   : os.path.abspath('./interface/static/'),    # bad default
+                'templatePath' : self.__getWebInterfacePath('templates/'),
+                'staticPath'   : self.__getWebInterfacePath('static/'),    
                 'port'         : '8080'
             }
         #players
@@ -185,3 +186,14 @@ class SimpleMediaCenter():
     def __saveConfig(self):
         with open(self.config_file, 'w') as configfile:
             self.config.write(configfile)
+            
+    def __getWebInterfacePath(self, subdir):
+        path = os.path.abspath(os.path.dirname(sys.modules[WebInterface.__module__].__file__))
+        path = os.path.abspath(os.path.join(path, subdir))
+        logging.debug('getWebInterfacePath:' + path)
+        return path
+        
+        
+        
+        
+            
