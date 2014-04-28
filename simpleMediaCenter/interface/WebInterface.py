@@ -1,7 +1,8 @@
 from simpleMediaCenter.interface.Interface import Interface, ExceptionDisplayHandler
 from simpleMediaCenter.helpers.twitch import TwitchException
 from tg import expose, TGController, AppConfig, redirect, config
-from wsgiref.simple_server import make_server
+from wsgiref.simple_server import make_server, WSGIServer
+from socketserver import ThreadingMixIn
 import os
 import jinja2
 import logging
@@ -157,6 +158,9 @@ class WebController(TGController):
         return json.dumps(self.statusDict)
         
 
+        
+class ThreadingWSGIServer(ThreadingMixIn, WSGIServer): 
+    pass
 
 class WebInterface(Interface):
     __logger=logging.getLogger(__name__)
@@ -184,8 +188,11 @@ class WebInterface(Interface):
         self.config.serve_static = True
         self.config.paths['static_files'] = staticPath
         
+        #make wsgi_app      
         self.application = self.config.make_wsgi_app()
-        self.httpd = make_server('', port, self.application)
+        
+        #make wsgi_server
+        self.httpd = make_server('', port, self.application, ThreadingWSGIServer)
         self.httpd.timeout = 5
     
     def run(self):
@@ -193,7 +200,6 @@ class WebInterface(Interface):
         while(self.keep_running):
             self.__logger.debug("start serve_forever()")
             try:
-                #self.httpd.handle_request()
                 self.httpd.serve_forever()
             except KeyboardInterrupt:
                 self.shutdown()
