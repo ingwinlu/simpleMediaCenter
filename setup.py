@@ -3,10 +3,11 @@ from distutils.core import setup
 setup(
     name='simpleMediaCenter',
     description='simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi.',
-    version='0.5.9',
+    version='0.5.9a',
     url='https://github.com/ingwinlu/simpleMediaCenter',
     packages=['simpleMediaCenter',
             'simpleMediaCenter.browser',
+            'simpleMediaCenter.helpers',
             'simpleMediaCenter.helpers.twitch',
             'simpleMediaCenter.helpers.youtube',
             'simpleMediaCenter.interface',
@@ -17,7 +18,7 @@ setup(
             '' : ['LICENSE','README.md']
     },
     scripts=['simpleMC'],
-    install_requires = [
+    requires = [
         'jinja2',
         'turbogears2',
         'youtube_dl'
