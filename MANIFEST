@@ -6,6 +6,7 @@ simpleMC
 simpleMediaCenter/__init__.py
 simpleMediaCenter/browser/Browser.py
 simpleMediaCenter/browser/__init__.py
+simpleMediaCenter/helpers/__init__.py
 simpleMediaCenter/helpers/twitch/__init__.py
 simpleMediaCenter/helpers/youtube/__init__.py
 simpleMediaCenter/interface/Interface.py

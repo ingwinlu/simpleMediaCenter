@@ -33,6 +33,10 @@ class SimpleMediaCenter():
             self.config.read_file(open(self.config_file))
         except FileNotFoundError as e:
             self.__logger.warning('config file not found, using default settings')
+            try:
+                self.__saveConfig()
+            except Exception as e:
+                self.__logger.critical('exception while saving config file: ' + repr(e))
         #parse config 
         self.__logger.info('parse config')
         ##logging settings
@@ -129,10 +133,6 @@ class SimpleMediaCenter():
     '''
     def run(self):
         self.interface.run()
-        try:
-            self.__saveConfig()
-        except Exception as e:
-            self.__logger.critical('exception while saving config file: ' + repr(e))
 
     def __setDefaultConfig(self, input_config):
         output_config = input_config
