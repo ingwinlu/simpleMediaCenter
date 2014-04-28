@@ -19,22 +19,18 @@ function update(){
             
             
             //set player buttons
-            if (json.playerStatus == "0"){ //stopped
-                $("#btn-pause").attr('disabled', true);
-                $("#btn-resume").attr('disabled', true);
-                $("#btn-stop").attr('disabled', true);
+            if (json.playerStatus == "0"){ //stopped, disable all buttons
+                $(".playerbutton").attr('disabled', true);
                 
                 $("#player-text").text('Player - ' + json.activePlayer + ' - stopped')
             }else if (json.playerStatus == "1"){ //playing
-                $("#btn-pause").attr('disabled', false);
+                $(".playerbutton").attr('disabled', false);
                 $("#btn-resume").attr('disabled', true);
-                $("#btn-stop").attr('disabled', false);
                 
                 $("#player-text").text('Player - ' + json.activePlayer + ' - playing ' + json.currentFile)
             }else if (json.playerStatus == "2"){ //paused
+                $(".playerbutton").attr('disabled', false);
                 $("#btn-pause").attr('disabled', true);
-                $("#btn-resume").attr('disabled', false);
-                $("#btn-stop").attr('disabled', false);
                 
                 $("#player-text").text('Player - ' + json.activePlayer + ' - paused ' + json.currentFile)
             }

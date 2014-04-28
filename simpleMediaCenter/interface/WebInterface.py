@@ -59,7 +59,6 @@ class WebController(TGController):
         try:
             id = self.parseID(id)
             self.__logger.debug("trying to play %s" ,self.browserList.getActive().getPlayable(id))
-            # TODO implement player select according to playlist.getSupportedPlayers()
             self.__logger.debug("searching for compatible Browser") 
             for supportedPlayer in self.browserList.getActive().getSupportedPlayers():
                 playerid = self.playerList.getIDfromName(supportedPlayer)
@@ -156,9 +155,7 @@ class WebController(TGController):
     def status(self,_=None):
         self.updateStatus()
         return json.dumps(self.statusDict)
-        
 
-        
 class ThreadingWSGIServer(ThreadingMixIn, WSGIServer): 
     pass
 
@@ -203,11 +200,8 @@ class WebInterface(Interface):
                 self.httpd.serve_forever()
             except KeyboardInterrupt:
                 self.shutdown()
-                
-        
+    
     def shutdown(self):
         self.__logger.info("init shutdown")
         self.controller.playerList.getActive().stop()
         self.keep_running=False
-        
-  
