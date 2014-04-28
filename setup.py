@@ -17,7 +17,7 @@ setup(
             '' : ['LICENSE','README.md']
     },
     scripts=['simpleMC'],
-    install_requires = [
+    requires = [
         'jinja2',
         'turbogears2',
         'youtube_dl'
