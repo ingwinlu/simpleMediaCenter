@@ -49,9 +49,6 @@ priority from top to bottom:
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch) (included)
 
 ##Installation
-###Archlinuxarm and Archlinux
-simpleMediaCenter is available on the [aur](https://aur.archlinux.org/packages/simplemediacenter-git/).
-
 ###pypi
 please note that you have to make sure that omxplayer is available yourself if you install via [pypi](https://pypi.python.org/pypi/simpleMediaCenter).
 
@@ -78,5 +75,3 @@ After the first launch a config file will be generated at ~/.simpleMediaCenter-c
 ##Screenshot
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_5_4.PNG)
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_4.PNG)
-
-
