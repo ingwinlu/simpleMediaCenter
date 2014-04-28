@@ -4,7 +4,6 @@ README.md
 setup.py
 simpleMC
 simpleMediaCenter/__init__.py
-simpleMediaCenter/simpleMediaCenter.py
 simpleMediaCenter/browser/Browser.py
 simpleMediaCenter/browser/__init__.py
 simpleMediaCenter/helpers/twitch/__init__.py
@@ -26,6 +25,7 @@ simpleMediaCenter/interface/templates/playerbutton.html
 simpleMediaCenter/interface/templates/playernav.html
 simpleMediaCenter/interface/templates/playlist.html
 simpleMediaCenter/interface/templates/sidebar.html
+simpleMediaCenter/player/MPlayer.py
 simpleMediaCenter/player/Omxplayer.py
 simpleMediaCenter/player/Player.py
 simpleMediaCenter/player/Twitchplayer.py
