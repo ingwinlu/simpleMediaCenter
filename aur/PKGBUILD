@@ -8,7 +8,7 @@ pkgdesc="a simple Alternative to XBMC, controlled via a webinterface, omxplayer 
 arch=('any')
 url="https://github.com/ingwinlu/${_pkgname}"
 license=('gplv3')
-depends=('python3')
+depends=('python3' 'git')
 optdepends=('omxplayer: for video playback on rpi',
             'mplayer: for video playback on other devices',
             'python-jinja2: webinterface',
