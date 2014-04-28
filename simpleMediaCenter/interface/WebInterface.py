@@ -54,6 +54,9 @@ class WebController(TGController):
         
     
     #controls
+    '''
+        play file, auto select suitable player
+    '''
     @expose()
     def play(self, id=None):
         try:
@@ -74,18 +77,42 @@ class WebController(TGController):
 
         redirect("/")
     
+    '''
+        stop playback
+    '''
     @expose()
     def stop(self):
         self.__logger.debug("stop called")
         self.playerList.getActive().stop()
         redirect("/")
-        
+      
+    '''
+        pause playback
+    '''
     @expose()
     def pause(self):
         self.__logger.debug("pause called")
         self.playerList.getActive().pause()
         redirect("/")
         
+    '''
+        reduces player volume
+    '''
+    @expose()
+    def volumedown(self):
+        self.__logger.debug("volume down called")
+    
+    '''
+        increases player volume
+    '''
+    @expose()
+    def volumeup(self):
+        self.__logger.debug("volume up called")
+
+        
+    '''
+        change working directory
+    '''
     @expose()
     def change(self,id=None):
         try:
@@ -100,6 +127,9 @@ class WebController(TGController):
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + repr(e))
         redirect("/")
         
+    '''
+        search something which is then treated as a playable file
+    '''    
     @expose()
     def searchFile(self, search):
         self.__logger.debug("searchFile called")
@@ -108,6 +138,9 @@ class WebController(TGController):
             self.browserList.getActive().setWorkingDir(search, search='File')
         redirect("/")
         
+    '''
+        search something which is then treated as a browsable directory
+    '''
     @expose()
     def searchDir(self, search):
         self.__logger.debug("searchDir called")
@@ -116,7 +149,11 @@ class WebController(TGController):
             self.__logger.debug("browser Search enabled")
             self.browserList.getActive().setWorkingDir(search, search='Dir')
         redirect("/")
-        
+      
+    '''
+        DEPRECATED: is now done automatically
+        selects player via dropdown menu
+    '''      
     @expose()
     def selectPlayer(self, id=None):
         try:
@@ -126,7 +163,10 @@ class WebController(TGController):
         except Exception as e:
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlayer: ' + repr(e))
         redirect("/")
-    
+        
+    '''
+        selects browser via dropdown menu
+    '''
     @expose()
     def selectBrowser(self, id=None):
         try:
@@ -136,6 +176,9 @@ class WebController(TGController):
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectBrowser: ' + repr(e))
         redirect("/")
         
+    '''
+        selects playlist via dropdown menu
+    '''
     @expose()
     def selectPlaylist(self, id=None):
         try:
@@ -145,6 +188,9 @@ class WebController(TGController):
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in selectPlaylist: ' + repr(e))
         redirect("/")
         
+    '''
+        clears an exception from memory
+    '''
     @expose()
     def clearException(self):
         self.exceptionDisplayHandler.clearException()
@@ -156,6 +202,7 @@ class WebController(TGController):
         self.updateStatus()
         return json.dumps(self.statusDict)
 
+        
 class ThreadingWSGIServer(ThreadingMixIn, WSGIServer): 
     pass
 
