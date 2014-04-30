@@ -1,5 +1,0 @@
-prune test
-prune aur
-prune docs
-include LICENSE
-include README.md

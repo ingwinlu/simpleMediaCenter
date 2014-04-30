@@ -1,10 +1,13 @@
 from distutils.core import setup
 
+upstream = 'https://github.com/ingwinlu/simpleMediaCenter'
+devblog = 'http://heroicdebugging.biz'
+
 setup(
     name='simpleMediaCenter',
     description='simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi.',
-    version='0.5.9a',
-    url='https://github.com/ingwinlu/simpleMediaCenter',
+    version='0.5.9b',
+    url=upstream,
     packages=['simpleMediaCenter',
             'simpleMediaCenter.browser',
             'simpleMediaCenter.helpers',
@@ -24,7 +27,7 @@ setup(
         'youtube_dl'
     ],
     license='GPLv3',
-    long_description=open('README.md').read(),
+    long_description='For a longer description, please have a look at ' + upstream + ' or the development blog at ' + devblog,
     author='winlu',
     author_email='derwinlu+simpleMediaCenter@gmail.com',
 )

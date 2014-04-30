@@ -1,5 +1,7 @@
 simpleMediaCenter
 =================
+[![Downloads](http://img.shields.io/pypi/dm/simpleMediaCenter.svg)](https://pypi.python.org/pypi/simpleMediaCenter#downloads)
+[![Latest Version](http://img.shields.io/pypi/v/simpleMediaCenter.svg)](http://pypi.python.org/pypi/simpleMediaCenter)
 
 simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi. 
 
