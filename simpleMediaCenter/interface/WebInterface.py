@@ -101,14 +101,17 @@ class WebController(TGController):
     @expose()
     def volumedown(self):
         self.__logger.debug("volume down called")
-    
+        self.playerList.getActive().volumeDown()
+        redirect("/")
+        
     '''
         increases player volume
     '''
     @expose()
     def volumeup(self):
         self.__logger.debug("volume up called")
-
+        self.playerList.getActive().volumeUp()
+        redirect("/")
         
     '''
         change working directory

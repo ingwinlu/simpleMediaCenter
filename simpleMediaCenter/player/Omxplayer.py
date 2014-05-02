@@ -14,7 +14,11 @@ class Omxplayer(Player):
     
     keymapping = {
         'pause' : 'p',
-        'quit'  : 'q'
+        'quit'  : 'q',
+        'volume': {
+                    'up'   : '+',
+                    'down' : '-'
+                  }
         }
     
 
@@ -92,6 +96,18 @@ class Omxplayer(Player):
                 subprocess.Popen(shlex.split("killall omxplayer.bin")).wait() ##quickhack
             self.__resetplayer()
             self.__logger.debug("player stopped")
+            
+    def volumeUp(self):
+        self.poll()
+        self.__logger.debug("increase vol")
+        if(self.__process is not None):
+            self.send(self.keymapping['volume']['up'])
+        
+    def volumeDown(self):
+        self.poll()
+        self.__logger.debug("decrease vol")
+        if(self.__process is not None):
+            self.send(self.keymapping['volume']['down'])
         
     def getDict(self):
         self.poll()
@@ -100,6 +116,4 @@ class Omxplayer(Player):
         tempDict['playerStatus'] = self.__playerstatus
         tempDict['currentFile'] = self.__currentfile
         return tempDict
-        
-
-        
+    

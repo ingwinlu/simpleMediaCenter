@@ -16,13 +16,13 @@ class Player(Displayable):
         
     def stop(self):
         raise NotImplementedError
-    '''    
+        
     def volumeUp(self):
         raise NotImplementedError
         
     def volumeDown(self):
         raise NotImplementedError
-    '''
+    
     def getName(self):
         return self.__class__.__name__
 

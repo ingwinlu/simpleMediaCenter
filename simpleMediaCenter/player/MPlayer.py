@@ -9,6 +9,10 @@ class MPlayer(Omxplayer):
     keymapping = {
         'pause' : 'pause\n',
         'quit'  : 'quit\n'
+        'volume'   : {
+                    'up'   : 'volume +5',
+                    'down' : 'volume -5'
+                  }
         }
 
     def __init__(self):
