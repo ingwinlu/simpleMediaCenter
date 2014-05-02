@@ -51,6 +51,14 @@ class WebController(TGController):
         self.updateStatus()
         self.__logger.debug(self.statusDict)
         return self.statusDict
+       
+    '''
+    #loading parking Page
+    @expose('loading.html')
+    def loading(self):
+        self.__logger.debug('loading called')
+        redirect("/")
+    '''    
         
     
     #controls
@@ -101,14 +109,17 @@ class WebController(TGController):
     @expose()
     def volumedown(self):
         self.__logger.debug("volume down called")
-    
+        self.playerList.getActive().volumeDown()
+        redirect("/")
+        
     '''
         increases player volume
     '''
     @expose()
     def volumeup(self):
         self.__logger.debug("volume up called")
-
+        self.playerList.getActive().volumeUp()
+        redirect("/")
         
     '''
         change working directory
@@ -126,6 +137,7 @@ class WebController(TGController):
         except Exception as e:
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + repr(e))
         redirect("/")
+        
         
     '''
         search something which is then treated as a playable file
