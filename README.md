@@ -11,16 +11,6 @@ Planned Core Features:
 
 ##TO-DO and IDEAS
 priority from top to bottom:
-+ ~~implement an interface where js or other clients can pull json data from~~
-+ ~~use javascript to disable buttons~~
-+ ~~move player to the navbar~~
-+ ~~split up index page generation from playerstatus~~
-+ ~~implement automatic player choosing~~
-+ ~~exceptions~~
-   + ~~create exceptionclasses for input/processing errors~~
-   + ~~create space in templates to display exceptiontext~~
-   + ~~implement javascript to display exceptions~~
-+ ~~implement configparser~~
 + ~~rework Browser~~
    + ~~should use id's to interact with controller, not the actual value, no idea what I was thinking~~
    + ~~couple them with player, i.e. don't let any player use any browser~~
@@ -28,7 +18,7 @@ priority from top to bottom:
    + ~~implement sendToBrowser in REST Interface~~
    + complete TwitchBrowser 80%
    + complete YoutubeBrowser 80%
-+ flush out mplayer support
++ multithread interface to implement a loading page
 + implement playlist functionality
 + improve documentation 5%
 + improve comments in code 5%
@@ -59,7 +49,6 @@ install via pip:
     pip install simpleMediaCenter
 ```
 
-
 ###installation from github
 1. install python3
 2. install youtube-dl
@@ -74,6 +63,23 @@ Please note that this project is still in heavy development and way of installat
 ##Configuration
 After the first launch a config file will be generated at ~/.simpleMediaCenter-config.ini which can be edited to customize behaviour.
 
+##Changelog
+Sorry I am not doing a changelog at this stage, if you have some coding experience you can check commit messages, else I blog about most new features on http://heroicdebugging.biz.
+
 ##Screenshot
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_5_4.PNG)
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_4.PNG)
+
+##Already implemented stuff (just to keep track)
++ ~~implement an interface where js or other clients can pull json data from~~
++ ~~use javascript to disable buttons~~
++ ~~move player to the navbar~~
++ ~~split up index page generation from playerstatus~~
++ ~~implement automatic player choosing~~
++ ~~exceptions~~
+   + ~~create exceptionclasses for input/processing errors~~
+   + ~~create space in templates to display exceptiontext~~
+   + ~~implement javascript to display exceptions~~
++ ~~implement configparser~~
++ ~~flush out mplayer support~~
+
