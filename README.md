@@ -8,6 +8,7 @@ simpleMediaCenter aims to provide an easy on ressources way to use your computer
 Planned Core Features:
 + Web Interface (jinja + turbogears)
 + omxplayer compatibility
++ file/youtube/twitch.tv playback
 
 ##TO-DO and IDEAS
 priority from top to bottom:
@@ -64,7 +65,7 @@ Please note that this project is still in heavy development and way of installat
 After the first launch a config file will be generated at ~/.simpleMediaCenter-config.ini which can be edited to customize behaviour.
 
 ##Changelog
-Sorry I am not doing a changelog at this stage, if you have some coding experience you can check commit messages, else I blog about most new features on http://heroicdebugging.biz.
+Sorry I am not doing a changelog at this stage, if you have some coding experience you can check commit messages. If you don't, no problem, I blog about most new features on http://heroicdebugging.biz. Also check the bottom of the readme for recently implemented stuff.
 
 ##Screenshot
 ![index Screenshot V0.4](./docs/simpleMediaServer_v0_5_4.PNG)
