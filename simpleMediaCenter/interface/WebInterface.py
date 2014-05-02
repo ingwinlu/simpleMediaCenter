@@ -51,13 +51,14 @@ class WebController(TGController):
         self.updateStatus()
         self.__logger.debug(self.statusDict)
         return self.statusDict
-        
+       
+    '''
     #loading parking Page
     @expose('loading.html')
     def loading(self):
         self.__logger.debug('loading called')
         redirect("/")
-        
+    '''    
         
     
     #controls
