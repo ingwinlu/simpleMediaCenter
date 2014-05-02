@@ -52,6 +52,13 @@ class WebController(TGController):
         self.__logger.debug(self.statusDict)
         return self.statusDict
         
+    #loading parking Page
+    @expose('loading.html')
+    def loading(self):
+        self.__logger.debug('loading called')
+        redirect("/")
+        
+        
     
     #controls
     '''
@@ -129,6 +136,7 @@ class WebController(TGController):
         except Exception as e:
             self.exceptionDisplayHandler.setException('Exception','Unhandled Exception in change: ' + repr(e))
         redirect("/")
+        
         
     '''
         search something which is then treated as a playable file
