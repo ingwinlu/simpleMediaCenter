@@ -19,6 +19,7 @@ simpleMediaCenter/interface/templates/alertbox.html
 simpleMediaCenter/interface/templates/base.html
 simpleMediaCenter/interface/templates/browser.html
 simpleMediaCenter/interface/templates/index.html
+simpleMediaCenter/interface/templates/loading.html
 simpleMediaCenter/interface/templates/player.html
 simpleMediaCenter/interface/templates/playerbutton.html
 simpleMediaCenter/interface/templates/playernav.html
