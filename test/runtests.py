@@ -7,5 +7,5 @@ import unittest
 
 sys.path.insert(0, os.path.abspath("../"))
 
-testsuite = unittest.TestLoader().discover(start_dir='.', pattern='Test*.py')
+testsuite = unittest.TestLoader().discover(start_dir='.', pattern='test_*.py')
 runner=unittest.TextTestRunner(verbosity=2).run(testsuite)

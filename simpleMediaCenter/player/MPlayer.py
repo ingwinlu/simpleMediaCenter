@@ -8,8 +8,8 @@ class MPlayer(Omxplayer):
     
     keymapping = {
         'pause' : 'pause\n',
-        'quit'  : 'quit\n'
-        'volume'   : {
+        'quit'  : 'quit\n',
+        'volume': {
                     'up'   : 'volume +5',
                     'down' : 'volume -5'
                   }
