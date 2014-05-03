@@ -35,6 +35,8 @@ class TestOmxplayer(unittest.TestCase):
     def test_keymapping(self):
         self.assertEqual(self.omxplayer.keymapping['pause'], 'p')
         self.assertEqual(self.omxplayer.keymapping['quit'], 'q')
+        self.assertEqual(self.omxplayer.keymapping['volume']['up'], '+')
+        self.assertEqual(self.omxplayer.keymapping['volume']['down'], '-')
 
         
     def suite(self):

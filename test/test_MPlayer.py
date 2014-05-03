@@ -34,6 +34,8 @@ class TestMPlayer(unittest.TestCase):
     def test_keymapping(self):
         self.assertEqual(self.mplayer.keymapping['pause'], 'pause\n')
         self.assertEqual(self.mplayer.keymapping['quit'], 'quit\n')
+        self.assertEqual(self.mplayer.keymapping['volume']['up'], 'volume +5\n')
+        self.assertEqual(self.mplayer.keymapping['volume']['down'], 'volume -5\n')
 
         
     def suite(self):

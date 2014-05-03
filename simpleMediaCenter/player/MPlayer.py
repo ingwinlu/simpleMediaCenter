@@ -10,8 +10,8 @@ class MPlayer(Omxplayer):
         'pause' : 'pause\n',
         'quit'  : 'quit\n',
         'volume': {
-                    'up'   : 'volume +5',
-                    'down' : 'volume -5'
+                    'up'   : 'volume +5\n',
+                    'down' : 'volume -5\n'
                   }
         }
 
