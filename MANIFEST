@@ -33,3 +33,12 @@ simpleMediaCenter/player/Youtubeplayer.py
 simpleMediaCenter/player/__init__.py
 simpleMediaCenter/playlist/Playlist.py
 simpleMediaCenter/playlist/__init__.py
+test/test_AutoPlayerSelect.py
+test/test_Fifo.py
+test/test_FileBrowser.py
+test/test_InterfaceListable.py
+test/test_MPlayer.py
+test/test_Omxplayer.py
+test/test_TwitchBrowser.py
+test/test_Twitchplayer.py
+test/test_Youtubeplayer.py
