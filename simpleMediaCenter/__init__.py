@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from simpleMediaCenter.interface.WebInterface import WebInterface, WebController
 from simpleMediaCenter.interface.Interface import InterfaceListable
 from simpleMediaCenter.browser.Browser import YoutubeBrowser
@@ -8,6 +6,7 @@ import logging
 import os
 import sys
 import configparser
+import argparse
 
 class SimpleMediaCenter():
     __logger=logging.getLogger(__name__)
@@ -38,13 +37,7 @@ class SimpleMediaCenter():
             except Exception as e:
                 self.__logger.critical('exception while saving config file: ' + repr(e))
         #parse config 
-        self.__logger.info('parse config')
-        ##logging settings
-        self.__logger.debug('parse logging settings')
-        try:
-            self.__logger.setLevel(self.config.getint('LOGGING','level'))
-        except Exception as e:
-            self.__logger.critical('value error while parsing logging settings in  config file: ' + repr(e))
+        self.__logger.info('parsing config')
         ##init players
         self.__logger.debug('parse players')
         array=[]
@@ -137,10 +130,6 @@ class SimpleMediaCenter():
     def __setDefaultConfig(self, input_config):
         output_config = input_config
         
-        #Logging
-        output_config['LOGGING'] = {
-                'level' : logging.DEBUG
-            }
         #webinterface
         output_config['WEBINTERFACE'] = {
                 'use'          : 'yes',
@@ -193,7 +182,14 @@ class SimpleMediaCenter():
         logging.debug('getWebInterfacePath:' + path)
         return path
         
-        
-        
-        
-            
+'''
+    argument parsing
+'''
+def parseArgs():
+    parser = argparse.ArgumentParser(
+        description="simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('-D', '--debug', action='store_const',
+                        const=logging.DEBUG, dest='verbosity',
+                        help='Show all messages, including DEBUG')
+    return parser.parse_args()

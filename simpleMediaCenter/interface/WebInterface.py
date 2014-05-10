@@ -252,9 +252,9 @@ class WebInterface(Interface):
         self.httpd.timeout = 5
     
     def run(self):
-        self.__logger.debug("start Webserver")
+        self.__logger.debug("run")
         while(self.keep_running):
-            self.__logger.debug("start serve_forever()")
+            self.__logger.info("listening for Requests")
             try:
                 self.httpd.serve_forever()
             except KeyboardInterrupt:
