@@ -2,6 +2,7 @@ from simpleMediaCenter.interface.WebInterface import WebInterface, WebController
 from simpleMediaCenter.interface.Interface import InterfaceListable
 from simpleMediaCenter.browser.Browser import YoutubeBrowser
 from simpleMediaCenter.playlist.Playlist import Single
+import simpleMediaCenter.interface.service as service
 import logging
 import os
 import sys
@@ -59,7 +60,9 @@ class SimpleMediaCenter():
                 mplayer = MPlayer()
                 array.append(mplayer)
         except ValueError as e:
-            self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
+            self.__logger.critical('value error while parsing players in config file: ' + repr(e))
+            self.__logger.exception(e)
+            return
         self.playerlist = InterfaceListable(array)
         ##init browsers
         self.__logger.debug('parse browsers')
@@ -81,7 +84,9 @@ class SimpleMediaCenter():
                     youtubeBrowser.addFavorite(favorite)
                 array.append(youtubeBrowser)            
         except ValueError as e:
-            self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
+            self.__logger.critical('value error while parsing browsers in config file: ' + repr(e))
+            self.__logger.exception(e)
+            return
         self.browserlist = InterfaceListable(array)
         ##init playlists
         self.__logger.debug('parse playlists')
@@ -91,7 +96,9 @@ class SimpleMediaCenter():
                 playList = Single()
                 array.append(playList)          
         except ValueError as e:
-            self.__logger.critical('value error while parsing players in  config file: ' + repr(e))
+            self.__logger.critical('value error while parsing playlists in config file: ' + repr(e))
+            self.__logger.exception(e)
+            return
         self.playlistlist = InterfaceListable(array)
         ##create controller
         ##init webinterface
@@ -103,11 +110,14 @@ class SimpleMediaCenter():
                 #TODO check if paths are valid
                 port = self.config.getint('WEBINTERFACE', 'port')
                 
+                self.__logger.info('creating interface service')
+                service.setup(
+                    players=self.playerlist,
+                    playlists=self.playlistlist,
+                    browsers=self.browserlist)
+                
                 self.__logger.info('creating controller')
-                self.controller = WebController(
-                    playerList=self.playerlist, 
-                    playlistList=self.playlistlist, 
-                    browserList=self.browserlist)
+                self.controller = WebController()
                 self.__logger.info('creating webinterface')
                 self.interface = WebInterface(
                     pathToTemplates,
@@ -116,9 +126,13 @@ class SimpleMediaCenter():
                     self.controller)
         
         except ValueError as e:
-            self.__logger.critical('value error while parsing webinterface in  config file: ' + repr(e))
+            self.__logger.critical('value error while parsing webinterface in config file: ' + repr(e))
+            self.__logger.exception(e)
+            return
         except Exception as e:
             self.__logger.critical('error while parsing webinterface in  config file: ' + repr(e))
+            self.__logger.exception(e)
+            return
         #finished parsing
         
     '''
