@@ -9,11 +9,13 @@ import os
 import jinja2
 import logging
 import json
+import threading
 
 class WebController(TGController):  
     __logger=logging.getLogger(__name__)
     statusDict=None
     exceptionDisplayHandler=None
+    thread=None
 
     def __init__(self):
         self.__logger.debug("WebInterface init")
@@ -44,6 +46,9 @@ class WebController(TGController):
     @expose('index.html')
     def index(self):
         self.__logger.debug('index called')
+        if(self.thread!=None): #wait for thread before building page
+            self.thread.join()
+            self.thread=None
         self.updateStatus()
         self.__logger.debug(self.statusDict)
         return self.statusDict
@@ -54,8 +59,7 @@ class WebController(TGController):
     def loading(self):
         self.__logger.debug('loading called')
         redirect("/")
-    '''    
-        
+    '''
     
     #controls
     '''
@@ -65,7 +69,8 @@ class WebController(TGController):
     def play(self, id=None):
         try:
             id = self.parseID(id)
-            service.play(id)
+            self.thread = threading.Thread(target=service.play,args=(id,))
+            self.thread.start()
         except Exception as e:
             self.exceptionDisplayHandler.setException(
                 'Exception',
@@ -131,7 +136,8 @@ class WebController(TGController):
     def change(self,id=None):
         try:
             id = self.parseID(id)
-            service.change(id)
+            self.thread = threading.Thread(target=service.change,args=(id,))
+            self.thread.start()
         except KeyError as e:
             self.exceptionDisplayHandler.setException('KeyError','Passed id not in range: ' + repr(e))
         except TwitchException as e:
@@ -147,7 +153,8 @@ class WebController(TGController):
     @expose()
     def searchFile(self, search):
         try:
-            service.search_file(search)
+            self.thread = threading.Thread(target=service.search_file,args=(search,))
+            self.thread.start()
         except Exception as e:
             self.exceptionDisplayHandler.setException(
                 'Exception',
@@ -159,11 +166,13 @@ class WebController(TGController):
     '''
     @expose()
     def searchDir(self, search):
-        self.__logger.debug("searchDir called")
-        #check if browser has search extension enabled, KEY ERROR
-        if(self.browserList.getActive().getDict()['browserSearch']==True):
-            self.__logger.debug("browser Search enabled")
-            self.browserList.getActive().setWorkingDir(search, search='Dir')
+        try:
+            self.thread = threading.Thread(target=service.search_dir,args=(search,))
+            self.thread.start()
+        except Exception as e:
+            self.exceptionDisplayHandler.setException(
+                'Exception',
+                'Unhandled Exception in searchFile: ' + repr(e))
         redirect("/")
       
     '''
@@ -247,7 +256,7 @@ class WebInterface(Interface):
         self.config.serve_static = True
         self.config.paths['static_files'] = staticPath
         
-        #make wsgi_app      
+        #make wsgi_app
         self.application = self.config.make_wsgi_app()
         
         #make wsgi_server
