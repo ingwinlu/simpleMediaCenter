@@ -16,7 +16,13 @@ function update(){
             if(json.exceptionStatus == "1"){ //exception occured
                 showException(json.exceptionTitle,json.exceptionBody)
             }
-            
+            if(json.threadRunning == "1"){ //Thread is running, display loading
+                showLoading()
+                console.log('thread is Running')
+            }
+            if(json.threadRunning != "1"){
+                hideLoading()
+            }
             
             //set player buttons
             if (json.playerStatus == "0"){ //stopped, disable all buttons
@@ -52,6 +58,14 @@ function showException(title, body){
 function clearException(){
     $("#exception").hide();
     window.location = './clearException';
+}
+
+function showLoading(){
+    $("#loading").show();
+}
+
+function hideLoading(){
+    $("#loading").hide();
 }
 
 function searchFile(){

@@ -24,6 +24,7 @@ class WebController(TGController):
             'playerArray'  : service.playerList.getArray(),
             'playlistArray'  : service.playlistList.getArray(),
             'browserArray'  : service.browserList.getArray(),
+            'threadRunning' : 0
             }
             
     def updateStatus(self):
@@ -36,8 +37,11 @@ class WebController(TGController):
             self.statusDict.update(service.browserList.getActive().getDict())
         if(self.exceptionDisplayHandler is not None):
             self.statusDict.update(self.exceptionDisplayHandler.getDict())
-            
-        
+        if(self.thread!=None):
+            self.statusDict['threadRunning'] = 1
+        else:
+            self.statusDict['threadRunning'] = 0
+    
     def parseID(self, id):
         id = int(id)
         return id

@@ -1,4 +1,14 @@
-{% extends "base.html" %}
-{% block content %}
-    <h1>Loading<small>please wait</small></h1>
-{% endblock content %}
+{#<button class="btn btn-primary" data-toggle="modal" data-target=".loading-modal-sm">Small modal</button>#}
+
+<div class="modal" id="loading" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Loading</h4>
+      </div>
+      <div class="modal-body">
+        Please wait...
+      </div>
+    </div>
+  </div>
+</div>
