@@ -44,7 +44,7 @@ def play(id):
     global browserList
     
     __logger.debug("trying to play %s" ,browserList.getActive().getPlayable(id))
-    __logger.debug("searching for compatible Browser") 
+    __logger.debug("searching for compatible Browser")
     for supportedPlayer in browserList.getActive().getSupportedPlayers():
         playerid = playerList.getIDfromName(supportedPlayer)
         if (playerid is not None):
@@ -123,7 +123,7 @@ def search_dir(search):
 '''
     DEPRECATED: is now done automatically
     selects player via dropdown menu
-'''  
+'''
 def select_player(id):
     global playerList
     playerList.getActive().stop()
@@ -142,4 +142,3 @@ def select_browser(id):
 def select_playlist(id):
     global playlistList
     playlistList.setActive(id)
-    
