@@ -16,6 +16,7 @@ function update(){
             if(json.exceptionStatus == "1"){ //exception occured
                 showException(json.exceptionTitle,json.exceptionBody)
             }
+            /*
             if(json.threadRunning == "1"){ //Thread is running, display loading
                 showLoading()
                 console.log('thread is Running')
@@ -23,6 +24,7 @@ function update(){
             if(json.threadRunning != "1"){
                 hideLoading()
             }
+            */
             
             //set player buttons
             if (json.playerStatus == "0"){ //stopped, disable all buttons
