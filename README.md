@@ -19,7 +19,7 @@ priority from top to bottom:
    + ~~implement sendToBrowser in REST Interface~~
    + complete TwitchBrowser 80%
    + complete YoutubeBrowser 80%
-+ multithread interface to implement a loading page
++ multithread interface to implement a loading page 80%
 + implement playlist functionality
 + improve documentation 5%
 + improve comments in code 5%
@@ -39,6 +39,8 @@ priority from top to bottom:
 + [jinja2](http://jinja.pocoo.org/)
 + [youtube-dl](https://github.com/rg3/youtube-dl)
     for youtube playback
++ [python-twitch](https://github.com/ingwinlu/python-twitch)
+    for twitch.tv playback (included)
 + [Bootswatch (Bootstrap-Themes)](https://github.com/thomaspark/bootswatch) (included)
 
 ##Installation
