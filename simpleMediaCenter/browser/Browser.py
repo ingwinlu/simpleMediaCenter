@@ -459,15 +459,22 @@ class YoutubeBrowser(Browser):
                             filelistcounter+=1
                
                     elif (pathArray[1]=='Dir'):    
-                        videos = self.yt.searchVideo(pathArray[2], offset=self.pagination.offset, limit=self.pagination.limit)
-                        for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
-                            title = video.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
+                        channels = self.yt.searchChannel(pathArray[2], offset=self.pagination.offset, limit=self.pagination.limit)
+                        for channel in channels.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                            statistics = channel.find('yt:channelStatistics', namespaces=self.yt.NAMESPACES).attrib
+                            authorName = channel.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
+                            title = authorName + " - Subscribers:" + statistics['subscriberCount']
                             self.dirlist[dirlistcounter] = title
+                            self.urllist[dirlistcounter] = ""
                             dirlistcounter+=1
                     else:
                         self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
                         raise NotImplementedError
-                        
+                elif(len(pathArray)==4):
+                    pass
+                else:
+                self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                raise NotImplementedError
             else:
                 self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
                 raise NotImplementedError

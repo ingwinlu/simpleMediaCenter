@@ -49,7 +49,8 @@ class Youtube():
     __logger=logging.getLogger(__name__)
     NAMESPACES = {
         'Atom': 'http://www.w3.org/2005/Atom',
-        'openSearch': 'http://a9.com/-/spec/opensearchrss/1.0/'}
+        'openSearch': 'http://a9.com/-/spec/opensearchrss/1.0/',
+        'yt': 'http://gdata.youtube.com/schemas/2007'}
     URLS = {
         'uploads'      : 'https://gdata.youtube.com/feeds/api/users/{0[0]}/uploads?start-index={0[1]}&max-results={0[2]}',
         'channelSearch': 'https://gdata.youtube.com/feeds/api/channels?q="{0[0]}"&start-index={0[1]}&max-results={0[2]}&v=2',
