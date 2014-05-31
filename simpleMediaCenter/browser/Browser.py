@@ -335,7 +335,7 @@ class YoutubeBrowser(Browser):
                 0 : '.'
             }
         self.setWorkingDir(0)
-        
+    
     def getPlayable(self, fileKey):
         return self.urllist[fileKey]
         
@@ -417,6 +417,12 @@ class YoutubeBrowser(Browser):
                     self.dirlist[dirlistcounter] = '..'
                     dirlistcounter+=1
                     
+                    self.dirlist[dirlistcounter] = self.pagination.prevPageString
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.nextPageString
+                    dirlistcounter+=1
+                    
                     self.__logger.debug('getting videolist')
                     videos = self.yt.listChannelVideos(pathArray[1], offset=self.pagination.offset, limit=self.pagination.limit)
                     self.__logger.debug('searching videolist')
@@ -463,18 +469,46 @@ class YoutubeBrowser(Browser):
                         for channel in channels.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
                             statistics = channel.find('yt:channelStatistics', namespaces=self.yt.NAMESPACES).attrib
                             authorName = channel.find('Atom:author/Atom:name',namespaces=self.yt.NAMESPACES).text
-                            title = authorName + " - Subscribers:" + statistics['subscriberCount']
-                            self.dirlist[dirlistcounter] = title
-                            self.urllist[dirlistcounter] = ""
-                            dirlistcounter+=1
+                            authorUri = channel.find('Atom:author/Atom:uri',namespaces=self.yt.NAMESPACES).text
+                            userId = channel.find('Atom:author/yt:userId',namespaces=self.yt.NAMESPACES).text
+                            authorChannel = authorUri.split("/")[-1]
+                            if(userId==authorChannel):#skip if channel name not set
+                                continue 
+                            else:
+                                title = authorChannel
+                                self.dirlist[dirlistcounter] = title
+                                dirlistcounter+=1
                     else:
                         self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
                         raise NotImplementedError
                 elif(len(pathArray)==4):
-                    pass
+                    self.__logger.info('getting videolist for ' + pathArray[-1])
+                    self.dirlist[dirlistcounter] = '.'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = '..'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.prevPageString
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.nextPageString
+                    dirlistcounter+=1
+                    
+                    self.__logger.debug('getting videolist')
+                    videos = self.yt.listChannelVideos(pathArray[-1], offset=self.pagination.offset, limit=self.pagination.limit)
+                    self.__logger.debug('searching videolist')
+                    for video in videos.findall('Atom:entry', namespaces=self.yt.NAMESPACES):
+                        self.urllist[filelistcounter] = video.find(
+                            ".//Atom:link[@rel='alternate']", 
+                            namespaces=self.yt.NAMESPACES).get('href')
+                        self.filelist[filelistcounter] = video.find(
+                            'Atom:title',
+                            namespaces=self.yt.NAMESPACES).text
+                        filelistcounter+=1
                 else:
-                self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
-                raise NotImplementedError
+                    self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                    raise NotImplementedError
             else:
                 self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
                 raise NotImplementedError
