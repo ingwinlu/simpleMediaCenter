@@ -6,7 +6,7 @@ import time
 
 class Omxplayer(Player):
     __logger=logging.getLogger(__name__)
-    __cmdline=""
+    __cmdline="-o both"
     __playerline="omxplayer -b"
     __playerstatus=0 # 0 stopped, 1 playing, 2 paused
     __currentfile=""
@@ -53,6 +53,8 @@ class Omxplayer(Player):
             self.__process.stdin.flush()
             
     def getcmdline(self,file):
+        finished_cmdline = self.__playerline + " " + self.__cmdline + " '" + file + "'"
+        self.__logger.debug('omxplayer cmdline: ' + finished_cmdline)
         return self.__playerline + " " + self.__cmdline + " '" + file + "'"
 
     def play(self, file):
