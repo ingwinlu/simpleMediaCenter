@@ -2,9 +2,8 @@
 <div id="playerpanel" class="panel panel-primary">
     <div class="panel-heading">
         <div class="dropdown">
-            <a class="dropbown-toggle panel-title" data-toggle="dropdown" href="#">{{activePlayer}}
-                <span class="caret"></span>
-            </a>
+            <h1 class="panel-title">{{activePlayer}}</h1>
+            {# note: disabled template because we no longer use this
             <ul class="dropdown-menu">
               {% for player in playerArray%}
                 <li>
@@ -12,6 +11,7 @@
                 </li>
                {% endfor %}
             </ul>
+            #}
         </div>
     </div>
     <div id="player-text" class="panel-body">
