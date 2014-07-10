@@ -6,7 +6,7 @@ devblog = 'http://heroicdebugging.biz'
 setup(
     name='simpleMediaCenter',
     description='simpleMediaCenter aims to provide an easy on ressources way to use your computer as an Media Center. It is primarily designed to act as an alternative to XBMC on the rpi.',
-    version='0.6.3',
+    version='0.6.4',
     url=upstream,
     packages=['simpleMediaCenter',
             'simpleMediaCenter.browser',
