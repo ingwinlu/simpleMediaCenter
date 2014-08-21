@@ -231,6 +231,8 @@ class TwitchBrowser(Browser):
         if (len(pathArray)==0):
             self.dirlist[dirlistcounter] = 'Featured'
             dirlistcounter+=1
+            self.dirlist[dirlistcounter] = 'Channels'
+            dirlistcounter+=10
             self.dirlist[dirlistcounter] = 'Games'
             dirlistcounter+=1
             self.dirlist[dirlistcounter] = 'Following'
@@ -249,7 +251,28 @@ class TwitchBrowser(Browser):
                     self.filelist[filelistcounter] = stream['stream']['channel']['name']
                     filelistcounter+=1
                     
-            elif (pathArray[0]=='Games'):   
+            elif (pathArray[0]=='Channels'):
+                if(len(pathArray)==1):
+                    self.dirlist[dirlistcounter] = '.'
+                    dirlistcounter+=1
+                
+                    self.dirlist[dirlistcounter] = '..'
+                    dirlistcounter+=1
+                    
+                    self.dirlist[dirlistcounter] = self.pagination.prevPageString
+                    dirlistcounter+=1
+                    
+                    self.__logger.debug('offset:' + str(self.pagination.offset) + ' limit:' + str(self.pagination.limit))
+                    channels = self.twitchTV.getChannels(offset=self.pagination.offset, limit=self.pagination.limit)
+                    for channel in channels:
+                        self.filelist[filelistcounter] = channel['channel']['name']
+                        filelistcounter+=1
+                    self.dirlist[dirlistcounter] = self.pagination.nextPageString
+                    dirlistcounter+=1
+                else:
+                    self.__logger.critical('no suiting menu found workingDir: ' + "|".join(self.workingDir))
+                    raise NotImplementedError
+            elif (pathArray[0]=='Games'):
                 if(len(pathArray)==1):
                     self.dirlist[dirlistcounter] = '.'
                     dirlistcounter+=1
