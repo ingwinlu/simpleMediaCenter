@@ -30,8 +30,8 @@ class TestTwitchBrowser(unittest.TestCase):
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Featured")
         tempBrowser.setWorkingDir(1) # should go to root directory
         self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/")
-        tempBrowser.setWorkingDir(1) # should go to Following
-        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Games")
+        tempBrowser.setWorkingDir(1) # should go to Channels
+        self.assertEqual(tempBrowser.getDict()['browserWorkingDir'], "/Channels")
         
     def test_supported_Players(self):
         self.assertIn('Twitchplayer', self.twitchBrowser.getSupportedPlayers())
