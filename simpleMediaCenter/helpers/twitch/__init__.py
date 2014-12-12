@@ -125,32 +125,20 @@ class TwitchTV(object):
         url = Urls.VIDEO_INFO.format(id)
         return self._fetchItems(url, 'title')
         
-    '''
-    needs to be rewritten to return a python list instead of a xbmc playlist
-    def getVideoChunksPlaylist(self, id):
-        vidChunks = self.getVideoChunks(id)
-        chunks = vidChunks['chunks']['live']
-        title = self.getVideoTitle(id)
-        itemTitle = '%s - Part {0} of %s' % (title, len(chunks))
-        
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playlist.clear()
-        
-        # For some reason first item is skipped, so added a dummy first item to fix
-        # theres probably a better way
-        playlist.add('', xbmcgui.ListItem('', thumbnailImage=vidChunks['preview']))
-        curN = 0
-        for chunk in chunks:
-            curN += 1
-            playlist.add(chunk['url'], xbmcgui.ListItem(itemTitle.format(curN), thumbnailImage=vidChunks['preview']))
-            
-        return playlist
-    '''
-        
     def getFollowingChannelNames(self, username):
+        acc = []
+        limit = 100
+        offset = 0
         quotedUsername = quote_plus(username)
-        url = Urls.FOLLOWED_CHANNELS.format(quotedUsername)
-        return self._fetchItems(url, Keys.FOLLOWS)
+        baseurl = Urls.FOLLOWED_CHANNELS.format(quotedUsername)
+        while True:
+            url = baseurl + Urls.OPTIONS_OFFSET_LIMIT.format(offset, limit)
+            temp = self._fetchItems(url, Keys.FOLLOWS)
+            if (len(temp) == 0):
+                break;
+            acc = acc + temp
+            offset = offset + limit
+        return acc
 
     def getTeams(self, index):
         return self._fetchItems(Urls.TEAMS.format(str(index * 25)), Keys.TEAMS)
@@ -214,30 +202,28 @@ class TwitchVideoResolver(object):
         channelsig= channeldata['sig']
         
         #Download Multiple Quality Stream Playlist
-        data = self.scraper.downloadWebData(Urls.HLS_PLAYLIST.format(channelName,channelsig,channeltoken))
-        
-        playlist = self._saveHLSToPlaylist(data,maxQuality)
-        
-        #Write Custom Playlist
-        text_file = open(fileName, "w")
-        text_file.write(str(playlist))
-        text_file.close()
+        try:
+            hls_url = Urls.HLS_PLAYLIST.format(channelName,channelsig,channeltoken)
+            data = self.scraper.downloadWebData(hls_url)
+            playlist = self._saveHLSToPlaylist(data,maxQuality)
+
+            #Write Custom Playlist
+            with open(fileName, "w") as text_file:
+                text_file.write(str(playlist))
+        except TwitchException:
+                #HTTP Error in download web data -> stream is offline
+                raise TwitchException(TwitchException.STREAM_OFFLINE)
         return
 
     #split off from main function so we can feed custom data for test cases + speedtest
     def _saveHLSToPlaylist(self, data, maxQuality):
-        #if channel is offline, quit here
-        if(data=="<p>No Results</p>"):
-            raise TwitchException(TwitchException.STREAM_OFFLINE)
-        
-        quality = ['Source','High','Medium','Low','Mobile'] # Define Qualities
-        if(maxQuality>=len(quality)): #check if maxQuality is supported
+        if(maxQuality>=len(Keys.QUALITY_LIST_STREAM)): #check if maxQuality is supported
             raise TwitchException()
         
         lines = data.split('\n') # split into lines
         
         playlist = lines[:2] # take first two lines into playlist
-        qualities = [None] * len(quality) # create quality based None array
+        qualities = [None] * len(Keys.QUALITY_LIST_STREAM) # create quality based None array
         
         lines_iterator = iter(lines[2:]) #start iterator after the first two lines
         for line in lines_iterator: # start after second line
@@ -249,26 +235,28 @@ class TwitchVideoResolver(object):
                 return '\n'.join([line,next(lines_iterator),next(lines_iterator)])
                 
             #if a line with quality is detected, put it into qualities array
-            if quality[0] in line:
+            if Keys.QUALITY_LIST_STREAM[0] in line:
                 qualities[0] = concat_next_3_lines()
-            elif quality[1] in line:
+            elif Keys.QUALITY_LIST_STREAM[1] in line:
                 qualities[1] = concat_next_3_lines()
-            elif quality[2] in line:
+            elif Keys.QUALITY_LIST_STREAM[2] in line:
                 qualities[2] = concat_next_3_lines()
-            elif quality[3] in line:
+            elif Keys.QUALITY_LIST_STREAM[3] in line:
                 qualities[3] = concat_next_3_lines()
-            elif quality[4] in line:
+            elif Keys.QUALITY_LIST_STREAM[4] in line:
                 qualities[4] = concat_next_3_lines()
             else:
                 pass # drop other lines
         
+        bestmatch = len(Keys.QUALITY_LIST_STREAM) - 1 #start with worst quality and improve
         if qualities[maxQuality]: # prefered quality is not None -> available
-            playlist.append(qualities[maxQuality])
-        else: #prefered quality is not available, append all qualities that are not None, could be changed to respect maxQuality
-            for q in qualities:
-                if q is not None:
-                    playlist.append(q)
-        
+            bestmatch = maxQuality
+        else: #prefered quality is not available, choose best fit, TODO refactor all quality queries
+            for i,q in enumerate(qualities):
+                if q is not None and i>maxQuality:
+                    bestmatch = i
+                    break
+        playlist.append(qualities[bestmatch])
         playlist = '\n'.join(playlist) + '\n'
         return playlist
 
@@ -364,6 +352,8 @@ class Keys(object):
     PREVIEW = 'preview'
     TITLE = 'title'
 
+    QUALITY_LIST_STREAM = ['Source', "High", "Medium", "Low", "Mobile"]
+    QUALITY_LIST_VIDEO = ['live', "720p", "480p", "360p", "226p"]
 
 class Patterns(object):
     '''
@@ -383,7 +373,7 @@ class Urls(object):
     TWITCH_TV = 'http://www.twitch.tv/'
 
     BASE = 'https://api.twitch.tv/kraken/'
-    FOLLOWED_CHANNELS = BASE + 'users/{0}/follows/channels?limit=100'
+    FOLLOWED_CHANNELS = BASE + 'users/{0}/follows/channels'
     GAMES = BASE + 'games/'
     STREAMS = BASE + 'streams/'
     SEARCH = BASE + 'search/'
@@ -399,7 +389,7 @@ class Urls(object):
     TWITCH_API = "http://usher.justin.tv/find/{channel}.json?type=any&group=&channel_subscription="
     TWITCH_SWF = "http://www.justin.tv/widgets/live_embed_player.swf?channel="
     FORMAT_FOR_RTMP = "{rtmp}/{playpath} swfUrl={swfUrl} swfVfy=1 {token} live=1"  # Pageurl missing here
-    HLS_PLAYLIST = 'http://usher.twitch.tv/select/{0}.m3u8?nauthsig={1}&nauth={2}&allow_source=true'
+    HLS_PLAYLIST = 'http://usher.twitch.tv/api/channel/hls/{0}.m3u8?sig={1}&token={2}&allow_source=true'
     
     CHANNEL_VIDEOS = 'https://api.twitch.tv/kraken/channels/{0}/videos?limit=8&offset={1}&broadcasts={2}'
     VIDEO_CHUNKS = 'https://api.twitch.tv/api/videos/{0}'
