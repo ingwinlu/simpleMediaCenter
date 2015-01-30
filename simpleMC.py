@@ -1,6 +1,6 @@
-#TODO: check for right environment
+#!/usr/bin/env python2
 
-from simpleMediaCenter import app, socketio, utils
+from simpleMediaCenter import utils, app, socketio
 
 if __name__ == '__main__':
     args = utils.get_args()
