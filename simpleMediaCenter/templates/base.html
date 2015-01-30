@@ -7,7 +7,9 @@
   <meta name="description" content="simpleMediaCenter main page" />
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reset.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-  <!--ink xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="bootstrap.spacelab.min.css" /-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.darkly.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/simpleMC.css') }}">
+
 </head>
 <body>
   {% block content %}
@@ -15,5 +17,7 @@
   <!--javascript-->
   <script src="{{ url_for('static', filename='js/jquery-2.1.3.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/simpleMC.js') }}"></script>
 </body>
 </html>
