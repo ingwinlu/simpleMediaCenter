@@ -3,22 +3,23 @@ from simpleMediaCenter import app, socketio
 from flask import render_template
 from flask.ext.socketio import emit
 
+DEFAULT_STATUS={
+        'player': 'not_implemented',
+        'time' : 0
+    }
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@socketio.on('my event', namespace='/test')
-def test_message(message):
-    emit('my response', {'data': message['data']})
+@socketio.on('connect', namespace='/controller')
+def io_connect():
+    emit_status(DEFAULT_STATUS)
 
-@socketio.on('my broadcast event', namespace='/test')
-def test_message(message):
-    emit('my response', {'data': message['data']}, broadcast=True)
+@socketio.on('my event', namespace='/controller')
+def io_controller(new_state):
+    print(new_state)
+    emit_status(DEFAULT_STATUS)
 
-@socketio.on('connect', namespace='/test')
-def test_connect():
-    emit('my response', {'data': 'Connected'})
-
-@socketio.on('disconnect', namespace='/test')
-def test_disconnect():
-    print('Client disconnected')
+def emit_status(status):
+    emit('new_status', status)

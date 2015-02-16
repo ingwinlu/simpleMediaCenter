@@ -19,5 +19,7 @@
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
   <script src="{{ url_for('static', filename='js/simpleMC.js') }}"></script>
+  {% block scripts%}
+  {% endblock %}
 </body>
 </html>
