@@ -3,9 +3,11 @@ from simpleMediaCenter import app, socketio
 from flask import render_template
 from flask.ext.socketio import emit
 
-DEFAULT_STATUS={
-        'player': 'not_implemented',
-        'time' : 0
+STATE={
+        'player': 'stop',
+        'volume': 50,
+        'time_current' : 0,
+        'time_total' : 1
     }
 
 @app.route('/')
@@ -14,12 +16,17 @@ def index():
 
 @socketio.on('connect', namespace='/controller')
 def io_connect():
-    emit_status(DEFAULT_STATUS)
+    print('new connection')
+    emit_status(STATE)
 
-@socketio.on('my event', namespace='/controller')
-def io_controller(new_state):
-    print(new_state)
-    emit_status(DEFAULT_STATUS)
+@socketio.on('controller', namespace='/controller')
+def io_controller(client_msg):
+    STATE.update(client_msg)
+    emit_status(STATE)
 
-def emit_status(status):
-    emit('new_status', status)
+def emit_status(state):
+    emit('new_state', state)
+
+'''
+    TODO, implement REST API for non socketio compatible clients
+'''

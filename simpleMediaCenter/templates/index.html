@@ -1,35 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  <div id='content'></div>
-{% endblock %}
-
-{% block scripts %}
-<script type="text/javascript">
-    $(document).ready(function(){
-                namespace = '/controller';
-                var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
-                // say hello to the server
-                socket.on('connect', function() {
-                    socket.emit('new_connection', {});
-                });
-                // update playerstatus
-                socket.on('new_status', function(new_status) {
-                    alert(new_status);
-                });
-                // handlers for the different forms in the page
-                // these send data to the server in a variety of ways
-                $('#play').submit(function(event) {
-                    socket.emit('controller', {new_state: 'play'});
-                    return false;
-                });
-                $('#pause').submit(function(event) {
-                    socket.emit('controller', {new_state: 'pause'});
-                    return false;
-                });
-                $('#stop').submit(function(event) {
-                    socket.emit('controller', {new_state: 'stop'});
-                    return false;
-                });
-            });
-</script>
+  <div id='content'>
+    <div id="playerpanel" class="panel panel-primary">
+        <div class="panel-heading">
+            <h1 class="panel-title">Player</h1>
+        </div>
+        <div id="player-text" class="panel-body"></div>
+    </div>
+  </div>
 {% endblock %}
