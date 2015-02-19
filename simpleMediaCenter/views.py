@@ -1,32 +1,53 @@
 from simpleMediaCenter import app, socketio
+from simpleMediaCenter.player import OMXPlayer, testFile
+
+from threading import Thread
 
 from flask import render_template
 from flask.ext.socketio import emit
 
-STATE={
-        'player': 'stop',
-        'volume': 50,
-        'time_current' : 0,
-        'time_total' : 1
-    }
+import time
+
+omxplayer = OMXPlayer(app.args.dbus)
+update_thread = None
+
+def player_update_thread():
+    while True:
+        time.sleep(1)
+        socketio.emit('player_status', omxplayer.status, namespace='/controller')
 
 @app.route('/')
 def index():
+    global update_thread
+    if update_thread is None:
+        update_thread = Thread(target=player_update_thread)
+        update_thread.start()
     return render_template('index.html')
 
 @socketio.on('connect', namespace='/controller')
 def io_connect():
     print('new connection')
-    emit_status(STATE)
+    #emit('new_state', state)
 
-@socketio.on('controller', namespace='/controller')
-def io_controller(client_msg):
-    STATE.update(client_msg)
-    emit_status(STATE)
+@socketio.on('player_stop', namespace='/controller')
+def io_controller():
+    omxplayer.stop()
 
-def emit_status(state):
-    emit('new_state', state)
+@socketio.on('player_play', namespace='/controller')
+def io_controller():
+    omxplayer.play(testFile)
 
+@socketio.on('player_pause', namespace='/controller')
+def io_controller():
+    omxplayer.pause()
+
+@socketio.on('player_vol_down', namespace='/controller')
+def io_controller():
+    omxplayer.vol_down()
+    
+@socketio.on('player_vol_up', namespace='/controller')
+def io_controller():
+    omxplayer.vol_up()
 '''
     TODO, implement REST API for non socketio compatible clients
 '''

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
-from simpleMediaCenter import utils, app, socketio
+from simpleMediaCenter import app, socketio
+
 
 if __name__ == '__main__':
-    args = utils.get_args()
-    socketio.run(app, host=args.ip, port=args.port)
+    socketio.run(app, host=app.args.ip, port=app.args.port)

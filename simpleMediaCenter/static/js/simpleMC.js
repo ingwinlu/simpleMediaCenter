@@ -11,6 +11,10 @@ function updateUI(state){
         $('#btn-stop').removeClass("disabled");
         $('#btn-play').removeClass("disabled");
         $('#btn-pause').addClass("disabled");
+    }else{
+        $('#btn-stop').addClass("disabled");
+        $('#btn-play').addClass("disabled");
+        $('#btn-pause').addClass("disabled");
     }
     
     // update progressbar + timer
@@ -21,34 +25,36 @@ $(document).ready(function(){
             var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
             // say hello to the server
             socket.on('connect', function() {
-                socket.emit('new_connection', {});
+                socket.emit('new_connection');
             });
-            var state = {};
+            socket.on('disconnect', function(){
+                updateUI('disconnect')
+            });
             // update playerstatus
-            socket.on('new_state', function(new_state) {
-                state = new_state
+            socket.on('new_state', function(state) {
                 updateUI(state)
                 alert(JSON.stringify(state, null, 4));
             });
             // button controlls
             $('#btn-stop').click(function(event) {
-                socket.emit('controller', {player: 'stop'});
+                socket.emit('player_stop');
                 return false;
             });
             $('#btn-play').click(function(event) {
-                socket.emit('controller', {player: 'play'});
+                socket.emit('player_play');
                 return false;
             });
             $('#btn-pause').click(function(event) {
-                socket.emit('controller', {player: 'pause'});
+                socket.emit('player_pause');
                 return false;
             });
             $('#btn-volume-down').click(function(event) {
-                socket.emit('controller', {volume: state.volume-10});
+                socket.emit('player_vol_down');
                 return false;
             });
             $('#btn-volume-up').click(function(event) {
-                socket.emit('controller', {volume: state.volume+10});
+                socket.emit('player_vol_up');
                 return false;
             });
+
         });

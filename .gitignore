@@ -39,3 +39,7 @@ nosetests.xml
 include
 
 *.json
+
+venv_simplemc
+dbuscontrol.sh
+
