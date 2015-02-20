@@ -1,13 +1,18 @@
 body{
-    padding-top: 130px;
+    padding-top: 165px;
 }
 
 ul{
     list-style:none;
 }
 
+.progress-bar > span{
+    text-align: center;
+    color: #00bc8c;
+}
+
 @media (min-width: 768px){
     body{
-        padding-top: 70px;
+        padding-top: 105px;
     }
 }

@@ -18,15 +18,23 @@ def get_dbus_session_addr(dbus_file='/tmp/omxplayerdbus'):
             return f.read()[:-1]
     except:
         return None
-        
-def dbus_ms_to_seconds(duration):
-    seconds = 0
+
+def sanitize_dbus_ms(duration):
+    ms = 0
     try:
-        millisec = int(duration.split()[1])
-        seconds = int(millisec/1000000)
+        ms = int(duration.split()[1])
     except:
         pass
-    return seconds
+    return ms
+
+def ms_to_seconds(ms):
+    return ms / 1000000
+
+def seconds_to_ms(seconds):
+    return seconds * 1000000
+
+def calculate_pos(duration, percent):
+    return percent * duration / 100
 
 def dbus_playbackStatus_to_status(dbus_status):
     return dbus_status.split()[0].lower()
