@@ -6,6 +6,10 @@ ul{
     list-style:none;
 }
 
+.progress {
+    cursor: pointer;
+}
+
 .progress-bar > span{
     text-align: center;
     color: #00bc8c;
