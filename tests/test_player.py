@@ -40,6 +40,14 @@ class TestOMXPlayer(unittest.TestCase):
     def test_dbus_session_reader(self):
         self.assertEqual(get_dbus_session_addr(self.dbusLocation), self.dbusSession)
 
+    def test_vol_up(self):
+        omxplayer = OMXPlayer('/tmp/omxplayerdbus.winlu')
+        omxplayer.vol_up()
+
+    def test_vol_down(self):
+        omxplayer = OMXPlayer('/tmp/omxplayerdbus.winlu')
+        omxplayer.vol_down()
+
     def tearDown(self):
         with open(os.devnull, "w") as fnull:
             subprocess.call(['killall','omxplayer.bin'], stdout = fnull, stderr = fnull)

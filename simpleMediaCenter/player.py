@@ -84,12 +84,28 @@ class OMXPlayer(object):
             pass
 
     def vol_down(self):
-        print('vol down')
-        pass
+        try:
+            self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
+            subprocess.call([
+                'dbus-send', '--print-reply=literal', '--session', '--dest=org.mpris.MediaPlayer2.omxplayer',
+                '/org/mpris/MediaPlayer2', 'org.mpris.MediaPlayer2.Player.Action', 'int32:17'],
+                env = self.env,
+                stdout=DEVNULL,
+                stderr=DEVNULL)
+        except subprocess.CalledProcessError as e:
+            pass
 
     def vol_up(self):
-        print('vol up')
-        pass
+        try:
+            self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
+            subprocess.call([
+                'dbus-send', '--print-reply=literal', '--session', '--dest=org.mpris.MediaPlayer2.omxplayer',
+                '/org/mpris/MediaPlayer2', 'org.mpris.MediaPlayer2.Player.Action', 'int32:18'],
+                env = self.env,
+                stdout=DEVNULL,
+                stderr=DEVNULL)
+        except subprocess.CalledProcessError as e:
+            pass
 
     @property
     def duration(self):
@@ -130,8 +146,10 @@ class OMXPlayer(object):
             pos_str = str(new_position)
             self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
             subprocess.call([
-                'dbus-send', '--print-reply=literal', '--session', '--dest=org.mpris.MediaPlayer2.omxplayer',
-                '/org/mpris/MediaPlayer2', 'org.mpris.MediaPlayer2.Player.SetPosition', 'objpath:/not/used', 'int64:' + pos_str],
+                'dbus-send', '--print-reply=literal', '--session',
+                '--dest=org.mpris.MediaPlayer2.omxplayer', '/org/mpris/MediaPlayer2',
+                'org.mpris.MediaPlayer2.Player.SetPosition', 'objpath:/not/used',
+                'int64:' + pos_str],
                 env = self.env,
                 stdout=DEVNULL,
                 stderr=DEVNULL)
