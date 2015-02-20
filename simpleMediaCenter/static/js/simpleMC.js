@@ -1,3 +1,11 @@
+function ms_to_hour_min_sec(ms){
+    var total_s = ms/1000000
+    var hours = Math.floor(total_s / 3600)
+    var minutes = Math.floor((total_s / 60) % 60)
+    var seconds = Math.floor(total_s % 60)
+    return ('0'  + hours).slice(-2)+':'+('0'  + minutes).slice(-2)+':'+('0' + seconds).slice(-2);
+};
+
 function updateUI(state){
     if(state.status == 'stopped'){
         $('#btn-stop').addClass("disabled");
@@ -19,10 +27,11 @@ function updateUI(state){
     // update progressbar + timer
     if(state.status = 'playing'){
         $('#progress').css("width", state.position / state.duration * 100 + '%');
-        $('#progress-text').text(state.position + " of " + state.duration);
+        $('#time-total').text(ms_to_hour_min_sec(state.duration));
+        $('#time-elapsed').text(ms_to_hour_min_sec(state.position));
     }else{
         $('#progress').css("width", '0%');
-        $('#progress-text').text('');
+        $('.progress-text').text('');
     }
     
     // update currently playing

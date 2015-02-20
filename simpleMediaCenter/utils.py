@@ -38,3 +38,4 @@ def calculate_pos(duration, percent):
 
 def dbus_playbackStatus_to_status(dbus_status):
     return dbus_status.split()[0].lower()
+
