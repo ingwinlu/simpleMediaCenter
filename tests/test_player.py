@@ -23,7 +23,7 @@ class TestOMXPlayer(unittest.TestCase):
     def test_status_play_pause_stop(self):
         omxplayer = OMXPlayer('/tmp/omxplayerdbus.winlu')
         omxplayer.play(self.testFile)
-        time.sleep(1)
+        time.sleep(3) #dbus needs a few seconds to be ready
         self.assertEqual(omxplayer.status['status'], 'playing')
         omxplayer.pause()
         self.assertEqual(omxplayer.status['status'], 'paused')
