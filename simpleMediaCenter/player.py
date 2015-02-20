@@ -3,7 +3,13 @@ import subprocess
 import time
 from threading import Thread
 from simpleMediaCenter.utils import get_dbus_session_addr, dbus_ms_to_seconds, dbus_playbackStatus_to_status
+from simpleMediaCenter import app
 
+DEVNULL = open(os.devnull, 'wb')
+DEFAULT_TO_PLAY = {
+            'location'      : 'None',
+            'title'         : 'None'
+            }
 
 class OMXPlayerRunner(Thread):
     def __init__(self, location):
@@ -18,9 +24,9 @@ class OMXPlayerRunner(Thread):
                     '-o', 'both',
                     self.location
                 ],
-                stdout=subprocess.PIPE, 
+                stdout=DEVNULL, 
                 stdin=subprocess.PIPE, 
-                stderr=subprocess.STDOUT,
+                stderr=DEVNULL,
                 close_fds=True
             )
         while self.running and omx_subprocess.returncode is None:
@@ -28,15 +34,18 @@ class OMXPlayerRunner(Thread):
             time.sleep(1)
         if not omx_subprocess.returncode:
             # process did not end normally, kill via stdin
-            omx_subprocess.stdin.write('q')
-            omx_subprocess.terminate()
+            try:
+                omx_subprocess.stdin.write('q')
+                omx_subprocess.terminate()
+            except:
+                pass
             omx_subprocess.wait()
 
     def stop(self):
         self.running = False
 
 class OMXPlayer(object):
-    def __init__(self, dbus_file='/tmp/omxplayerdbus'):
+    def __init__(self, dbus_file=app.args.dbus):
         self.__status = {
             'location'      : 'None',
             'title'         : 'None',
@@ -61,9 +70,19 @@ class OMXPlayer(object):
             self.runner.stop()
             self.runner.join()
             self.runner = None
+        self.__status.update(DEFAULT_TO_PLAY)
 
     def pause(self):
-        print('pause')
+        try:
+            self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
+            output = subprocess.call([
+                'dbus-send', '--print-reply=literal', '--session', '--dest=org.mpris.MediaPlayer2.omxplayer',
+                '/org/mpris/MediaPlayer2', 'org.mpris.MediaPlayer2.Player.Action', 'int32:16'],
+                env = self.env,
+                stdout=DEVNULL,
+                stderr=DEVNULL)
+        except subprocess.CalledProcessError as e:
+            pass
         pass
 
     def vol_down(self):
@@ -79,14 +98,14 @@ class OMXPlayer(object):
         duration = 0
         try:
             self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
-            duration = subprocess.check_output([
+            output = subprocess.check_output([
                 'dbus-send', '--print-reply=literal', '--session',
                 '--reply-timeout=500', '--dest=org.mpris.MediaPlayer2.omxplayer',
                 '/org/mpris/MediaPlayer2', 'org.freedesktop.DBus.Properties.Duration'],
-                env = self.env)
-            duration = dbus_ms_to_seconds(duration)
-        except Exception as e:
-            print(repr(e))
+                env = self.env,
+                stderr=DEVNULL)
+            duration = dbus_ms_to_seconds(output)
+        except subprocess.CalledProcessError as e:
             pass
         return duration
 
@@ -95,14 +114,14 @@ class OMXPlayer(object):
         position = 0
         try:
             self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
-            position = subprocess.check_output([
+            output = subprocess.check_output([
                 'dbus-send', '--print-reply=literal', '--session',
                 '--reply-timeout=500', '--dest=org.mpris.MediaPlayer2.omxplayer',
                 '/org/mpris/MediaPlayer2', 'org.freedesktop.DBus.Properties.Position'],
-                env = self.env)
-            position = dbus_ms_to_seconds(position)
-        except Exception as e:
-            print(repr(e))
+                env = self.env,
+                stderr=DEVNULL)
+            position = dbus_ms_to_seconds(output)
+        except subprocess.CalledProcessError as e:
             pass
         return position
 
@@ -111,14 +130,14 @@ class OMXPlayer(object):
         playbackStatus = 'stopped'
         try:
             self.env['DBUS_SESSION_BUS_ADDRESS'] = get_dbus_session_addr(self.dbus_file)
-            playbackStatus = subprocess.check_output([
+            output = subprocess.check_output([
                 'dbus-send', '--print-reply=literal', '--session',
                 '--reply-timeout=500', '--dest=org.mpris.MediaPlayer2.omxplayer',
                 '/org/mpris/MediaPlayer2', 'org.freedesktop.DBus.Properties.PlaybackStatus'],
-                env = self.env)
-            playbackStatus = dbus_playbackStatus_to_status(playbackStatus)
-        except Exception as e:
-            print(repr(e))
+                env = self.env,
+                stderr=DEVNULL)
+            playbackStatus = dbus_playbackStatus_to_status(output)
+        except subprocess.CalledProcessError as e:
             pass
         return playbackStatus
 

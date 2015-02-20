@@ -1,16 +1,16 @@
 function updateUI(state){
-    if(state.player == 'stop'){
+    if(state.status == 'stopped'){
         $('#btn-stop').addClass("disabled");
         $('#btn-play').removeClass("disabled");
         $('#btn-pause').addClass("disabled");
-    }else if (state.player == 'play'){
+    }else if (state.status == 'playing'){
         $('#btn-stop').removeClass("disabled");
         $('#btn-play').addClass("disabled");
         $('#btn-pause').removeClass("disabled");
-    }else if (state.player == 'pause'){
+    }else if (state.status == 'paused'){
         $('#btn-stop').removeClass("disabled");
         $('#btn-play').removeClass("disabled");
-        $('#btn-pause').addClass("disabled");
+        $('#btn-pause').removeClass("disabled");
     }else{
         $('#btn-stop').addClass("disabled");
         $('#btn-play').addClass("disabled");
@@ -31,9 +31,9 @@ $(document).ready(function(){
                 updateUI('disconnect')
             });
             // update playerstatus
-            socket.on('new_state', function(state) {
+            socket.on('player_status', function(state) {
                 updateUI(state)
-                alert(JSON.stringify(state, null, 4));
+                console.log(JSON.stringify(state, null, 4));
             });
             // button controlls
             $('#btn-stop').click(function(event) {
